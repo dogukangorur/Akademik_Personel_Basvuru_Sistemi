@@ -24,3 +24,27 @@ CREATE TABLE KullaniciRoller (
     FOREIGN KEY (kullaniciID) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (rolID) REFERENCES Rol(id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE Fakulte (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fakulte_adi VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE Kadrolar (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kadro_adi VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE Ilanlar (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fakulte_id INT NOT NULL,
+    kadro_id INT NOT NULL,
+    baslik VARCHAR(255) NOT NULL,
+    aciklama TEXT NOT NULL,
+    durum ENUM('aktif', 'pasif') NOT NULL DEFAULT 'aktif',
+    baslangic_tarih DATE NOT NULL,
+    bitis_tarih DATE NOT NULL,
+    FOREIGN KEY (fakulte_id) REFERENCES Fakulte(id) ON DELETE CASCADE,
+    FOREIGN KEY (kadro_id) REFERENCES Kadrolar(id) ON DELETE CASCADE
+);
