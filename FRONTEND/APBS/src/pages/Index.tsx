@@ -6,1093 +6,645 @@ import ReactApexChart from 'react-apexcharts';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Dropdown from '../components/Dropdown';
 import { setPageTitle } from '../store/themeConfigSlice';
-import IconHorizontalDots from '../components/Icon/IconHorizontalDots';
-import IconDollarSign from '../components/Icon/IconDollarSign';
-import IconInbox from '../components/Icon/IconInbox';
-import IconTag from '../components/Icon/IconTag';
-import IconCreditCard from '../components/Icon/IconCreditCard';
-import IconShoppingCart from '../components/Icon/IconShoppingCart';
-import IconArrowLeft from '../components/Icon/IconArrowLeft';
-import IconCashBanknotes from '../components/Icon/IconCashBanknotes';
-import IconUser from '../components/Icon/IconUser';
-import IconNetflix from '../components/Icon/IconNetflix';
-import IconBolt from '../components/Icon/IconBolt';
-import IconCaretDown from '../components/Icon/IconCaretDown';
-import IconPlus from '../components/Icon/IconPlus';
-import IconMultipleForwardRight from '../components/Icon/IconMultipleForwardRight';
+import sortBy from 'lodash/sortBy';
+import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 
 const Index = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('Sales Admin'));
+        dispatch(setPageTitle('APBS - Anasayfa'));
     });
-    const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
-    const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
-    const [loading] = useState(false);
-
-    //Revenue Chart
-    const revenueChart: any = {
-        series: [
-            {
-                name: 'Income',
-                data: [16800, 16800, 15500, 17800, 15500, 17000, 19000, 16000, 15000, 17000, 14000, 17000],
-            },
-            {
-                name: 'Expenses',
-                data: [16500, 17500, 16200, 17300, 16000, 19500, 16000, 17000, 16000, 19000, 18000, 19000],
-            },
-        ],
-        options: {
-            chart: {
-                height: 325,
-                type: 'area',
-                fontFamily: 'Nunito, sans-serif',
-                zoom: {
-                    enabled: false,
-                },
-                toolbar: {
-                    show: false,
+    const rowData = [
+        {
+            id: 1,
+            firstName: 'Caroline',
+            lastName: 'Jensen',
+            email: 'carolinejensen@zidant.com',
+            dob: '2004-05-28',
+            address: {
+                street: '529 Scholes Street',
+                city: 'Temperanceville',
+                zipcode: 5235,
+                geo: {
+                    lat: 23.806115,
+                    lng: 164.677197,
                 },
             },
-
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                show: true,
-                curve: 'smooth',
-                width: 2,
-                lineCap: 'square',
-            },
-            dropShadow: {
-                enabled: true,
-                opacity: 0.2,
-                blur: 10,
-                left: -7,
-                top: 22,
-            },
-            colors: isDark ? ['#2196F3', '#E7515A'] : ['#1B55E2', '#E7515A'],
-            markers: {
-                discrete: [
-                    {
-                        seriesIndex: 0,
-                        dataPointIndex: 6,
-                        fillColor: '#1B55E2',
-                        strokeColor: 'transparent',
-                        size: 7,
-                    },
-                    {
-                        seriesIndex: 1,
-                        dataPointIndex: 5,
-                        fillColor: '#E7515A',
-                        strokeColor: 'transparent',
-                        size: 7,
-                    },
-                ],
-            },
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            xaxis: {
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    show: false,
-                },
-                crosshairs: {
-                    show: true,
-                },
-                labels: {
-                    offsetX: isRtl ? 2 : 0,
-                    offsetY: 5,
-                    style: {
-                        fontSize: '12px',
-                        cssClass: 'apexcharts-xaxis-title',
-                    },
-                },
-            },
-            yaxis: {
-                tickAmount: 7,
-                labels: {
-                    formatter: (value: number) => {
-                        return value / 1000 + 'K';
-                    },
-                    offsetX: isRtl ? -30 : -10,
-                    offsetY: 0,
-                    style: {
-                        fontSize: '12px',
-                        cssClass: 'apexcharts-yaxis-title',
-                    },
-                },
-                opposite: isRtl ? true : false,
-            },
-            grid: {
-                borderColor: isDark ? '#191E3A' : '#E0E6ED',
-                strokeDashArray: 5,
-                xaxis: {
-                    lines: {
-                        show: true,
-                    },
-                },
-                yaxis: {
-                    lines: {
-                        show: false,
-                    },
-                },
-                padding: {
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                },
-            },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-                fontSize: '16px',
-                markers: {
-                    width: 10,
-                    height: 10,
-                    offsetX: -2,
-                },
-                itemMargin: {
-                    horizontal: 10,
-                    vertical: 5,
-                },
-            },
-            tooltip: {
-                marker: {
-                    show: true,
-                },
-                x: {
-                    show: false,
-                },
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    inverseColors: !1,
-                    opacityFrom: isDark ? 0.19 : 0.28,
-                    opacityTo: 0.05,
-                    stops: isDark ? [100, 100] : [45, 100],
-                },
-            },
+            phone: '+1 (821) 447-3782',
+            isActive: true,
+            age: 39,
+            company: 'POLARAX',
         },
-    };
-
-    //Sales By Category
-    const salesByCategory: any = {
-        series: [985, 737, 270],
-        options: {
-            chart: {
-                type: 'donut',
-                height: 460,
-                fontFamily: 'Nunito, sans-serif',
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                show: true,
-                width: 25,
-                colors: isDark ? '#0e1726' : '#fff',
-            },
-            colors: isDark ? ['#5c1ac3', '#e2a03f', '#e7515a', '#e2a03f'] : ['#e2a03f', '#5c1ac3', '#e7515a'],
-            legend: {
-                position: 'bottom',
-                horizontalAlign: 'center',
-                fontSize: '14px',
-                markers: {
-                    width: 10,
-                    height: 10,
-                    offsetX: -2,
-                },
-                height: 50,
-                offsetY: 20,
-            },
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '65%',
-                        background: 'transparent',
-                        labels: {
-                            show: true,
-                            name: {
-                                show: true,
-                                fontSize: '29px',
-                                offsetY: -10,
-                            },
-                            value: {
-                                show: true,
-                                fontSize: '26px',
-                                color: isDark ? '#bfc9d4' : undefined,
-                                offsetY: 16,
-                                formatter: (val: any) => {
-                                    return val;
-                                },
-                            },
-                            total: {
-                                show: true,
-                                label: 'Total',
-                                color: '#888ea8',
-                                fontSize: '29px',
-                                formatter: (w: any) => {
-                                    return w.globals.seriesTotals.reduce(function (a: any, b: any) {
-                                        return a + b;
-                                    }, 0);
-                                },
-                            },
-                        },
-                    },
+        {
+            id: 2,
+            firstName: 'Celeste',
+            lastName: 'Grant',
+            email: 'celestegrant@polarax.com',
+            dob: '1989-11-19',
+            address: {
+                street: '639 Kimball Street',
+                city: 'Bascom',
+                zipcode: 8907,
+                geo: {
+                    lat: 65.954483,
+                    lng: 98.906478,
                 },
             },
-            labels: ['Apparel', 'Sports', 'Others'],
-            states: {
-                hover: {
-                    filter: {
-                        type: 'none',
-                        value: 0.15,
-                    },
-                },
-                active: {
-                    filter: {
-                        type: 'none',
-                        value: 0.15,
-                    },
-                },
-            },
+            phone: '+1 (838) 515-3408',
+            isActive: false,
+            age: 32,
+            company: 'MANGLO',
         },
-    };
-
-    //Daily Sales
-    const dailySales: any = {
-        series: [
-            {
-                name: 'Sales',
-                data: [44, 55, 41, 67, 22, 43, 21],
-            },
-            {
-                name: 'Last Week',
-                data: [13, 23, 20, 8, 13, 27, 33],
-            },
-        ],
-        options: {
-            chart: {
-                height: 160,
-                type: 'bar',
-                fontFamily: 'Nunito, sans-serif',
-                toolbar: {
-                    show: false,
-                },
-                stacked: true,
-                stackType: '100%',
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                show: true,
-                width: 1,
-            },
-            colors: ['#e2a03f', '#e0e6ed'],
-            responsive: [
-                {
-                    breakpoint: 480,
-                    options: {
-                        legend: {
-                            position: 'bottom',
-                            offsetX: -10,
-                            offsetY: 0,
-                        },
-                    },
-                },
-            ],
-            xaxis: {
-                labels: {
-                    show: false,
-                },
-                categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
-            },
-            yaxis: {
-                show: false,
-            },
-            fill: {
-                opacity: 1,
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '25%',
+        {
+            id: 3,
+            firstName: 'Tillman',
+            lastName: 'Forbes',
+            email: 'tillmanforbes@manglo.com',
+            dob: '2016-09-05',
+            address: {
+                street: '240 Vandalia Avenue',
+                city: 'Thynedale',
+                zipcode: 8994,
+                geo: {
+                    lat: -34.949388,
+                    lng: -82.958111,
                 },
             },
-            legend: {
-                show: false,
-            },
-            grid: {
-                show: false,
-                xaxis: {
-                    lines: {
-                        show: false,
-                    },
-                },
-                padding: {
-                    top: 10,
-                    right: -20,
-                    bottom: -20,
-                    left: -20,
-                },
-            },
+            phone: '+1 (969) 496-2892',
+            isActive: false,
+            age: 26,
+            company: 'APPLIDECK',
         },
-    };
-
-    //Total Orders
-    const totalOrders: any = {
-        series: [
-            {
-                name: 'Sales',
-                data: [28, 40, 36, 52, 38, 60, 38, 52, 36, 40],
-            },
-        ],
-        options: {
-            chart: {
-                height: 290,
-                type: 'area',
-                fontFamily: 'Nunito, sans-serif',
-                sparkline: {
-                    enabled: true,
+        {
+            id: 4,
+            firstName: 'Daisy',
+            lastName: 'Whitley',
+            email: 'daisywhitley@applideck.com',
+            dob: '1987-03-23',
+            address: {
+                street: '350 Pleasant Place',
+                city: 'Idledale',
+                zipcode: 9369,
+                geo: {
+                    lat: -54.458809,
+                    lng: -127.476556,
                 },
             },
-            stroke: {
-                curve: 'smooth',
-                width: 2,
-            },
-            colors: isDark ? ['#00ab55'] : ['#00ab55'],
-            labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-            yaxis: {
-                min: 0,
-                show: false,
-            },
-            grid: {
-                padding: {
-                    top: 125,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                },
-            },
-            fill: {
-                opacity: 1,
-                type: 'gradient',
-                gradient: {
-                    type: 'vertical',
-                    shadeIntensity: 1,
-                    inverseColors: !1,
-                    opacityFrom: 0.3,
-                    opacityTo: 0.05,
-                    stops: [100, 100],
-                },
-            },
-            tooltip: {
-                x: {
-                    show: false,
-                },
-            },
+            phone: '+1 (861) 564-2877',
+            isActive: true,
+            age: 21,
+            company: 'VOLAX',
         },
-    };
+        {
+            id: 5,
+            firstName: 'Weber',
+            lastName: 'Bowman',
+            email: 'weberbowman@volax.com',
+            dob: '1983-02-24',
+            address: {
+                street: '154 Conway Street',
+                city: 'Broadlands',
+                zipcode: 8131,
+                geo: {
+                    lat: 54.501351,
+                    lng: -167.47138,
+                },
+            },
+            phone: '+1 (962) 466-3483',
+            isActive: false,
+            age: 26,
+            company: 'ORBAXTER',
+        },
+        {
+            id: 6,
+            firstName: 'Buckley',
+            lastName: 'Townsend',
+            email: 'buckleytownsend@orbaxter.com',
+            dob: '2011-05-29',
+            address: {
+                street: '131 Guernsey Street',
+                city: 'Vallonia',
+                zipcode: 6779,
+                geo: {
+                    lat: -2.681655,
+                    lng: 3.528942,
+                },
+            },
+            phone: '+1 (884) 595-2643',
+            isActive: true,
+            age: 40,
+            company: 'OPPORTECH',
+        },
+        {
+            id: 7,
+            firstName: 'Latoya',
+            lastName: 'Bradshaw',
+            email: 'latoyabradshaw@opportech.com',
+            dob: '2010-11-23',
+            address: {
+                street: '668 Lenox Road',
+                city: 'Lowgap',
+                zipcode: 992,
+                geo: {
+                    lat: 36.026423,
+                    lng: 130.412198,
+                },
+            },
+            phone: '+1 (906) 474-3155',
+            isActive: true,
+            age: 24,
+            company: 'GORGANIC',
+        },
+        {
+            id: 8,
+            firstName: 'Kate',
+            lastName: 'Lindsay',
+            email: 'katelindsay@gorganic.com',
+            dob: '1987-07-02',
+            address: {
+                street: '773 Harrison Avenue',
+                city: 'Carlton',
+                zipcode: 5909,
+                geo: {
+                    lat: 42.464724,
+                    lng: -12.948403,
+                },
+            },
+            phone: '+1 (930) 546-2952',
+            isActive: true,
+            age: 24,
+            company: 'AVIT',
+        },
+        {
+            id: 9,
+            firstName: 'Marva',
+            lastName: 'Sandoval',
+            email: 'marvasandoval@avit.com',
+            dob: '2010-11-02',
+            address: {
+                street: '200 Malta Street',
+                city: 'Tuskahoma',
+                zipcode: 1292,
+                geo: {
+                    lat: -52.206169,
+                    lng: 74.19452,
+                },
+            },
+            phone: '+1 (927) 566-3600',
+            isActive: false,
+            age: 28,
+            company: 'QUILCH',
+        },
+        {
+            id: 10,
+            firstName: 'Decker',
+            lastName: 'Russell',
+            email: 'deckerrussell@quilch.com',
+            dob: '1994-04-21',
+            address: {
+                street: '708 Bath Avenue',
+                city: 'Coultervillle',
+                zipcode: 1268,
+                geo: {
+                    lat: -41.550295,
+                    lng: -146.598075,
+                },
+            },
+            phone: '+1 (846) 535-3283',
+            isActive: false,
+            age: 27,
+            company: 'MEMORA',
+        },
+        {
+            id: 11,
+            firstName: 'Odom',
+            lastName: 'Mills',
+            email: 'odommills@memora.com',
+            dob: '2010-01-24',
+            address: {
+                street: '907 Blake Avenue',
+                city: 'Churchill',
+                zipcode: 4400,
+                geo: {
+                    lat: -56.061694,
+                    lng: -130.238523,
+                },
+            },
+            phone: '+1 (995) 525-3402',
+            isActive: true,
+            age: 34,
+            company: 'ZORROMOP',
+        },
+        {
+            id: 12,
+            firstName: 'Sellers',
+            lastName: 'Walters',
+            email: 'sellerswalters@zorromop.com',
+            dob: '1975-11-12',
+            address: {
+                street: '978 Oakland Place',
+                city: 'Gloucester',
+                zipcode: 3802,
+                geo: {
+                    lat: 11.732587,
+                    lng: 96.118099,
+                },
+            },
+            phone: '+1 (830) 430-3157',
+            isActive: true,
+            age: 28,
+            company: 'ORBOID',
+        },
+        {
+            id: 13,
+            firstName: 'Wendi',
+            lastName: 'Powers',
+            email: 'wendipowers@orboid.com',
+            dob: '1979-06-02',
+            address: {
+                street: '376 Greenpoint Avenue',
+                city: 'Elliott',
+                zipcode: 9149,
+                geo: {
+                    lat: -78.159578,
+                    lng: -9.835103,
+                },
+            },
+            phone: '+1 (863) 457-2088',
+            isActive: true,
+            age: 31,
+            company: 'SNORUS',
+        },
+        {
+            id: 14,
+            firstName: 'Sophie',
+            lastName: 'Horn',
+            email: 'sophiehorn@snorus.com',
+            dob: '2018-09-20',
+            address: {
+                street: '343 Doughty Street',
+                city: 'Homestead',
+                zipcode: 330,
+                geo: {
+                    lat: 65.484087,
+                    lng: 137.413998,
+                },
+            },
+            phone: '+1 (885) 418-3948',
+            isActive: true,
+            age: 22,
+            company: 'XTH',
+        },
+        {
+            id: 15,
+            firstName: 'Levine',
+            lastName: 'Rodriquez',
+            email: 'levinerodriquez@xth.com',
+            dob: '1973-02-08',
+            address: {
+                street: '643 Allen Avenue',
+                city: 'Weedville',
+                zipcode: 8931,
+                geo: {
+                    lat: -63.185586,
+                    lng: 117.327808,
+                },
+            },
+            phone: '+1 (999) 565-3239',
+            isActive: true,
+            age: 27,
+            company: 'COMTRACT',
+        },
+        {
+            id: 16,
+            firstName: 'Little',
+            lastName: 'Hatfield',
+            email: 'littlehatfield@comtract.com',
+            dob: '2012-01-03',
+            address: {
+                street: '194 Anthony Street',
+                city: 'Williston',
+                zipcode: 7456,
+                geo: {
+                    lat: 47.480837,
+                    lng: 6.085909,
+                },
+            },
+            phone: '+1 (812) 488-3011',
+            isActive: false,
+            age: 33,
+            company: 'ZIDANT',
+        },
+        {
+            id: 17,
+            firstName: 'Larson',
+            lastName: 'Kelly',
+            email: 'larsonkelly@zidant.com',
+            dob: '2010-06-14',
+            address: {
+                street: '978 Indiana Place',
+                city: 'Innsbrook',
+                zipcode: 639,
+                geo: {
+                    lat: -71.766732,
+                    lng: 150.854345,
+                },
+            },
+            phone: '+1 (892) 484-2162',
+            isActive: true,
+            age: 20,
+            company: 'SUREPLEX',
+        },
+        {
+            id: 18,
+            firstName: 'Kendra',
+            lastName: 'Molina',
+            email: 'kendramolina@sureplex.com',
+            dob: '2002-07-19',
+            address: {
+                street: '567 Charles Place',
+                city: 'Kimmell',
+                zipcode: 1966,
+                geo: {
+                    lat: 50.765816,
+                    lng: -117.106499,
+                },
+            },
+            phone: '+1 (920) 528-3330',
+            isActive: false,
+            age: 31,
+            company: 'DANJA',
+        },
+        {
+            id: 19,
+            firstName: 'Ebony',
+            lastName: 'Livingston',
+            email: 'ebonylivingston@danja.com',
+            dob: '1994-10-18',
+            address: {
+                street: '284 Cass Place',
+                city: 'Navarre',
+                zipcode: 948,
+                geo: {
+                    lat: 65.271256,
+                    lng: -83.064729,
+                },
+            },
+            phone: '+1 (970) 591-3039',
+            isActive: false,
+            age: 33,
+            company: 'EURON',
+        },
+        {
+            id: 20,
+            firstName: 'Kaufman',
+            lastName: 'Rush',
+            email: 'kaufmanrush@euron.com',
+            dob: '2011-07-10',
+            address: {
+                street: '408 Kingsland Avenue',
+                city: 'Beaulieu',
+                zipcode: 7911,
+                geo: {
+                    lat: 41.513153,
+                    lng: 54.821641,
+                },
+            },
+            phone: '+1 (924) 463-2934',
+            isActive: false,
+            age: 39,
+            company: 'ILLUMITY',
+        },
+        {
+            id: 21,
+            firstName: 'Frank',
+            lastName: 'Hays',
+            email: 'frankhays@illumity.com',
+            dob: '2005-06-15',
+            address: {
+                street: '973 Caton Place',
+                city: 'Dargan',
+                zipcode: 4104,
+                geo: {
+                    lat: 63.314988,
+                    lng: -138.771323,
+                },
+            },
+            phone: '+1 (930) 577-2670',
+            isActive: false,
+            age: 31,
+            company: 'SYBIXTEX',
+        },
+        {
+            id: 22,
+            firstName: 'Carmella',
+            lastName: 'Mccarty',
+            email: 'carmellamccarty@sybixtex.com',
+            dob: '1980-03-06',
+            address: {
+                street: '919 Judge Street',
+                city: 'Canby',
+                zipcode: 8283,
+                geo: {
+                    lat: 9.198597,
+                    lng: -138.809971,
+                },
+            },
+            phone: '+1 (876) 456-3218',
+            isActive: true,
+            age: 21,
+            company: 'ZEDALIS',
+        },
+        {
+            id: 23,
+            firstName: 'Massey',
+            lastName: 'Owen',
+            email: 'masseyowen@zedalis.com',
+            dob: '2012-03-01',
+            address: {
+                street: '108 Seaview Avenue',
+                city: 'Slovan',
+                zipcode: 3599,
+                geo: {
+                    lat: -74.648318,
+                    lng: 99.620699,
+                },
+            },
+            phone: '+1 (917) 567-3786',
+            isActive: false,
+            age: 40,
+            company: 'DYNO',
+        },
+        {
+            id: 24,
+            firstName: 'Lottie',
+            lastName: 'Lowery',
+            email: 'lottielowery@dyno.com',
+            dob: '1982-10-10',
+            address: {
+                street: '557 Meserole Avenue',
+                city: 'Fowlerville',
+                zipcode: 4991,
+                geo: {
+                    lat: 54.811546,
+                    lng: -20.996515,
+                },
+            },
+            phone: '+1 (912) 539-3498',
+            isActive: true,
+            age: 36,
+            company: 'MULTIFLEX',
+        },
+        {
+            id: 25,
+            firstName: 'Addie',
+            lastName: 'Luna',
+            email: 'addieluna@multiflex.com',
+            dob: '1988-05-01',
+            address: {
+                street: '688 Bulwer Place',
+                city: 'Harmon',
+                zipcode: 7664,
+                geo: {
+                    lat: -12.762766,
+                    lng: -39.924497,
+                },
+            },
+            phone: '+1 (962) 537-2981',
+            isActive: true,
+            age: 32,
+            company: 'PHARMACON',
+        },
+    ];
+    
+    const MultiColumn = () => {
+        const dispatch = useDispatch();
+        useEffect(() => {
+            dispatch(setPageTitle('Multi Column Table'));
+        });
+        const [page, setPage] = useState(1);
+        const PAGE_SIZES = [10, 20, 30, 50, 100];
+        const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+        const [initialRecords, setInitialRecords] = useState(sortBy(rowData, 'firstName'));
+        const [recordsData, setRecordsData] = useState(initialRecords);
+    
+        const [search, setSearch] = useState('');
+        const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
+            columnAccessor: 'firstName',
+            direction: 'asc',
+        });
+    
+        useEffect(() => {
+            setPage(1);
+        }, [pageSize]);
+    
+        useEffect(() => {
+            const from = (page - 1) * pageSize;
+            const to = from + pageSize;
+            setRecordsData([...initialRecords.slice(from, to)]);
+        }, [page, pageSize, initialRecords]);
+    
+        useEffect(() => {
+            setInitialRecords(() => {
+                return rowData.filter((item) => {
+                    return (
+                        item.firstName.toLowerCase().includes(search.toLowerCase()) ||
+                        item.lastName.toLowerCase().includes(search.toLowerCase()) ||
+                        item.company.toLowerCase().includes(search.toLowerCase()) ||
+                        item.email.toLowerCase().includes(search.toLowerCase()) ||
+                        item.age.toString().toLowerCase().includes(search.toLowerCase()) ||
+                        item.dob.toLowerCase().includes(search.toLowerCase()) ||
+                        item.phone.toLowerCase().includes(search.toLowerCase())
+                    );
+                });
+            });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [search]);
+    
+        useEffect(() => {
+            const data = sortBy(initialRecords, sortStatus.columnAccessor);
+            setInitialRecords(sortStatus.direction === 'desc' ? data.reverse() : data);
+            setPage(1);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [sortStatus]);
+    
+        const formatDate = (date: any) => {
+            if (date) {
+                const dt = new Date(date);
+                const month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
+                const day = dt.getDate() < 10 ? '0' + dt.getDate() : dt.getDate();
+                return day + '/' + month + '/' + dt.getFullYear();
+            }
+            return '';
+        };
+
 
     return (
-        <div>
-            <ul className="flex space-x-2 rtl:space-x-reverse">
-                <li>
-                    <Link to="/" className="text-primary hover:underline">
-                        Dashboard
-                    </Link>
-                </li>
-                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Sales</span>
-                </li>
-            </ul>
-
-            <div className="pt-5">
-                <div className="grid xl:grid-cols-3 gap-6 mb-6">
-                    <div className="panel h-full xl:col-span-2">
-                        <div className="flex items-center justify-between dark:text-white-light mb-5">
-                            <h5 className="font-semibold text-lg">Revenue</h5>
-                            <div className="dropdown">
-                                <Dropdown
-                                    offset={[0, 1]}
-                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                    button={<IconHorizontalDots className="text-black/70 dark:text-white/70 hover:!text-primary" />}
-                                >
-                                    <ul>
-                                        <li>
-                                            <button type="button">Weekly</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Monthly</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Yearly</button>
-                                        </li>
-                                    </ul>
-                                </Dropdown>
-                            </div>
-                        </div>
-                        <p className="text-lg dark:text-white-light/90">
-                            Total Profit <span className="text-primary ml-2">$10,840</span>
-                        </p>
-                        <div className="relative">
-                            <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
-                                {loading ? (
-                                    <div className="min-h-[325px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                        <span className="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                                    </div>
-                                ) : (
-                                    <ReactApexChart series={revenueChart.series} options={revenueChart.options} type="area" height={325} />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="panel h-full">
-                        <div className="flex items-center mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Sales By Category</h5>
-                        </div>
-                        <div>
-                            <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
-                                {loading ? (
-                                    <div className="min-h-[325px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                        <span className="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                                    </div>
-                                ) : (
-                                    <ReactApexChart series={salesByCategory.series} options={salesByCategory.options} type="donut" height={460} />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
-                    <div className="panel h-full sm:col-span-2 xl:col-span-1">
-                        <div className="flex items-center mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">
-                                Daily Sales
-                                <span className="block text-white-dark text-sm font-normal">Go to columns for details.</span>
-                            </h5>
-                            <div className="ltr:ml-auto rtl:mr-auto relative">
-                                <div className="w-11 h-11 text-warning bg-[#ffeccb] dark:bg-warning dark:text-[#ffeccb] grid place-content-center rounded-full">
-                                    <IconDollarSign />
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="bg-white dark:bg-black rounded-lg overflow-hidden">
-                                {loading ? (
-                                    <div className="min-h-[325px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                        <span className="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                                    </div>
-                                ) : (
-                                    <ReactApexChart series={dailySales.series} options={dailySales.options} type="bar" height={160} />
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="panel h-full">
-                        <div className="flex items-center justify-between dark:text-white-light mb-5">
-                            <h5 className="font-semibold text-lg">Summary</h5>
-                            <div className="dropdown">
-                                <Dropdown
-                                    placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                    button={<IconHorizontalDots className="w-5 h-5 text-black/70 dark:text-white/70 hover:!text-primary" />}
-                                >
-                                    <ul>
-                                        <li>
-                                            <button type="button">View Report</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Edit Report</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Mark as Done</button>
-                                        </li>
-                                    </ul>
-                                </Dropdown>
-                            </div>
-                        </div>
-                        <div className="space-y-9">
-                            <div className="flex items-center">
-                                <div className="w-9 h-9 ltr:mr-3 rtl:ml-3">
-                                    <div className="bg-secondary-light dark:bg-secondary text-secondary dark:text-secondary-light  rounded-full w-9 h-9 grid place-content-center">
-                                        <IconInbox />
-                                    </div>
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex font-semibold text-white-dark mb-2">
-                                        <h6>Income</h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto">$92,600</p>
-                                    </div>
-                                    <div className="rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">
-                                        <div className="bg-gradient-to-r from-[#7579ff] to-[#b224ef] w-11/12 h-full rounded-full"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-9 h-9 ltr:mr-3 rtl:ml-3">
-                                    <div className="bg-success-light dark:bg-success text-success dark:text-success-light rounded-full w-9 h-9 grid place-content-center">
-                                        <IconTag />
-                                    </div>
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex font-semibold text-white-dark mb-2">
-                                        <h6>Profit</h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto">$37,515</p>
-                                    </div>
-                                    <div className="w-full rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">
-                                        <div className="bg-gradient-to-r from-[#3cba92] to-[#0ba360] w-full h-full rounded-full" style={{ width: '65%' }}></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-9 h-9 ltr:mr-3 rtl:ml-3">
-                                    <div className="bg-warning-light dark:bg-warning text-warning dark:text-warning-light rounded-full w-9 h-9 grid place-content-center">
-                                        <IconCreditCard />
-                                    </div>
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex font-semibold text-white-dark mb-2">
-                                        <h6>Expenses</h6>
-                                        <p className="ltr:ml-auto rtl:mr-auto">$55,085</p>
-                                    </div>
-                                    <div className="w-full rounded-full h-2 bg-dark-light dark:bg-[#1b2e4b] shadow">
-                                        <div className="bg-gradient-to-r from-[#f09819] to-[#ff5858] w-full h-full rounded-full" style={{ width: '80%' }}></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="panel h-full p-0">
-                        <div className="flex items-center justify-between w-full p-5 absolute">
-                            <div className="relative">
-                                <div className="text-success dark:text-success-light bg-success-light dark:bg-success w-11 h-11 rounded-lg flex items-center justify-center">
-                                    <IconShoppingCart />
-                                </div>
-                            </div>
-                            <h5 className="font-semibold text-2xl ltr:text-right rtl:text-left dark:text-white-light">
-                                3,192
-                                <span className="block text-sm font-normal">Total Orders</span>
-                            </h5>
-                        </div>
-                        <div className="bg-transparent rounded-lg overflow-hidden">
-                            {/* loader */}
-                            {loading ? (
-                                <div className="min-h-[325px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                                    <span className="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                                </div>
-                            ) : (
-                                <ReactApexChart series={totalOrders.series} options={totalOrders.options} type="area" height={290} />
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
-                    <div className="panel h-full sm:col-span-2 xl:col-span-1 pb-0">
-                        <h5 className="font-semibold text-lg dark:text-white-light mb-5">Recent Activities</h5>
-                        <PerfectScrollbar className="relative h-[290px] ltr:pr-3 rtl:pl-3 ltr:-mr-3 rtl:-ml-3 mb-4">
-                            <div className="text-sm cursor-pointer">
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-primary w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Updated Server Logs</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">Just Now</div>
-
-                                    <span className="badge badge-outline-primary absolute ltr:right-0 rtl:left-0 text-xs bg-primary-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Pending
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-success w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Send Mail to HR and Admin</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">2 min ago</div>
-
-                                    <span className="badge badge-outline-success absolute ltr:right-0 rtl:left-0 text-xs bg-success-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Completed
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-danger w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Backup Files EOD</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">14:00</div>
-
-                                    <span className="badge badge-outline-danger absolute ltr:right-0 rtl:left-0 text-xs bg-danger-light dark:bg-black opacity-0 group-hover:opacity-100">Pending</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-black w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Collect documents from Sara</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">16:00</div>
-
-                                    <span className="badge badge-outline-dark absolute ltr:right-0 rtl:left-0 text-xs bg-dark-light dark:bg-black opacity-0 group-hover:opacity-100">Completed</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-warning w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Conference call with Marketing Manager.</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">17:00</div>
-
-                                    <span className="badge badge-outline-warning absolute ltr:right-0 rtl:left-0 text-xs bg-warning-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        In progress
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-info w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Rebooted Server</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">17:00</div>
-
-                                    <span className="badge badge-outline-info absolute ltr:right-0 rtl:left-0 text-xs bg-info-light dark:bg-black opacity-0 group-hover:opacity-100">Completed</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-secondary w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Send contract details to Freelancer</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">18:00</div>
-
-                                    <span className="badge badge-outline-secondary absolute ltr:right-0 rtl:left-0 text-xs bg-secondary-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Pending
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-primary w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Updated Server Logs</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">Just Now</div>
-
-                                    <span className="badge badge-outline-primary absolute ltr:right-0 rtl:left-0 text-xs bg-primary-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Pending
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-success w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Send Mail to HR and Admin</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">2 min ago</div>
-
-                                    <span className="badge badge-outline-success absolute ltr:right-0 rtl:left-0 text-xs bg-success-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Completed
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-danger w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Backup Files EOD</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">14:00</div>
-
-                                    <span className="badge badge-outline-danger absolute ltr:right-0 rtl:left-0 text-xs bg-danger-light dark:bg-black opacity-0 group-hover:opacity-100">Pending</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-black w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Collect documents from Sara</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">16:00</div>
-
-                                    <span className="badge badge-outline-dark absolute ltr:right-0 rtl:left-0 text-xs bg-dark-light dark:bg-black opacity-0 group-hover:opacity-100">Completed</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-warning w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Conference call with Marketing Manager.</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">17:00</div>
-
-                                    <span className="badge badge-outline-warning absolute ltr:right-0 rtl:left-0 text-xs bg-warning-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        In progress
-                                    </span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-info w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Rebooted Server</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">17:00</div>
-
-                                    <span className="badge badge-outline-info absolute ltr:right-0 rtl:left-0 text-xs bg-info-light dark:bg-black opacity-0 group-hover:opacity-100">Completed</span>
-                                </div>
-                                <div className="flex items-center py-1.5 relative group">
-                                    <div className="bg-secondary w-1.5 h-1.5 rounded-full ltr:mr-1 rtl:ml-1.5"></div>
-                                    <div className="flex-1">Send contract details to Freelancer</div>
-                                    <div className="ltr:ml-auto rtl:mr-auto text-xs text-white-dark dark:text-gray-500">18:00</div>
-
-                                    <span className="badge badge-outline-secondary absolute ltr:right-0 rtl:left-0 text-xs bg-secondary-light dark:bg-black opacity-0 group-hover:opacity-100">
-                                        Pending
-                                    </span>
-                                </div>
-                            </div>
-                        </PerfectScrollbar>
-                        <div className="border-t border-white-light dark:border-white/10">
-                            <Link to="/" className=" font-semibold group hover:text-primary p-4 flex items-center justify-center group">
-                                View All
-                                <IconArrowLeft className="rtl:rotate-180 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition duration-300 ltr:ml-1 rtl:mr-1" />
-                            </Link>
-                        </div>
-                    </div>
-                    <div className="panel h-full">
-                        <div className="flex items-center justify-between dark:text-white-light mb-5">
-                            <h5 className="font-semibold text-lg">Transactions</h5>
-                            <div className="dropdown">
-                                <Dropdown placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`} button={<IconHorizontalDots className="text-black/70 dark:text-white/70 hover:!text-primary" />}>
-                                    <ul>
-                                        <li>
-                                            <button type="button">View Report</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Edit Report</button>
-                                        </li>
-                                        <li>
-                                            <button type="button">Mark as Done</button>
-                                        </li>
-                                    </ul>
-                                </Dropdown>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="space-y-6">
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center text-base w-9 h-9 rounded-md bg-success-light dark:bg-success text-success dark:text-success-light">SP</span>
-                                    <div className="px-3 flex-1">
-                                        <div>Shaun Park</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">10 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-success text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">+$36.11</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center w-9 h-9 rounded-md bg-warning-light dark:bg-warning text-warning dark:text-warning-light">
-                                        <IconCashBanknotes />
-                                    </span>
-                                    <div className="px-3 flex-1">
-                                        <div>Cash withdrawal</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">04 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-danger text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">-$16.44</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center w-9 h-9 rounded-md bg-danger-light dark:bg-danger text-danger dark:text-danger-light">
-                                        <IconUser className="w-6 h-6" />
-                                    </span>
-                                    <div className="px-3 flex-1">
-                                        <div>Amy Diaz</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">10 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-success text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">+$66.44</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center w-9 h-9 rounded-md bg-secondary-light dark:bg-secondary text-secondary dark:text-secondary-light">
-                                        <IconNetflix />
-                                    </span>
-                                    <div className="px-3 flex-1">
-                                        <div>Netflix</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">04 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-danger text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">-$32.00</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center text-base w-9 h-9 rounded-md bg-info-light dark:bg-info text-info dark:text-info-light">DA</span>
-                                    <div className="px-3 flex-1">
-                                        <div>Daisy Anderson</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">10 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-success text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">+$10.08</span>
-                                </div>
-                                <div className="flex">
-                                    <span className="shrink-0 grid place-content-center w-9 h-9 rounded-md bg-primary-light dark:bg-primary text-primary dark:text-primary-light">
-                                        <IconBolt />
-                                    </span>
-                                    <div className="px-3 flex-1">
-                                        <div>Electricity Bill</div>
-                                        <div className="text-xs text-white-dark dark:text-gray-500">04 Jan 1:00PM</div>
-                                    </div>
-                                    <span className="text-danger text-base px-1 ltr:ml-auto rtl:mr-auto whitespace-pre">-$22.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="panel h-full p-0 border-0 overflow-hidden">
-                        <div className="p-6 bg-gradient-to-r from-[#4361ee] to-[#160f6b] min-h-[190px]">
-                            <div className="flex justify-between items-center mb-6">
-                                <div className="bg-black/50 rounded-full p-1 ltr:pr-3 rtl:pl-3 flex items-center text-white font-semibold">
-                                    <img className="w-8 h-8 rounded-full border-2 border-white/50 block object-cover ltr:mr-1 rtl:ml-1" src="/assets/images/profile-34.jpeg" alt="avatar" />
-                                    Alan Green
-                                </div>
-                                <button type="button" className="ltr:ml-auto rtl:mr-auto flex items-center justify-between w-9 h-9 bg-black text-white rounded-md hover:opacity-80">
-                                    <IconPlus className="w-6 h-6 m-auto" />
-                                </button>
-                            </div>
-                            <div className="text-white flex justify-between items-center">
-                                <p className="text-xl">Wallet Balance</p>
-                                <h5 className="ltr:ml-auto rtl:mr-auto text-2xl">
-                                    <span className="text-white-light">$</span>2953
-                                </h5>
-                            </div>
-                        </div>
-                        <div className="-mt-12 px-8 grid grid-cols-2 gap-2">
-                            <div className="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
-                                <span className="flex justify-between items-center mb-4 dark:text-white">
-                                    Received
-                                    <IconCaretDown className="w-4 h-4 text-success rotate-180" />
-                                </span>
-                                <div className="btn w-full  py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">$97.99</div>
-                            </div>
-                            <div className="bg-white rounded-md shadow px-4 py-2.5 dark:bg-[#060818]">
-                                <span className="flex justify-between items-center mb-4 dark:text-white">
-                                    Spent
-                                    <IconCaretDown className="w-4 h-4 text-danger" />
-                                </span>
-                                <div className="btn w-full  py-1 text-base shadow-none border-0 bg-[#ebedf2] dark:bg-black text-[#515365] dark:text-[#bfc9d4]">$53.00</div>
-                            </div>
-                        </div>
-                        <div className="p-5">
-                            <div className="mb-5">
-                                <span className="bg-[#1b2e4b] text-white text-xs rounded-full px-4 py-1.5 before:bg-white before:w-1.5 before:h-1.5 before:rounded-full ltr:before:mr-2 rtl:before:ml-2 before:inline-block">
-                                    Pending
-                                </span>
-                            </div>
-                            <div className="mb-5 space-y-1">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-[#515365] font-semibold">Netflix</p>
-                                    <p className="text-base">
-                                        <span>$</span> <span className="font-semibold">13.85</span>
-                                    </p>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <p className="text-[#515365] font-semibold">BlueHost VPN</p>
-                                    <p className="text-base">
-                                        <span>$</span> <span className="font-semibold ">15.66</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-center px-2 flex justify-around">
-                                <button type="button" className="btn btn-secondary ltr:mr-2 rtl:ml-2">
-                                    View Details
-                                </button>
-                                <button type="button" className="btn btn-success">
-                                    Pay Now $29.51
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-                    <div className="panel h-full w-full">
-                        <div className="flex items-center justify-between mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Recent Orders</h5>
-                        </div>
-                        <div className="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th className="ltr:rounded-l-md rtl:rounded-r-md">Customer</th>
-                                        <th>Product</th>
-                                        <th>Invoice</th>
-                                        <th>Price</th>
-                                        <th className="ltr:rounded-r-md rtl:rounded-l-md">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="min-w-[150px] text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/profile-6.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Luke Ivory</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-primary">Headphone</td>
-                                        <td>
-                                            <Link to="/apps/invoice/preview">#46894</Link>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>
-                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">Paid</span>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/profile-7.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Andy King</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-info">Nike Sport</td>
-                                        <td>
-                                            <Link to="/apps/invoice/preview">#76894</Link>
-                                        </td>
-                                        <td>$126.04</td>
-                                        <td>
-                                            <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">Shipped</span>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/profile-8.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Laurie Fox</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-warning">Sunglasses</td>
-                                        <td>
-                                            <Link to="/apps/invoice/preview">#66894</Link>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>
-                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">Paid</span>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/profile-9.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Ryan Collins</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-danger">Sport</td>
-                                        <td>
-                                            <Link to="/apps/invoice/preview">#75844</Link>
-                                        </td>
-                                        <td>$110.00</td>
-                                        <td>
-                                            <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">Shipped</span>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex items-center">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/profile-10.jpeg" alt="avatar" />
-                                                <span className="whitespace-nowrap">Irene Collins</span>
-                                            </div>
-                                        </td>
-                                        <td className="text-secondary">Speakers</td>
-                                        <td>
-                                            <Link to="/apps/invoice/preview">#46894</Link>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>
-                                            <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">Paid</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div className="panel h-full w-full">
-                        <div className="flex items-center justify-between mb-5">
-                            <h5 className="font-semibold text-lg dark:text-white-light">Top Selling Product</h5>
-                        </div>
-                        <div className="table-responsive">
-                            <table>
-                                <thead>
-                                    <tr className="border-b-0">
-                                        <th className="ltr:rounded-l-md rtl:rounded-r-md">Product</th>
-                                        <th>Price</th>
-                                        <th>Discount</th>
-                                        <th>Sold</th>
-                                        <th className="ltr:rounded-r-md rtl:rounded-l-md">Source</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="min-w-[150px] text-black dark:text-white">
-                                            <div className="flex">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/product-headphones.jpg" alt="avatar" />
-                                                <p className="whitespace-nowrap">
-                                                    Headphone
-                                                    <span className="text-primary block text-xs">Digital</span>
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>$168.09</td>
-                                        <td>$60.09</td>
-                                        <td>170</td>
-                                        <td>
-                                            <Link className="text-danger flex items-center" to="/">
-                                                <IconMultipleForwardRight className="rtl:rotate-180 ltr:mr-1 rtl:ml-1" />
-                                                Direct
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/product-shoes.jpg" alt="avatar" />
-                                                <p className="whitespace-nowrap">
-                                                    Shoes <span className="text-warning block text-xs">Faishon</span>
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>$126.04</td>
-                                        <td>$47.09</td>
-                                        <td>130</td>
-                                        <td>
-                                            <Link className="text-success flex items-center" to="/">
-                                                <IconMultipleForwardRight className="rtl:rotate-180 ltr:mr-1 rtl:ml-1" />
-                                                Google
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/product-watch.jpg" alt="avatar" />
-                                                <p className="whitespace-nowrap">
-                                                    Watch <span className="text-danger block text-xs">Accessories</span>
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>$20.00</td>
-                                        <td>66</td>
-                                        <td>
-                                            <Link className="text-warning flex items-center" to="/">
-                                                <IconMultipleForwardRight className="rtl:rotate-180 ltr:mr-1 rtl:ml-1" />
-                                                Ads
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/product-laptop.jpg" alt="avatar" />
-                                                <p className="whitespace-nowrap">
-                                                    Laptop <span className="text-primary block text-xs">Digital</span>
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>$110.00</td>
-                                        <td>$33.00</td>
-                                        <td>35</td>
-                                        <td>
-                                            <Link className="text-secondary flex items-center" to="/">
-                                                <IconMultipleForwardRight className="rtl:rotate-180 ltr:mr-1 rtl:ml-1" />
-                                                Email
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                    <tr className="text-white-dark hover:text-black dark:hover:text-white-light/90 group">
-                                        <td className="text-black dark:text-white">
-                                            <div className="flex">
-                                                <img className="w-8 h-8 rounded-md ltr:mr-3 rtl:ml-3 object-cover" src="/assets/images/product-camera.jpg" alt="avatar" />
-                                                <p className="whitespace-nowrap">
-                                                    Camera <span className="text-primary block text-xs">Digital</span>
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>$56.07</td>
-                                        <td>$26.04</td>
-                                        <td>30</td>
-                                        <td>
-                                            <Link className="text-primary flex items-center" to="/">
-                                                <IconMultipleForwardRight className="rtl:rotate-180 ltr:mr-1 rtl:ml-1" />
-                                                Referral
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    <header className={`z-40`}>
+        <button>Hello</button>
+    </header>
+    <div>
+    <div className="panel flex items-center overflow-x-auto whitespace-nowrap p-3 text-primary">
+        <div className="rounded-full bg-primary p-1.5 text-white ring-2 ring-primary/30 ltr:mr-3 rtl:ml-3">
+            <IconBell />
+        </div>
+        <span className="ltr:mr-3 rtl:ml-3">Documentation: </span>
+        <a href="https://www.npmjs.com/package/mantine-datatable" target="_blank" className="block hover:underline">
+            https://www.npmjs.com/package/mantine-datatable
+        </a>
+    </div>
+    <div className="panel mt-6">
+        <div className="flex md:items-center md:flex-row flex-col mb-5 gap-5">
+            <h5 className="font-semibold text-lg dark:text-white-light">Multicolumn</h5>
+            <div className="ltr:ml-auto rtl:mr-auto">
+                <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
         </div>
+        <div className="datatables">
+            <DataTable
+                highlightOnHover
+                className="whitespace-nowrap table-hover"
+                records={recordsData}
+                columns={[
+                    {
+                        accessor: 'firstName',
+                        title: 'User',
+                        sortable: true,
+                        render: ({ firstName, lastName, id }) => (
+                            <div className="flex items-center w-max">
+                                <img className="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src={`/assets/images/profile-${id}.jpeg`} alt="" />
+                                <div>{firstName + ' ' + lastName}</div>
+                            </div>
+                        ),
+                    },
+                    { accessor: 'company', title: 'Company', sortable: true },
+                    { accessor: 'age', title: 'Age', sortable: true },
+                    {
+                        accessor: 'dob',
+                        title: 'Start Date',
+                        sortable: true,
+                        render: ({ dob }) => <div>{formatDate(dob)}</div>,
+                    },
+                    { accessor: 'email', sortable: true },
+                    { accessor: 'phone', title: 'Phone No.', sortable: true },
+                ]}
+                totalRecords={initialRecords.length}
+                recordsPerPage={pageSize}
+                page={page}
+                onPageChange={(p) => setPage(p)}
+                recordsPerPageOptions={PAGE_SIZES}
+                onRecordsPerPageChange={setPageSize}
+                sortStatus={sortStatus}
+                onSortStatusChange={setSortStatus}
+                minHeight={200}
+                paginationText={({ from, to, totalRecords }) => `Showing  ${from} to ${to} of ${totalRecords} entries`}
+            />
+        </div>
+    </div>
+</div>
     );
 };
+}
 
 export default Index;
