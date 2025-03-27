@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import AuthGuard from './AuthGuard';
 const Index = lazy(() => import('../pages/Index'));
-const Login = lazy(() => import('../pages/Authentication/LoginBoxed'));
-const Register = lazy(() => import('../pages/Authentication/RegisterBoxed'));
+const Login = lazy(() => import('../pages/Authentication/Login'));
+const Register = lazy(() => import('../pages/Authentication/Register'));
 
 //Aday
 const AdayAnasayfa = lazy(() => import('../pages/Aday/AdayAnasayfa'));
