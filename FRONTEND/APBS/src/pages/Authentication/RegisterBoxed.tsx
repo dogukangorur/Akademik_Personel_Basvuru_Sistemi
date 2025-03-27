@@ -63,7 +63,7 @@ const RegisterBoxed = () => {
                                 <div className='w-[400px] flex justify-center flex-col'>
 
                                       <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-3">
-                                         <input type="text" name='telefon' placeholder="Telefon" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" required />
+                                         <input type="text" name='telefon' placeholder="Telefon" minLength={11} maxLength={11} pattern='[0-9]{11}' className="form-input border-2  focus:border-green-800" required />
                                          <input type="text" name='tc' placeholder="TC" className="form-input border-2  focus:border-green-800" minLength={11} maxLength={11} required />
                                       </div>
                         
