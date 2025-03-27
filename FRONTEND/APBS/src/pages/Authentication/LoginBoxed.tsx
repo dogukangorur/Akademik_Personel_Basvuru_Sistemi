@@ -86,7 +86,7 @@ const LoginBoxed = () => {
                                         <div className="relative z-0  mb-8 group">
                                             <input type="sifre" name="sifre" id="floating_password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
                                         </div>
-                                        <div className="flex items-start mb-8">
+                                        <div className="flex items-start mb-8 ml-2">
                                             <div className="flex items-start h-5 ">
                                                 <input type="checkbox" className="w-4 h-4 border border-gray-300 accent-green-600 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 checked:bg-green-600 checked:border-green-600"/> 
                                             </div>
