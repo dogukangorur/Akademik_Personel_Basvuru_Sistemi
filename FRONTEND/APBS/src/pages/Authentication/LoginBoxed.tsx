@@ -113,7 +113,7 @@ const LoginBoxed = () => {
                                 <div className='w-[200px] flex justify-center flex-col'>
 
                                     <div className="flex justify-center mb-8">
-                                            <select id="select"  className="form-input border-2  focus:border-green-800" required>
+                                            <select id="select"  className="form-select border-2  focus:border-green-800" required>
                                                 <option selected>Rol</option>
                                                 <option value="a">Admin</option>
                                                 <option value="y">Yönetici</option>

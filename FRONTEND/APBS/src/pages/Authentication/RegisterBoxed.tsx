@@ -13,6 +13,8 @@ import IconInstagram from '../../components/Icon/IconInstagram';
 import IconFacebookCircle from '../../components/Icon/IconFacebookCircle';
 import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/flatpickr.css';
 import Header from '../Parts/Header';
 
 const RegisterBoxed = () => {
@@ -24,6 +26,8 @@ const RegisterBoxed = () => {
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
+    const [date1, setDate1] = useState<any>('');
+
     const setLocale = (flag: string) => {
         setFlag(flag);
         if (flag.toLowerCase() === 'ae') {
@@ -70,6 +74,7 @@ const RegisterBoxed = () => {
 
                                     <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-3">
                                         <input type="email" name="email" placeholder="Email" className="form-input border-2  focus:border-green-800"  required />
+                                        <Flatpickr value={date1} options={{ dateFormat: 'd-m-Y', position: isRtl ? 'auto right' : 'auto left' }} className="form-input" onChange={(date) => setDate1(date)} placeholder='Doğum Yılı'/>
                                     </div> 
 
                                     <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-6">
