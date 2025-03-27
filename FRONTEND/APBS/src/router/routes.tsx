@@ -45,8 +45,14 @@ const routes = [
     //Aday ana sayfa
     {
         path: '/aday/anasayfa',
-        element: <AuthGuard allowedRoles={['ad']}><AdayAnasayfa /></AuthGuard>,
-        layout: 'blank',
+        element: <AdayAnasayfa />,
+        layout: 'aday',
+    },
+    //Aday ana sayfa
+    {
+        path: '/aday/basvurularım',
+        element: <AdayAnasayfa />,
+        layout: 'aday',
     },
 
     //Jüri
@@ -54,7 +60,7 @@ const routes = [
     {
         path: '/juri/anasayfa',
         element: <AuthGuard allowedRoles={['j']}><JuriAnasayfa /></AuthGuard>,
-        layout: 'blank',
+        layout: 'juri',
     },
 
     //Yönetici
@@ -62,7 +68,7 @@ const routes = [
     {
         path: '/yonetici/anasayfa',
         element: <AuthGuard allowedRoles={['y']}><YoneticiAnasayfa /></AuthGuard>,
-        layout: 'blank',
+        layout: 'yonetici',
     },
 ];
 

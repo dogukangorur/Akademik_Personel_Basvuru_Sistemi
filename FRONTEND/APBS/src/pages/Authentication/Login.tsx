@@ -33,8 +33,70 @@ const LoginBoxed = () => {
     };
     const [flag, setFlag] = useState(themeConfig.locale);
 
-    const submitForm = () => {
-        navigate('/');
+    const submitFormAday = () => {
+        navigate('/aday/anasayfa');
+        /*e.preventDefault();
+        setErrorMessage(''); // Hata mesajını sıfırla
+
+        try {
+            const response = await fetch('http://localhost:3030/api/login/giris', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, şifre: password }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Hata durumunda mesajı al ve state'e ata
+                console.log(data)
+                setErrorMessage(data.message || t('Email or password is incorrect.'));
+                return;
+            }
+            console.log(data)
+            // Kullanıcı bilgilerini kaydet
+            const userInfo = {
+                kullaniciID: data.kullaniciID,
+                kullaniciTuru: data.kullaniciTuru,
+                hesapDurumu: data.hesapDurumu,
+                hesapFirmaYetkisi : data.hesapFirmaYetkisi,
+                eposta: data.eposta,
+                isim: data.isim,
+                soyisim: data.soyisim,
+                telefonNo: data.telefonNo,
+                tcNo: data.tcNo,
+                firmaID: data.firmaID
+            };
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+            if(data.hesapDurumu == "a" && data.firmaHesapDurumu == "a"){
+                switch (data.kullaniciTuru) {
+                    case "a":
+                        navigate('/admin/dashboard');
+                        break;
+                    case "c":
+                        navigate('/cifci/dashboard');
+                        break;
+                    case "t":
+                        navigate('/tedarikci/dashboard');
+                        break;
+                    default:
+                        setErrorMessage(data.message || t('A type of user that does not exist.'));
+                        break;
+                }
+            }else if(data.firmaHesapDurumu == "b"){
+                navigate('/basvuruDurum' , {state: { BasvuruDurum: data.firmaHesapDurumu }});
+            }else if(data.firmaHesapDurumu == "p"){
+                navigate('/basvuruDurum', {state: { BasvuruDurum: data.firmaHesapDurumu }});
+            }else{
+                setErrorMessage(data.message || t('Your account has been suspended.'));
+            }
+        } catch (error) {
+            // İstek sırasında hata olursa mesajı ayarla
+            setErrorMessage('A network error occurred. Please check your connection.');
+        }*/
     };
 
     const [activeTab, setActiveTab] = useState("aday");
@@ -77,7 +139,7 @@ const LoginBoxed = () => {
                     <div>
                         {activeTab === "aday" && (
                             <div className="p-4 rounded-lg ">
-                                <form action="#" className="flex items-center justify-center">
+                                <form action="#" className="flex items-center justify-center" onSubmit={submitFormAday}>
                                     <div className='w-[200px] flex justify-center flex-col'>
 
                                         <div className="relative z-0  mb-8 group ">
