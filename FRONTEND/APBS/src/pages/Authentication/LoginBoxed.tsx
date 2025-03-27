@@ -51,8 +51,8 @@ const LoginBoxed = () => {
                             <li className="me-2" role="presentation">
                                 <button
                                     className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "aday"
-                                            ? "text-green-800 border-green-800 dark:text-purple-500 dark:border-purple-500"
-                                            : "text-gray-500 border-transparent hover:text-gray-600 hover:border-dark-300 dark:text-gray-400 dark:hover:text-gray-300"
+                                        ? "text-green-800 border-green-800 dark:text-purple-500 dark:border-purple-500"
+                                        : "text-gray-500 border-transparent hover:text-gray-600 hover:border-dark-300 dark:text-gray-400 dark:hover:text-gray-300"
                                         }`}
                                     onClick={() => setActiveTab("aday")}
                                     role="tab"
@@ -63,8 +63,8 @@ const LoginBoxed = () => {
                             <li className="me-2" role="presentation">
                                 <button
                                     className={`inline-block p-4 border-b-2 rounded-t-lg ${activeTab === "admin"
-                                            ? "text-green-800 border-green-800 dark:text-purple-500 dark:border-purple-500"
-                                            : "text-gray-500 border-transparent hover:text-gray-600 hover:border-dark-300 dark:text-gray-400 dark:hover:text-gray-300"
+                                        ? "text-green-800 border-green-800 dark:text-purple-500 dark:border-purple-500"
+                                        : "text-gray-500 border-transparent hover:text-gray-600 hover:border-dark-300 dark:text-gray-400 dark:hover:text-gray-300"
                                         }`}
                                     onClick={() => setActiveTab("admin")}
                                     role="tab"
@@ -77,76 +77,76 @@ const LoginBoxed = () => {
                     <div>
                         {activeTab === "aday" && (
                             <div className="p-4 rounded-lg ">
-                               <form action="#" className="flex items-center justify-center">
-                                <div className='w-[200px] flex justify-center flex-col'>
+                                <form action="#" className="flex items-center justify-center">
+                                    <div className='w-[200px] flex justify-center flex-col'>
 
-                                    <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
-                                    </div>
-                                    <div className="relative z-0  mb-8 group">
-                                        <input type="sifre" name="sifre" id="floating_password"  className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
-                                    </div>   
-                                    <div className="flex items-start mb-8">
-                                        <div className="flex items-start h-5 ">
-                                            <input id="hatirla" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                        <div className="relative z-0  mb-8 group ">
+                                            <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
                                         </div>
-                                        <label htmlFor="hatirla" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
-                                    </div>
+                                        <div className="relative z-0  mb-8 group">
+                                            <input type="sifre" name="sifre" id="floating_password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
+                                        </div>
+                                        <div className="flex items-start mb-8">
+                                            <div className="flex items-start h-5 ">
+                                                <input type="checkbox" className="w-4 h-4 border border-gray-300 accent-green-600 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 checked:bg-green-600 checked:border-green-600"/> 
+                                            </div>
+                                            <label htmlFor="hatirla" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
+                                        </div>
 
-                                    <div className="flex justify-center mb-6">
-                                        <button type="submit" className="w-[120px] text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Giriş</button>
-                                    </div>
+                                        <div className="flex justify-center mb-6">
+                                            <button type="submit" className="w-[120px] text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Giriş</button>
+                                        </div>
 
-                                    <div className="flex justify-center">
-                                        <a href="#" className='text-green-800 hover:underline hover:underline-offset-8'>Şifremi Unuttum ?</a>
-                                    </div>
+                                        <div className="flex justify-center">
+                                            <a href="#" className='text-green-800 hover:underline hover:underline-offset-8'>Şifremi Unuttum ?</a>
+                                        </div>
 
-                                </div>
-                               </form>
+                                    </div>
+                                </form>
                             </div>
                         )}
 
                         {activeTab === "admin" && (
-                              <div className="p-4 rounded-lg ">
-                               <form action="#" className="flex items-center justify-center">
+                            <div className="p-4 rounded-lg ">
+                                <form action="#" className="flex items-center justify-center">
 
-                                <div className='w-[200px] flex justify-center flex-col'>
+                                    <div className='w-[200px] flex justify-center flex-col'>
 
-                                    <div className="flex justify-center mb-8">
-                                            <select id="select"  className="form-select border-2  focus:border-green-800" required>
+                                        <div className="flex justify-center mb-8">
+                                            <select id="select" className="form-select border-2  focus:border-green-800" required>
                                                 <option selected>Rol</option>
                                                 <option value="a">Admin</option>
                                                 <option value="y">Yönetici</option>
                                                 <option value="j">Jüri</option>
                                             </select>
-                                    </div>
-
-                                    <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="tcNo"  minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
-                                    </div>
-
-                                    <div className="relative z-0  mb-8 group">
-                                        <input type="sifre" name="sifre"   className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
-                                    </div>   
-                                    <div className="flex items-start mb-8">
-                                        <div className="flex items-start h-5 ">
-                                            <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
                                         </div>
-                                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
-                                    </div>
 
-                                    <div className="flex justify-center mb-6">
-                                        <button type="submit" className="w-[120px] text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Giriş</button>
-                                    </div>
+                                        <div className="relative z-0  mb-8 group ">
+                                            <input type="text" name="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
+                                        </div>
 
-                                    <div className="flex justify-center">
-                                        <a href="#" className='text-green-800 hover:underline hover:underline-offset-8'>Şifremi Unuttum ?</a>
-                                    </div>
+                                        <div className="relative z-0  mb-8 group">
+                                            <input type="sifre" name="sifre" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
+                                        </div>
+                                        <div className="flex items-start mb-8">
+                                            <div className="flex items-start h-5 ">
+                                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                            </div>
+                                            <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
+                                        </div>
 
-                                </div>
-                               </form>
+                                        <div className="flex justify-center mb-6">
+                                            <button type="submit" className="w-[120px] text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Giriş</button>
+                                        </div>
+
+                                        <div className="flex justify-center">
+                                            <a href="#" className='text-green-800 hover:underline hover:underline-offset-8'>Şifremi Unuttum ?</a>
+                                        </div>
+
+                                    </div>
+                                </form>
                             </div>
-                        
+
                         )}
                     </div>
 
