@@ -56,28 +56,29 @@ const RegisterBoxed = () => {
                         
                             <div className="p-4 rounded-lg ">
                                <form action="#" className="flex items-center justify-center">
-                                <div className='w-[200px] flex justify-center flex-col'>
-                                    <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="tcNo" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TC</label>
-                                    </div>
+                                <div className='w-[400px] flex justify-center flex-col'>
+
+                                      <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-3">
+                                         <input type="text" name='telefon' placeholder="Telefon" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" required />
+                                         <input type="text" name='tc' placeholder="TC" className="form-input border-2  focus:border-green-800" minLength={11} maxLength={11} required />
+                                      </div>
                         
-                                    <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="ad" id="ad"  className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="ad" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Ad</label>
+                                    <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-3">
+                                        <input type="text" name='ad' placeholder="Ad" className="form-input border-2  focus:border-green-800" required />
+                                        <input type="text" name='soyad' placeholder="Soyad" className="form-input border-2  focus:border-green-800" required />
                                     </div>
 
-                                    <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="soyad" id="soyad"  className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="soyad" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Soyad</label>
-                                    </div>
-
-                                    <div className="relative z-0  mb-8 group">
-                                        <input type="password" name="password" id="floating_password" className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="password" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Şifre</label>
+                                    <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-3">
+                                        <input type="email" name="email" placeholder="Email" className="form-input border-2  focus:border-green-800"  required />
                                     </div> 
+
+                                    <div className="grid grid-cols-1 sm:flex justify-between gap-2 mb-6">
+                                        <input type="sifre" name="sifre" placeholder="Şifre" className="form-input border-2  focus:border-green-800"  required />
+                                    </div>
+
                                     
-                                    <div className="flex justify-center mb-6">
+                                    
+                                    <div className="flex justify-center mb-3">
                                         <button type="submit" className="w-[120px] text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Kayıt Ol</button>
                                     </div>
 

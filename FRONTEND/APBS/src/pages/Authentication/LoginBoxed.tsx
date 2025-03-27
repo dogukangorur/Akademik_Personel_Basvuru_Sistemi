@@ -79,19 +79,18 @@ const LoginBoxed = () => {
                             <div className="p-4 rounded-lg ">
                                <form action="#" className="flex items-center justify-center">
                                 <div className='w-[200px] flex justify-center flex-col'>
+
                                     <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="tcNo" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TC</label>
+                                        <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
                                     </div>
                                     <div className="relative z-0  mb-8 group">
-                                        <input type="password" name="password" id="floating_password" className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="password" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Şifre</label>
+                                        <input type="sifre" name="sifre" id="floating_password"  className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
                                     </div>   
                                     <div className="flex items-start mb-8">
                                         <div className="flex items-start h-5 ">
-                                            <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                            <input id="hatirla" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
                                         </div>
-                                        <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
+                                        <label htmlFor="hatirla" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
                                     </div>
 
                                     <div className="flex justify-center mb-6">
@@ -114,8 +113,7 @@ const LoginBoxed = () => {
                                 <div className='w-[200px] flex justify-center flex-col'>
 
                                     <div className="flex justify-center mb-8">
-                                        <label htmlFor="underline_select" className="sr-only text-dark-800">Rol</label>
-                                            <select id="underline_select" className="block py-2.5 px-0 w-full text-sm text-dark-900 dark:text-dark-400 duration-300 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                            <select id="select"  className="form-input border-2  focus:border-green-800" required>
                                                 <option selected>Rol</option>
                                                 <option value="a">Admin</option>
                                                 <option value="y">Yönetici</option>
@@ -124,12 +122,11 @@ const LoginBoxed = () => {
                                     </div>
 
                                     <div className="relative z-0  mb-8 group ">
-                                        <input type="text" name="tcNo" id="TcNo" minLength={11} maxLength={11} className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="tcNo" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">TC</label>
+                                        <input type="text" name="tcNo"  minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
                                     </div>
+
                                     <div className="relative z-0  mb-8 group">
-                                        <input type="password" name="password" id="floating_password" className="w-[100%] block py-2.5 px-0 w-full text-sm text-dark-900 bg-transparent border-0 border-b-2 border-dark-300 appearance-none dark:text-white dark:border-dark-600 dark:focus:border-green-800 focus:outline-none focus:ring-0 focus:border-green-800 peer" placeholder=" " required />
-                                        <label  htmlFor="password" className="peer-focus:font-medium absolute text-sm text-dark-500 dark:text-dark-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-green-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Şifre</label>
+                                        <input type="sifre" name="sifre"   className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
                                     </div>   
                                     <div className="flex items-start mb-8">
                                         <div className="flex items-start h-5 ">
