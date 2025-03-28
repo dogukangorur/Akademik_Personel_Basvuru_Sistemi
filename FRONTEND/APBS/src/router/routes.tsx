@@ -6,12 +6,16 @@ const Register = lazy(() => import('../pages/Authentication/Register'));
 
 //Aday
 const AdayAnasayfa = lazy(() => import('../pages/Aday/AdayAnasayfa'));
+const AdayBasvurularim=lazy(()=>import('../pages/Aday/AdayBasvurularim'))
+const AdayProfil=lazy(()=>import('../pages/Aday/AdayProfil'))
 //Admin
 const AdminAnasayfa = lazy(() => import('../pages/Admin/AdminAnasayfa'));
 //Yonetici
 const YoneticiAnasayfa = lazy(() => import('../pages/Yonetici/YoneticiAnasayfa'));
 //Jüri
 const JuriAnasayfa = lazy(() => import('../pages/Juri/JuriAnasayfa'));
+const JuriBasvuru = lazy(() => import('../pages/Juri/JuriBasvuru'));
+const JuriBasvuruDegerlendirme = lazy(() => import('../pages/Juri/JuriBasvuruDegerlendirme'));
 
 const routes = [
     // index sayfası
@@ -48,18 +52,37 @@ const routes = [
         element: <AdayAnasayfa />,
         layout: 'aday',
     },
-    //Aday ana sayfa
+    //Aday basvurularım
     {
         path: '/aday/basvurularım',
-        element: <AdayAnasayfa />,
+        element: <AdayBasvurularim />,
+        layout: 'aday',
+    },
+    //Aday profil
+    {
+        path: '/aday/profil',
+        element: <AdayProfil />,
         layout: 'aday',
     },
 
-    //Jüri
-    //Jüri ana sayfa
-    {
+
+     //Jüri ana sayfa
+     {
         path: '/juri/anasayfa',
-        element: <AuthGuard allowedRoles={['j']}><JuriAnasayfa /></AuthGuard>,
+        element: <JuriAnasayfa />,
+        layout: 'juri',
+    },
+    //Jüri başvuru
+ 
+    {
+        path: '/juri/basvuru',
+        element: <JuriBasvuru />,
+        layout: 'juri',
+    },
+    //Jüri başvuru değerlendirme
+    {
+        path: '/juri/basvuru-degerlendirme',
+        element: <JuriBasvuruDegerlendirme />,
         layout: 'juri',
     },
 

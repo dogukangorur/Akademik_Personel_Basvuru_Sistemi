@@ -15,6 +15,7 @@ import IconOpenBook from '../Icon/IconOpenBook';
 import IconBookmark from '../Icon/IconBookmark';
 import IconBox from '../Icon/IconBox';
 import IconPlus from '../Icon/IconPlus';
+import IconUser from '../Icon/IconUser';
 
 const AdaySidear = () => {
     const [currentMenu, setCurrentMenu] = useState<string>('');
@@ -74,12 +75,20 @@ const AdaySidear = () => {
                         </button>
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative  bg-green-50">
-                        <ul className="relative font-semibold space-y-0.5 p-4 py-0">
+                        <ul className="relative font-semibold space-y-0.5 p-4 py-5">
                         <li className="nav-item">
                             <NavLink to="/aday/anasayfa" className="group">
                                 <div className="flex items-center">
                                     <IconMenuDocumentation className="group-hover:!text-success shrink-0" />
                                     <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Açık İlanlar</span>
+                                </div>
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/aday/profil" className="group">
+                                <div className="flex items-center">
+                                    <IconUser className="group-hover:!text-success shrink-0" />
+                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profil</span>
                                 </div>
                             </NavLink>
                         </li>

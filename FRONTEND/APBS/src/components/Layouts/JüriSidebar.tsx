@@ -74,7 +74,7 @@ const AdaySidear = () => {
                         </button>
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative  bg-green-50">
-                        <ul className="relative font-semibold space-y-0.5 p-4 py-0">
+                        <ul className="relative font-semibold space-y-0.5 p-4 py-5">
                         <li className="nav-item">
                             <NavLink to="/aday/anasayfa" className="group">
                                 <div className="flex items-center">
