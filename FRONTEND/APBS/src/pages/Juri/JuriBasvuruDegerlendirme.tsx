@@ -1,7 +1,7 @@
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-const JuriAnasayfa = () => {
+const JuriBasvuruDegerlendirme = () => {
     const tableData = [
         {
             id: 1,
@@ -80,4 +80,4 @@ const JuriAnasayfa = () => {
     );
     
 }
-export default JuriAnasayfa;
+export default JuriBasvuruDegerlendirme;
