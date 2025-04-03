@@ -6,8 +6,9 @@ const Register = lazy(() => import('../pages/Authentication/Register'));
 
 //Aday
 const AdayAnasayfa = lazy(() => import('../pages/Aday/AdayAnasayfa'));
-const AdayBasvurularim=lazy(()=>import('../pages/Aday/AdayBasvurularim'))
-const AdayProfil=lazy(()=>import('../pages/Aday/AdayProfil'))
+const AdayBasvurularim=lazy(()=>import('../pages/Aday/AdayBasvurularim'));
+const AdayProfil=lazy(()=>import('../pages/Aday/AdayProfil'));
+const AdayProfilDuzenle = lazy(()=>import('../pages/Aday/AdayProfilDuzenle'));
 //Admin
 const AdminAnasayfa = lazy(() => import('../pages/Admin/AdminAnasayfa'));
 //Yonetici
@@ -64,7 +65,12 @@ const routes = [
         element: <AdayProfil />,
         layout: 'aday',
     },
-
+    //Aday profil düzenleme
+    {
+        path: '/aday/duzenle',
+        element: <AdayProfilDuzenle />,
+        layout: 'aday',
+    },
 
      //Jüri ana sayfa
      {

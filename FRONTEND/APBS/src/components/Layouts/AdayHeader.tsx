@@ -152,7 +152,7 @@ const Header = () => {
                                         </div>
                                     </li>
                                     <li className="bg-green-50 hover:text-success">
-                                        <Link to="/admin/Profil" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
+                                        <Link to="/aday/duzenle" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
                                             <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0 hover:!text-success hover:!bg-sussess-light" />
                                             Profil
                                         </Link>
