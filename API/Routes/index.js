@@ -1,5 +1,5 @@
 const express = require("express");
-const user = require("./user.js");
+const user = require("./aday.js");
 
 
 const router = express.Router();
@@ -8,6 +8,6 @@ router.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-router.use("/api/user", user);
+router.use("/api/aday", user);
 
 module.exports = router;

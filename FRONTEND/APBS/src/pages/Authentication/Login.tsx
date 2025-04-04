@@ -5,13 +5,7 @@ import { useEffect, useState } from 'react';
 import { setPageTitle, toggleRTL } from '../../store/themeConfigSlice';
 import Dropdown from '../../components/Dropdown';
 import i18next from 'i18next';
-import IconCaretDown from '../../components/Icon/IconCaretDown';
-import IconMail from '../../components/Icon/IconMail';
-import IconLockDots from '../../components/Icon/IconLockDots';
-import IconInstagram from '../../components/Icon/IconInstagram';
-import IconFacebookCircle from '../../components/Icon/IconFacebookCircle';
-import IconTwitter from '../../components/Icon/IconTwitter';
-import IconGoogle from '../../components/Icon/IconGoogle';
+
 import Header from '../Parts/Header';
 
 const LoginBoxed = () => {
@@ -32,19 +26,19 @@ const LoginBoxed = () => {
         }
     };
     const [flag, setFlag] = useState(themeConfig.locale);
+    const [password, setPassword] = useState('');
+    const [tc, setTc] = useState('')
 
-    const submitFormAday = () => {
-        navigate('/aday/anasayfa');
-        /*e.preventDefault();
-        setErrorMessage(''); // Hata mesajını sıfırla
 
+    const submitFormAday = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3030/api/login/giris', {
+            const response = await fetch('http://localhost:8080/api/aday/postAdayGiris', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, şifre: password }),
+                body: JSON.stringify({ tc:tc, sifre: password }),
             });
 
             const data = await response.json();
@@ -52,51 +46,29 @@ const LoginBoxed = () => {
             if (!response.ok) {
                 // Hata durumunda mesajı al ve state'e ata
                 console.log(data)
-                setErrorMessage(data.message || t('Email or password is incorrect.'));
+                alert(data.message || 'TC yada şifre hatalı.');
                 return;
             }
             console.log(data)
             // Kullanıcı bilgilerini kaydet
             const userInfo = {
-                kullaniciID: data.kullaniciID,
-                kullaniciTuru: data.kullaniciTuru,
-                hesapDurumu: data.hesapDurumu,
-                hesapFirmaYetkisi : data.hesapFirmaYetkisi,
-                eposta: data.eposta,
-                isim: data.isim,
-                soyisim: data.soyisim,
-                telefonNo: data.telefonNo,
-                tcNo: data.tcNo,
-                firmaID: data.firmaID
+                kullaniciID: data.ID,
+                Ad: data.Ad,
+                Soyad: data.Soyad,
+                TC : data.TC,
+                Mail: data.Mail,
+                Kurumu: data.Kurumu,
+                Telefon: data.Telefon,
+                DogumTarihi: data.DogumTarihi,
+                KadroID: data.KadroID,
+                Kadro: data.Kadro
             };
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
-
-            if(data.hesapDurumu == "a" && data.firmaHesapDurumu == "a"){
-                switch (data.kullaniciTuru) {
-                    case "a":
-                        navigate('/admin/dashboard');
-                        break;
-                    case "c":
-                        navigate('/cifci/dashboard');
-                        break;
-                    case "t":
-                        navigate('/tedarikci/dashboard');
-                        break;
-                    default:
-                        setErrorMessage(data.message || t('A type of user that does not exist.'));
-                        break;
-                }
-            }else if(data.firmaHesapDurumu == "b"){
-                navigate('/basvuruDurum' , {state: { BasvuruDurum: data.firmaHesapDurumu }});
-            }else if(data.firmaHesapDurumu == "p"){
-                navigate('/basvuruDurum', {state: { BasvuruDurum: data.firmaHesapDurumu }});
-            }else{
-                setErrorMessage(data.message || t('Your account has been suspended.'));
-            }
+            navigate('/aday/anasayfa');
         } catch (error) {
             // İstek sırasında hata olursa mesajı ayarla
-            setErrorMessage('A network error occurred. Please check your connection.');
-        }*/
+            alert('A network error occurred. Please check your connection.');
+        }
     };
 
     const [activeTab, setActiveTab] = useState("aday");
@@ -143,10 +115,10 @@ const LoginBoxed = () => {
                                     <div className='w-[200px] flex justify-center flex-col'>
 
                                         <div className="relative z-0  mb-8 group ">
-                                            <input type="text" name="tcNo" id="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
+                                            <input type="text" name="tc" id="tc" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required value={tc} onChange={(e) => setTc(e.target.value)}/>
                                         </div>
                                         <div className="relative z-0  mb-8 group">
-                                            <input type="sifre" name="sifre" id="floating_password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
+                                            <input type="sifre" name="password" id="password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required value={password} onChange={(e) => setPassword(e.target.value)}/>
                                         </div>
                                         <div className="flex items-start mb-8 ml-2">
                                             <div className="flex items-start h-5 ">

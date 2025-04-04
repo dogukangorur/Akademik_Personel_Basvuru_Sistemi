@@ -88,7 +88,7 @@ const AdaySidear = () => {
                             <NavLink to="/aday/profil" className="group">
                                 <div className="flex items-center">
                                     <IconUser className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Profil</span>
+                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Akademik Profil</span>
                                 </div>
                             </NavLink>
                         </li>
