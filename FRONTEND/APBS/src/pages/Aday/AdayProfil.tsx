@@ -19,90 +19,68 @@ const AdayProfil = () => {
         });
     };
 
-    const egitimTurleri =[
-        "Önlisans /lisans dersleri",
-        "Önlisans/lisans dersleri (Yabancı dilde)",
-        "Lisansüstü dersleri",
-        "Lisansüstü dersleri (Yabancı dilde)"
-    ];
+    interface Etkinlik {
+        id: number;
+        baslik_id: number;
+        baslik_no: number;
+        aciklama: string;
+        puan:number;
+ 
+      }
+     
+         const [makaleEtkinlik, setMakale] = useState<Etkinlik[]>([]);
+         const [bilimselEtkinlik, setBilimsel] = useState<Etkinlik[]>([]);
+         const [kitapEtkinlik, setKitap] = useState<Etkinlik[]>([]);
+         const [atifEtkinlik, setAtif] = useState<Etkinlik[]>([]);
+         const [egitimEtkinlik, setEgitim] = useState<Etkinlik[]>([]);
+         const [tezEtkinlik, setTez] = useState<Etkinlik[]>([]);
+         const [patentEtkinlik, setPatent] = useState<Etkinlik[]>([]);
+         const [arastirmaEtkinlik, setArastirma] = useState<Etkinlik[]>([]);
+         const [editorEtkinlik, setEditor] = useState<Etkinlik[]>([]);
+         const [odulEtkinlik, setOdul] = useState<Etkinlik[]>([]);
+         const [idariEtkinlik, setIdari] = useState<Etkinlik[]>([]);
+         const [guzelEtkinlik, setGuzel] = useState<Etkinlik[]>([]);
 
-    const makaleTurleri =[
-        "SCI-E, SSCI veya AHCI kapsamındaki dergilerde yayımlanmış makale(Q1 olarak taranan dergide)",
-        "SCI-E, SSCI veya AHCI kapsamındaki dergilerde yayımlanmış makale (Q2 olarak taranan dergide)",
-        "SCI-E, SSCI veya AHCI kapsamındaki dergilerde yayımlanmış makale (Q3 olarak taranan dergide) ",
-        "SCI-E, SSCI veya AHCI kapsamındaki dergilerde yayımlanmış makale (Q4 olarak taranan dergide)",
-        "ESCI tarafından taranan dergilerde yayımlanmış makale",
-        "Scopus tarafından taranan dergilerde yayımlanmış makale ",
-        "Uluslararası diğer indekslerde taranan dergilerde yayımlanmış makale",
-        "ULAKBİM TR Dizin tarafından taranan ulusal hakemli dergilerde yayımlanmış makale ",
-        "8. madde dışındaki ulusal hakemli dergilerde yayımlanmış makale "
-    ];
-    const bilimselToplantiTurleri =[
-        "Uluslararası bilimsel toplantılarda sözlü olarak sunulan, tam metni matbu veya elektronik olarak bildiri kitapçığında yayımlanmış çalışmalar",
-        "Uluslararası bilimsel toplantılarda sözlü olarak sunulan, özet metni matbu veya elektronik olarak bildiri kitapçığında yayımlanmış çalışmalar ",
-        "Uluslararası bilimsel toplantılarda poster olarak sunulan çalışmalar ",
-        "Ulusal bilimsel toplantılarda sözlü olarak sunulan, özet metni matbu veya elektronik olarak bildiri kitapçığında yayımlanmış çalışmalar "
-    ];
-    const kitapTurleri =[
-        " Uluslararası yayınevleri tarafından yayımlanmış özgün kitap ",
-        " Uluslararası yayınevleri tarafından yayımlanmış özgün kitap editörlüğü, bölüm yazarlığı (Her bir kitap için maksimum 2 bölüm yazarlığı)",
-        " Uluslararası yayımlanan ansiklopedi konusu/maddesi (en fazla 3 madde) ",
-        " Ulusal yayınevleri tarafından yayımlanmış özgün kitap"
-    ];
-    const atifTurleri =[
-        "SCI-E, SSCI ve AHCI tarafından taranan dergilerde;Uluslararası yayınevleri tarafından yayımlanmış kitaplarda yayımlanan ve adayın yazar olarak yer almadığı yayınlardan her birinde, metin içindeki atıf sayısına bakılmaksızın adayın atıf yapılan her eseri için  ",
-        " E-SCI tarafından taranan dergilerde ve adayın yazar olarak yer almadığı yayınlardan her birinde, metin içindeki atıf sayısına bakılmaksızın adayın atıf yapılan her eseri için",
-        " SCI-E, SSCI, AHCI, E-SCI dışındaki diğer uluslararası indeksler tarafından taranan dergilerde; Uluslararası yayınevleri tarafından yayımlanmış kitaplarda bölüm yazarı olarak yayımlanan ve adayın yazar olarak yer almadığı yayınlardan her birinde, metin içindeki atıf sayısına bakılmaksızın adayın atıf yapılan her eseri için"
-        ];
-    const tezTurleri =[
-            "Doktora/Sanatta Yeterlik veya Tıp/Diş Hekimliğinde Uzmanlık tez yönetimi  ",
-            " Yüksek Lisans Tez Yönetimi  ",
-            " Doktora/Sanatta Yeterlik (Eş Danışman) ",
-            "Yüksek Lisans/Sanatta Yeterlik Tez Yönetimi (Eş Danışman) "
-        ];
-        const patentTurleri =[
-            "Lisanslanan Uluslararası Patent  ",
-            " Tescillenmiş Uluslararası Patent   ",
-            " Uluslararası Patent Başvurusu  ",
-            " Tescillenmiş Ulusal Patent "
-        ];
-        const arastirmaTurleri =[
-            "AB çerçeve programı/NSF/ERC bilimsel araştırma projesinde koordinatör/alt koordinatör olmak",
-            "AB çerçeve programı/NSF/ERC bilimsel araştırma projesinde yürütücü olmak",
-            "AB çerçeve programı/NSF/ERC bilimsel araştırma projesinde araştırmacı olmak",
-            "AB Çerçeve Programı/NSF/ERC bilimsel araştırma projeleri dışındaki uluslararası destekli bilimsel araştırma projelerinde (derleme ve rapor hazırlama çalışmaları hariç) koordinatör/alt koordinatör olmak "
-        ];
+        useEffect(() => {
+          fetch("http://localhost:8080/api/etkinlik/etkinlikGetir") // endpoint adresini kendine göre güncelle
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error("Veri alınamadı");
+              }
+              return res.json();
+            })
+            .then((data) => {
+            const makaleFiltre = data.filter((item: any) => item.baslik_id === 1);  
+            const bilimselFiltre = data.filter((item: any) => item.baslik_id === 2);
+            const kitapFiltre = data.filter((item: any) => item.baslik_id === 3); 
+            const atifFiltre = data.filter((item: any) => item.baslik_id === 4);     
+            const egitimFiltre = data.filter((item: any) => item.baslik_id === 5);
+            const tezFiltre = data.filter((item: any) => item.baslik_id === 6);
+            const patentFiltre = data.filter((item: any) => item.baslik_id === 7);
+            const arastirmaFiltre = data.filter((item: any) => item.baslik_id === 8);
+            const editorFiltre = data.filter((item: any) => item.baslik_id === 9);
+            const odulFiltre = data.filter((item: any) => item.baslik_id === 10);
+            const idariFiltre = data.filter((item: any) => item.baslik_id === 11);    
+            const guzelFiltre = data.filter((item: any) => item.baslik_id === 12);
+              setMakale(makaleFiltre);
+              setBilimsel(bilimselFiltre);
+              setKitap(kitapFiltre);
+              setAtif(atifFiltre);
+              setEgitim(egitimFiltre);
+              setTez(tezFiltre);
+              setPatent(patentFiltre);
+              setArastirma(arastirmaFiltre);
+              setEditor(editorFiltre);
+              setOdul(odulFiltre);
+              setIdari(idariFiltre);
+              setGuzel(guzelFiltre);
+            })
+            .catch((err) => {
+             
+            });
 
-        const editorlukTurleri =[
-            "SCI-E, SSCI, AHCI veya E-SCI kapsamındaki dergilerde baş editörlük görevinde bulunmak ",
-            "SCI-E, SSCI, AHCI veya E-SCI kapsamındaki dergilerde yardımcı/ortak editörlük görevinde bulunmak ",
-            "SCI-E, SSCI, AHCI veya E-SCI kapsamındaki dergilerde yayın kurulu üyeliği "
-        ];
-
-        const odulTurleri =[
-            "Sürekli ve Periyodik olarak Jürili uluslararası bilim ve sanat ödülleri  ",
-            "TÜBİTAK tarafından verilen Bilim, Özel ve Hizmet Ödülleri ",
-            " TÜBA tarafından verilen Akademi Ödülleri ",
-            "TÜBİTAK tarafından verilen Teşvik Ödülü (Yayın teşvik ödülü hariç) "
-        ];
-
-        const idariTurleri =[
-            "Dekan/Enstitü/Yüksekokul/MYO/Merkez Müdürü",
-            "Enstitü Müdür Yrd. / Dekan Yrd. / Yüksekokul Müdür Yrd. / MYO Müdür Yrd. / Merkez Müdürü Yrd./Bölüm Başkanı",
-            "Bölüm Başkan Yrd. / Anabilim Dalı Başkanı",
-            "Rektörlükçe görevlendirilen Koordinatörlük ",
-            "Rektörlükçe görevlendirilen Koordinatör Yardımcıları"
-        ];
-
-
-
-        const sanatTurleri =[
-            "Özgün sanat eserlerinin, tasarım veya yorum çalışmalarının yurt dışında sanat, eğitim ve kültür kurumlarınca satın alınması veya bu eser(ler) için telif ödenmesi (Kurumlar bazında puanlama yapılır)",
-            "Özgün sanat eserlerinin, tasarım veya yorum çalışmalarının yurt içinde sanat, eğitim ve kültür kurumlarınca satın alınması veya bu eser(ler) için telif ödenmesi (Kurumlar bazında puanlama yapılır)",
-            "Yerel Yönetimler veya Özel Kuruluşların desteklediği kamusal alanda kalıcı olarak gerçekleştirilen sanat projeleri (Heykel, Duvar Resmi / Graffiti, Enstalasyon vb.) (Kurumlar bazında puanlama yapılır)"
-
-        ];
-
+        }, []);
+  
 
     // Makaleler
     const [articles, setArticles] = useState([
@@ -363,8 +341,10 @@ const AdayProfil = () => {
 
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {makaleTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {makaleEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                             </select>
 
@@ -493,8 +473,10 @@ const AdayProfil = () => {
 
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {bilimselToplantiTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {bilimselEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                             </select>
 
@@ -625,8 +607,10 @@ const AdayProfil = () => {
 
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {kitapTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {kitapEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                             </select>
 
@@ -753,8 +737,10 @@ const AdayProfil = () => {
 
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {atifTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {atifEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                             </select>
                                             
@@ -835,8 +821,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Eğitim Faaliyeti {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {egitimTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {egitimEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -885,7 +873,7 @@ const AdayProfil = () => {
 
                                      
                                         <button
-                                            onClick={addAtiflar}
+                                            onClick={addEgitimFaaliyetler}
                                             className="w-full p-2 bg-blue-500 text-white rounded mt-4 hover:bg-blue-600"
                                         >
                                             + Ekle
@@ -932,8 +920,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Eğitim Faaliyeti {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {tezTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {tezEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -1030,8 +1020,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Patent {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {patentTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {patentEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -1134,8 +1126,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Arastirma Proje {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {arastirmaTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {patentEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -1233,8 +1227,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Editörlük {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {editorlukTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {editorEtkinlik.map((faaliyet:any) => (
+                                                <option key={faaliyet.id} value={faaliyet.id}>
+                                                    {faaliyet.aciklama}
+                                                </option>
                                             ))}
                                              </select>
                                             <input
@@ -1323,8 +1319,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Ödül {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {odulTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {odulEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -1407,8 +1405,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Ödül {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {idariTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {idariEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input
@@ -1487,8 +1487,10 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Güzel Sanatlar {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {sanatTurleri.map((faaliyet, index) => (
-                                                 <option>{faaliyet}</option>
+                                            {guzelEtkinlik.map((faaliyet:any) => (
+                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                                {faaliyet.aciklama}
+                                            </option>
                                             ))}
                                              </select>
                                             <input

@@ -118,7 +118,7 @@ const LoginBoxed = () => {
                                             <input type="text" name="tc" id="tc" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required value={tc} onChange={(e) => setTc(e.target.value)}/>
                                         </div>
                                         <div className="relative z-0  mb-8 group">
-                                            <input type="sifre" name="password" id="password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                            <input type="password" name="password" id="password" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required value={password} onChange={(e) => setPassword(e.target.value)}/>
                                         </div>
                                         <div className="flex items-start mb-8 ml-2">
                                             <div className="flex items-start h-5 ">
@@ -160,7 +160,7 @@ const LoginBoxed = () => {
                                         </div>
 
                                         <div className="relative z-0  mb-8 group">
-                                            <input type="sifre" name="sifre" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
+                                            <input type="password" name="sifre" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
                                         </div>
                                         <div className="flex items-start mb-8">
                                             <div className="flex items-start h-5 ">
