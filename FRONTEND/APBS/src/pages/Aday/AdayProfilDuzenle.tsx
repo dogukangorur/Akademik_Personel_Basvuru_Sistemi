@@ -1,56 +1,128 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { setPageTitle } from '../../store/themeConfigSlice';
 import { useDispatch } from 'react-redux';
-import IconInstagram from '../../components/Icon/IconInstagram';
-import IconFacebookCircle from '../../components/Icon/IconFacebookCircle';
-import IconTwitter from '../../components/Icon/IconTwitter';
-import IconGoogle from '../../components/Icon/IconGoogle';
+import { useLocation } from 'react-router-dom';
+import { setPageTitle } from '../../store/themeConfigSlice';
+import axios from 'axios'; // Axios paketi yüklenmeli!!!
 
 const AdayProfilDuzenle = () => {
-
+    const location = useLocation();
+    const storedUserInfo = localStorage.getItem('userInfo');
+    const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
     const dispatch = useDispatch();
+
+    const [password, setPassword] = useState('');
+    const [passwordAgain, setPasswordAgain] = useState('');
+    const [message, setMessage] = useState('');
+
     useEffect(() => {
         dispatch(setPageTitle('Anasayfa'));
+    }, []);
 
-    });
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
 
+        if (password !== passwordAgain) {
+            setMessage('Şifreler uyuşmuyor.');
+            return;
+        }
+
+        // API endpointi güncellenecek, bu örnekte localhost:3000/api/update-password olarak varsayıyoruz
+        /*try {
+            const response = await axios.post('http://localhost:3000/api/update-password', {
+                tc: userInfo?.TC, // TC'yi backend'de kullanıcıyı tanımak için kullanıyoruz
+                newPassword: password,
+            });
+
+            if (response.data.success) {
+                setMessage('Şifre başarıyla güncellendi.');
+                setPassword('');
+                setPasswordAgain('');
+            } else {
+                setMessage('Şifre güncellenemedi: ' + response.data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage('Sunucu hatası oluştu.');
+        }*/
+    };
 
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full ">
+            {/* Profil Bilgileri (önceki kodun) */}
             <div className="flex justify-between items-center border-b pb-2">
                 <div className="p-4 rounded-lg w-full flex flex-col items-center">
-                    <div className="flex flex-col items-center gap-4">
-                        {Array.from({ length: 4 }).map((_, index) => (
-                            <div key={index} className="flex gap-4">
-                                <div className="flex flex-col items-center">
-                                    <label className="text-white-dark mb-1">TC</label>
-                                    <input
-                                        type="text"
-                                        placeholder="12345678901"
-                                        className="form-input w-[200px] disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed"
-                                        disabled
-                                    />
-                                </div>
-                               
-                            </div>
-                        ))}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-5 p-4">
+                        <div>
+                            <label htmlFor="browserFname">Ad</label>
+                            <input id="browserFname" type="text" value={userInfo?.Ad} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserLname">Soyad</label>
+                            <input id="browserLname" type="text" value={userInfo?.Soyad} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserTC">TC</label>
+                            <input id="browserEmail" type="text" value={userInfo?.TC} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserBorn">Doğum Tarihi</label>
+                            <input id="browserBorn" type="text" value={userInfo?.DogumTarihi?.substring(0, 10)} className="form-input" readOnly />
+                        </div>
                     </div>
-                      <br /><br /><br />      
-                    <h4 className='mb-5 text-green-800 text-xl'>PROFİL GÜNCELLEME</h4>
 
-                    <form action="#" className="flex items-center justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-5 p-4">
+                        <div>
+                            <label htmlFor="browserTel">Telefon</label>
+                            <input id="browserTel" type="text" value={userInfo?.Telefon} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserMail">E-Mail</label>
+                            <input id="browserCountry" type="text" value={userInfo?.Mail} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserCorporation">Kurum</label>
+                            <input id="browserState" type="text" value={userInfo?.Kurumu} className="form-input" readOnly />
+                        </div>
+                        <div>
+                            <label htmlFor="browserStaff">Kadro</label>
+                            <input id="browserZip" type="text" value={userInfo?.Kadro} className="form-input" readOnly />
+                        </div>
+                    </div>
+
+                    <br /><br /><br />
+                    <h4 className='mb-5 text-green-800 text-xl'>ŞİFRE GÜNCELLEME</h4>
+
+                    <form onSubmit={handleSubmit} className="flex items-center justify-center">
                         <div className='w-[400px] flex justify-center flex-col'>
-                            <div className="grid grid-cols-1 flex flex-col sm:flex justify-between gap-2 mb-3">
-                                <input type="password" name='password' placeholder="Şifre" className="form-input border-2  focus:border-green-800" required />
+                            <div className="grid grid-cols-1 flex flex-col sm:flex justify-between gap-2 mb-3 items-center">
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Yeni Şifre"
+                                    className="form-input border-2  focus:border-green-800"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
                                 <br />
-                                <input type="password" name='passwordAgain' placeholder="Şifre Tekrar" className="form-input border-2  focus:border-green-800" required />
+                                <input
+                                    type="password"
+                                    name="passwordAgain"
+                                    placeholder="Şifre Tekrar"
+                                    className="form-input border-2  focus:border-green-800"
+                                    value={passwordAgain}
+                                    onChange={(e) => setPasswordAgain(e.target.value)}
+                                    required
+                                />
                                 <br />
-                                <input type="email" name="email" placeholder="Email" className="form-input border-2  focus:border-green-800" required />
-                                <br />
-                                <button type="submit" className="w-[120px] text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Kaydet</button>
-
+                                <button
+                                    type="submit"
+                                    className="w-[120px] text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                                    font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                                    Kaydet
+                                </button>
                             </div>
+                            {message && <p className="text-center text-sm mt-2 text-red-600">{message}</p>}
                         </div>
                     </form>
 

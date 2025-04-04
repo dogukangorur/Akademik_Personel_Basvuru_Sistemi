@@ -32,25 +32,25 @@ const JuriAnasayfa = () => {
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
             <div className="flex justify-between items-center border-b pb-2">
-                <h2 className="text-xl font-semibold">Atanılan İlanlar</h2>
+                <h2 className="text-xl font-semibold mb-3">Atanılan İlanlar</h2>
             </div>
             <div className="table-responsive mb-5">
                 <table className="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-4 py-2">İlan Adı</th>
-                            <th className="border border-gray-300 px-4 py-2">Tarih Aralığı</th>
-                            <th className="border border-gray-300 px-4 py-2">Durum</th>
-                            <th className="border border-gray-300 px-4 py-2 text-center">Başvurular</th>
+                            <th className="px-4 py-2">İlan Adı</th>
+                            <th className="px-4 py-2">Tarih Aralığı</th>
+                            <th className="px-4 py-2">Durum</th>
+                            <th className="px-4 py-2 text-center">Başvurular</th>
                         </tr>
                     </thead>
                     <tbody>
                         {tableData.map((data) => (
                             <tr key={data.id} className="hover:bg-gray-50">
-                                <td className="border border-gray-300 px-4 py-2">{data.ilanAdi}</td>
-                                <td className="border border-gray-300 px-4 py-2">{data.tarihAraligi}</td>
+                                <td className="border-gray-300 px-4 py-2">{data.ilanAdi}</td>
+                                <td className="border-gray-300 px-4 py-2">{data.tarihAraligi}</td>
                                 <td
-                                    className={`border border-gray-300 px-4 py-2 font-semibold ${
+                                    className={`border-gray-300 px-4 py-2 font-semibold ${
                                         data.status === 'Tamamlandı' ? 'text-green-600' :
                                         data.status === 'Değerlendirme Aşamasında' ? 'text-blue-600' :
                                         data.status === 'Başvuru Aşamasında' ? 'text-yellow-600' :
@@ -60,7 +60,7 @@ const JuriAnasayfa = () => {
                                 >
                                     {data.status}
                                 </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
+                                <td className=" px-4 py-2 text-center">
                                     <Tippy content="Başvuruları Görüntüle">
                                         <button
                                             type="button"

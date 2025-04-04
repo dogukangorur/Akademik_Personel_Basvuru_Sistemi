@@ -2,6 +2,7 @@
 // const jwt = require("jsonwebtoken");
 
 const connection = require("../service/connection.js");
+
 exports.postAdayGiris = async (req, res) => {
     const q = `
         SELECT

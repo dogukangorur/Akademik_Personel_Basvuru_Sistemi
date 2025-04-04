@@ -11,6 +11,8 @@ import IconUser from '../Icon/IconUser';
 import IconLogout from '../Icon/IconLogout';
 const Header = () => {
     const location = useLocation();
+    const storedUserInfo = localStorage.getItem('userInfo');
+    const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
         if (selector) {
@@ -142,11 +144,11 @@ const Header = () => {
                                         <div className="flex items-center px-4 py-4">
                                             <div className="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 className="text-base">
-                                                    {"userInfo?.isim"+" "+"userInfo?.soyisim"}
+                                                    {userInfo?.Ad+" "+userInfo?.Soyad}
                                                     <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Aday</span>
                                                 </h4>
                                                 <button type="button" className="text-black/60 hover:text-success dark:text-dark-light/60 dark:hover:text-white">
-                                                    {"userInfo?.eposta"}
+                                                    {userInfo?.Mail}
                                                 </button>
                                             </div>
                                         </div>

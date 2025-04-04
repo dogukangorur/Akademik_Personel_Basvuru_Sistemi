@@ -38,27 +38,27 @@ export default function ApplicationReviewTable() {
                 <table className="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-4 py-2">#</th>
-                            <th className="border border-gray-300 px-4 py-2">Ad Soyad</th>
-                            <th className="border border-gray-300 px-4 py-2">Tarih</th>
-                            <th className="border border-gray-300 px-4 py-2">Durum</th>
-                            <th className="border border-gray-300 px-4 py-2 text-center">İncele </th>
+                            <th className="px-4 py-2">#</th>
+                            <th className="px-4 py-2">Ad Soyad</th>
+                            <th className="px-4 py-2">Tarih</th>
+                            <th className="px-4 py-2">Durum</th>
+                            <th className="px-4 py-2 text-center">İncele </th>
                         </tr>
                     </thead>
                     <tbody>
                         {applicationData.map((data) => (
                             <tr key={data.id} className="hover:bg-gray-50">
-                                <td className="border border-gray-300 px-4 py-2 text-center">{data.id}</td>
-                                <td className="border border-gray-300 px-4 py-2">{data.name}</td>
-                                <td className="border border-gray-300 px-4 py-2">{data.date}</td>
+                                <td className="px-4 py-2 text-center">{data.id}</td>
+                                <td className="px-4 py-2">{data.name}</td>
+                                <td className="px-4 py-2">{data.date}</td>
                                 <td
-                                    className={`border border-gray-300 px-4 py-2 font-semibold ${
+                                    className={`px-4 py-2 font-semibold ${
                                         data.status === 'İncelendi' ? 'text-green-600' : 'text-red-600'
                                     }`}
                                 >
                                     {data.status}
                                 </td>
-                                <td className="border border-gray-300 px-4 py-2 text-center">
+                                <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruyu İncele">
                                         <button
                                             type="button"
