@@ -270,3 +270,45 @@ INSERT INTO etkinlik (baslik_id, baslık_no, aciklama, puan) VALUES
 (12, 103, 'Yapıtın festival, şenlik vb. etkinliklere katılımı', 15),
 (12, 104, 'Oyunun/senaryonun/filmin/sergilenmiş oyunun video kaydının vb. kamu/özel TV’ler/dijital platformlar/kurumsal kimlikli internet siteleri vb tarafından satın alınması/gösterilmesi; Devlet Tiyatroları/Şehir Tiyatroları vb tiyatroların repertuvarlarına girmesi', 18),
 (12, 105, 'En az 10 kere gerçekleştirilmiş olan sanatsal bir yarışma/ödül organizasyonu tarafından yapıtın/sanatçının ödüllendirilmesi', 18);
+
+
+INSERT INTO rol (tanimlama) VALUES
+('Admin'),
+('Aday'),
+('Jüri'),
+('Yönetici');
+
+
+INSERT INTO fakulte (fakulte_adi, fakulte_grup_id) VALUES
+('Tıp Fakültesi', 1),
+('Sağlık Bilimleri Fakültesi', 1),
+('Diş Hekimliği Fakültesi', 1),
+('Fen Fakültesi', 1),
+('Matematik Fakültesi', 1),
+('Ziraat Fakültesi', 1),
+('Su Ürünleri Fakültesi', 1),
+('Mühendislik Fakültesi', 1),
+('Teknoloji Fakültesi', 1),
+('Eğitim Fakültesi', 2),
+('Siyasal Bilgiler Fakültesi', 2),
+('Sosyal Bilimler Fakültesi', 2),
+('Spor Bilimleri Fakültesi', 2),
+('Planlama ve Tasarım Fakültesi', 2),
+('Beşeri Bilimler Fakültesi', 2),
+('İdari Bilimler Fakültesi', 2),
+('Mimarlık Fakültesi', 2),
+('Hukuk Fakültesi', 3),
+('İlahiyat Fakültesi', 3),
+('Güzel Sanatlar Fakültesi', 4);
+
+
+-- Kadrolar tablosuna veriler ekleme
+INSERT INTO kadrolar (kadro_adi) VALUES
+('Lis.'),
+('Yük. Lis.'),
+('Dr.'),
+('Ar. Gör.'),
+('Öğr. Üyesi'),
+('Dr. Öğr. Üyesi'),
+('Doçent'),
+('Profesör');
