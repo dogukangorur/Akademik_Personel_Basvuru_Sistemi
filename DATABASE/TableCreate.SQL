@@ -8,7 +8,7 @@ CREATE TABLE Rol (
 
 CREATE TABLE FakulteGrup (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    fakulte_grup_adi NVARCHAR(100) NOT NULL UNIQUE
+    fakulte_grup_adi NVARCHAR(200) NOT NULL UNIQUE
 );
 
 CREATE TABLE Fakulte (
@@ -69,7 +69,7 @@ CREATE TABLE Etkinlik (
     id INT AUTO_INCREMENT PRIMARY KEY,
     baslik_id INT NOT NULL,
     baslık_no INT NOT NULL,
-    aciklama  NVARCHAR(500) NOT NULL,
+    aciklama  NVARCHAR(1000) NOT NULL,
     puan INT NOT NULL,
     FOREIGN KEY (baslik_id) REFERENCES Baslik(id) ON DELETE CASCADE
 );
