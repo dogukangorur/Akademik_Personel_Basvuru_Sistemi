@@ -312,3 +312,65 @@ INSERT INTO kadrolar (kadro_adi) VALUES
 ('Dr. Öğr. Üyesi'),
 ('Doçent'),
 ('Profesör');
+
+
+
+INSERT INTO bolumler (bolum_adi, fakulte_id) VALUES
+-- Tıp Fakültesi (1)
+('Tıp', 1),
+
+-- Sağlık Bilimleri Fakültesi (2)
+('Hemşirelik', 2),
+('Ebelik', 2),
+('Beslenme ve Diyetetik', 2),
+('Fizyoterapi ve Rehabilitasyon', 2),
+('Sağlık Yönetimi', 2),
+('Odyoloji', 2),
+('Ergoterapi', 2),
+
+-- Diş Hekimliği Fakültesi (3)
+('Diş Hekimliği', 3),
+
+-- Fen Fakültesi (4)
+('Fizik', 4),
+('Kimya', 4),
+('Biyoloji', 4),
+('Moleküler Biyoloji ve Genetik', 4),
+('Astronomi ve Uzay Bilimleri', 4),
+('İstatistik', 4),
+
+-- Matematik Fakültesi (5)
+('Matematik', 5),
+
+-- Ziraat Fakültesi (6)
+('Tarla Bitkileri', 6),
+('Bahçe Bitkileri', 6),
+('Bitki Koruma', 6),
+('Zootekni', 6),
+('Tarım Ekonomisi', 6),
+('Tarımsal Biyoteknoloji', 6),
+('Toprak Bilimi ve Bitki Besleme', 6),
+('Tarım Makineleri ve Teknolojileri Mühendisliği', 6),
+
+-- Su Ürünleri Fakültesi (7)
+('Su Ürünleri Mühendisliği', 7),
+('Balıkçılık Teknolojisi', 7),
+
+-- Mühendislik Fakültesi (8)
+('Bilgisayar Mühendisliği', 8),
+('Elektrik Mühendisliği', 8),
+('Elektronik ve Haberleşme Mühendisliği', 8),
+('Makine Mühendisliği', 8),
+('İnşaat Mühendisliği', 8),
+('Endüstri Mühendisliği', 8),
+('Çevre Mühendisliği', 8),
+('Kimya Mühendisliği', 8),
+('Harita Mühendisliği', 8),
+('Jeoloji Mühendisliği', 8),
+('Yazılım Mühendisliği', 8),
+('Mekatronik Mühendisliği', 8),
+-- Teknoloji Fakültesi (9)
+('Enerji Sistemleri Mühendisliği', 9),
+('Otomotiv Mühendisliği', 9),
+('Bilişim Sistemleri Mühendisliği', 9),
+('Biyomedikal Mühendisliği', 9)

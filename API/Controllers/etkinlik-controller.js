@@ -1,4 +1,4 @@
-const connection = require("../service/connection.js");
+const connection = require("../Service/connection.js");
 
 exports.etkinlikGetir = async (req, res) => {
     const q = "select * from etkinlik";

@@ -76,18 +76,27 @@ const AdaySidear = () => {
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative  bg-green-50">
                         <ul className="relative font-semibold space-y-0.5 p-4 py-5">
                         <li className="nav-item">
-                            <NavLink to="/aday/anasayfa" className="group">
+                            <NavLink to="/admin/anasayfa" className="group">
                                 <div className="flex items-center">
                                     <IconMenuDocumentation className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Açık İlanlar</span>
+                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlanlar</span>
                                 </div>
                             </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/aday/basvurularım" className="group">
+                            <NavLink to="/admin/ilan-olustur" className="group">
                                 <div className="flex items-center">
                                     <IconBox className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvurularım</span>
+                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlan Oluştur</span>
+                                </div>
+                            </NavLink>
+                        </li>
+
+                        <li className="nav-item">
+                            <NavLink to="/admin/etkinlik" className="group">
+                                <div className="flex items-center">
+                                    <IconBox className="group-hover:!text-success shrink-0" />
+                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Etkinlik</span>
                                 </div>
                             </NavLink>
                         </li>

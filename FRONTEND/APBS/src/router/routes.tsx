@@ -11,6 +11,9 @@ const AdayProfil=lazy(()=>import('../pages/Aday/AdayProfil'));
 const AdayProfilDuzenle = lazy(()=>import('../pages/Aday/AdayProfilDuzenle'));
 //Admin
 const AdminAnasayfa = lazy(() => import('../pages/Admin/AdminAnasayfa'));
+const AdminEtkinlik = lazy(() => import('../pages/Admin/AdminEtkinlik'));
+const AdminIlanOlustur = lazy(() => import('../pages/Admin/AdminIlanOlustur'));
+
 //Yonetici
 const YoneticiAnasayfa = lazy(() => import('../pages/Yonetici/YoneticiAnasayfa'));
 //Jüri
@@ -38,13 +41,27 @@ const routes = [
         layout: 'blank',
     },
 
-    //Admin
+    //Admin <AuthGuard allowedRoles={['a']}>
     //Admin ana sayfa
     {
         path: '/admin/anasayfa',
-        element:<AuthGuard allowedRoles={['a']}><AdminAnasayfa /></AuthGuard>,//buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
+        element:<AdminAnasayfa />,//buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
         layout: 'admin',
     },
+    //Admin ilan olusturma
+    {
+        path: '/admin/ilan-olustur',
+        element:<AdminIlanOlustur />,
+        layout: 'admin',
+    },
+    //Admin etkinlik duzenleme
+    {
+        path: '/admin/etkinlik',
+        element:<AdminEtkinlik />,
+        layout: 'admin',
+    },
+
+    
 
     //Aday
     //Aday ana sayfa
