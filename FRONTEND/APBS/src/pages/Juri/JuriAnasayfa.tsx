@@ -1,34 +1,50 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
+interface Ilan {
+    id: number;
+    ilanAdi: string;
+    tarihAraligi: string;
+    durum: string;
+}
+
 const JuriAnasayfa = () => {
-    const tableData = [
-        {
-            id: 1,
-            ilanAdi: 'Bilgisayar Mühendisliği Akademik Kadro',
-            tarihAraligi: '01/04/2024 - 15/04/2024',
-            status: 'Değerlendirme Aşamasında',
-        },
-        {
-            id: 2,
-            ilanAdi: 'Elektrik Elektronik Mühendisliği Yardımcı Doçent',
-            tarihAraligi: '05/03/2024 - 20/03/2024',
-            status: 'Tamamlandı',
-        },
-        {
-            id: 3,
-            ilanAdi: 'Makine Mühendisliği Öğretim Üyesi',
-            tarihAraligi: '10/02/2024 - 25/02/2024',
-            status: 'Başvuru Aşamasında',
-        },
-        {
-            id: 4,
-            ilanAdi: 'İnşaat Mühendisliği Profesörlük Kadrosu',
-            tarihAraligi: '15/01/2024 - 30/01/2024',
-            status: 'İptal Edildi',
-        },
-    ];
-    
+    const [tableData, setTableData] = useState<Ilan[]>([]);
+
+    useEffect(() => {
+        const fetchIlanlar = async () => {
+            try {
+                const response = await axios.get('/api/juri/ilanlarim', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+                console.log("API'den dönen veri:", response.data);
+
+                if (Array.isArray(response.data)) {
+                    setTableData(response.data);
+                } else {
+                    console.warn("Beklenmeyen veri formatı:", response.data);
+                    setTableData([]); // hatalı veri gelirse boş dizi ata
+                }
+
+            } catch (error) {
+                console.error("İlanlar alınırken hata oluştu:", error);
+                setTableData([]); // hata durumunda yine boş dizi
+            }
+        };
+
+        fetchIlanlar();
+    }, []);
+
+    const handleBasvuruyaGit = (ilanId: number) => {
+        localStorage.setItem("secilenIlanId", ilanId.toString());
+        window.location.href = "/juri/basvuru";
+    };
+
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
             <div className="flex justify-between items-center border-b pb-2">
@@ -49,23 +65,21 @@ const JuriAnasayfa = () => {
                             <tr key={data.id} className="hover:bg-gray-50">
                                 <td className="border-gray-300 px-4 py-2">{data.ilanAdi}</td>
                                 <td className="border-gray-300 px-4 py-2">{data.tarihAraligi}</td>
-                                <td
-                                    className={`border-gray-300 px-4 py-2 font-semibold ${
-                                        data.status === 'Tamamlandı' ? 'text-green-600' :
-                                        data.status === 'Değerlendirme Aşamasında' ? 'text-blue-600' :
-                                        data.status === 'Başvuru Aşamasında' ? 'text-yellow-600' :
-                                        data.status === 'İptal Edildi' ? 'text-red-600' :
-                                        'text-gray-600'
-                                    }`}
-                                >
-                                    {data.status}
+                                <td className={`border-gray-300 px-4 py-2 font-semibold ${
+                                    data.durum === 'Tamamlandı' ? 'text-green-600' :
+                                    data.durum === 'Değerlendirme Aşamasında' ? 'text-blue-600' :
+                                    data.durum === 'Başvuru Aşamasında' ? 'text-yellow-600' :
+                                    data.durum === 'İptal Edildi' ? 'text-red-600' :
+                                    'text-gray-600'
+                                }`}>
+                                    {data.durum}
                                 </td>
-                                <td className=" px-4 py-2 text-center">
+                                <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruları Görüntüle">
                                         <button
                                             type="button"
                                             className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            onClick={() => alert(`Başvurular sayfasına yönlendiriliyor: ${data.ilanAdi}`)}
+                                            onClick={() => handleBasvuruyaGit(data.id)}
                                         >
                                             Başvurular &gt;
                                         </button>
@@ -78,6 +92,6 @@ const JuriAnasayfa = () => {
             </div>
         </div>
     );
-    
-}
+};
+
 export default JuriAnasayfa;
