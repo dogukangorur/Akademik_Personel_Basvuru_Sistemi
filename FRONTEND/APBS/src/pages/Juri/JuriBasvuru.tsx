@@ -1,34 +1,43 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
-const applicationData = [
-    {
-        id: 1,
-        name: 'Ahmet Yılmaz',
-        date: '10/03/2024',
-        status: 'İncelendi',
-    },
-    {
-        id: 2,
-        name: 'Mehmet Demir',
-        date: '12/03/2024',
-        status: 'İncelenmedi',
-    },
-    {
-        id: 3,
-        name: 'Zeynep Kaya',
-        date: '15/03/2024',
-        status: 'İncelendi',
-    },
-    {
-        id: 4,
-        name: 'Elif Çelik',
-        date: '18/03/2024',
-        status: 'İncelenmedi',
-    },
-];
+interface Basvuru {
+    id: number;
+    aday_adi: string;
+    tarih: string;
+    basvuru_durum: 'Beklemede' | 'Onaylandı' | 'Reddedildi';
+}
 
 export default function ApplicationReviewTable() {
+    const [applications, setApplications] = useState<Basvuru[]>([]);
+
+    useEffect(() => {
+        const ilanId = localStorage.getItem('secilenIlanId');
+
+        if (!ilanId) {
+            console.error("Seçilen ilan bulunamadı.");
+            return;
+        }
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get<Basvuru[]>(`/api/juri/basvurular/${ilanId}`);
+                setApplications(response.data);
+            } catch (error) {
+                console.error("Başvurular alınırken hata oluştu:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleIncele = (basvuruId: number) => {
+        localStorage.setItem("secilenBasvuruId", basvuruId.toString());
+        window.location.href = "/juri/basvuru-degerlendirme";
+    };
+
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
             <div className="flex justify-between items-center border-b pb-2">
@@ -42,28 +51,28 @@ export default function ApplicationReviewTable() {
                             <th className="px-4 py-2">Ad Soyad</th>
                             <th className="px-4 py-2">Tarih</th>
                             <th className="px-4 py-2">Durum</th>
-                            <th className="px-4 py-2 text-center">İncele </th>
+                            <th className="px-4 py-2 text-center">İncele</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {applicationData.map((data) => (
-                            <tr key={data.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-2 text-center">{data.id}</td>
-                                <td className="px-4 py-2">{data.name}</td>
-                                <td className="px-4 py-2">{data.date}</td>
-                                <td
-                                    className={`px-4 py-2 font-semibold ${
-                                        data.status === 'İncelendi' ? 'text-green-600' : 'text-red-600'
-                                    }`}
-                                >
-                                    {data.status}
+                        {applications.map((app, index) => (
+                            <tr key={app.id} className="hover:bg-gray-50">
+                                <td className="px-4 py-2 text-center">{index + 1}</td>
+                                <td className="px-4 py-2">{app.aday_adi}</td>
+                                <td className="px-4 py-2">{app.tarih}</td>
+                                <td className={`px-4 py-2 font-semibold ${
+                                    app.basvuru_durum === 'Onaylandı' ? 'text-green-600' :
+                                    app.basvuru_durum === 'Beklemede' ? 'text-yellow-600' :
+                                    'text-red-600'
+                                }`}>
+                                    {app.basvuru_durum}
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruyu İncele">
                                         <button
                                             type="button"
                                             className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            onClick={() => alert(`Başvuru inceleniyor: ${data.name}`)}
+                                            onClick={() => handleIncele(app.id)}
                                         >
                                             İncele &gt;
                                         </button>

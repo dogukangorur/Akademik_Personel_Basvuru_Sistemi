@@ -380,9 +380,11 @@ CREATE TABLE FaaliyetPuanKatsayisi (
 CREATE TABLE BasvuruJuri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     juri_id INT NOT NULL,
+    basvuru_id INT NOT NULL,
     degerlendime_raporu_doc NVARCHAR(250) NOT NULL,
     basvuru_degerlendirme_durum ENUM('Beklemede', 'Olumlu', 'Olumsuz') NOT NULL DEFAULT 'Beklemede', 
-    FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE
+    FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
+    FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
 );
 
 CREATE TABLE bolumler (
@@ -390,4 +392,13 @@ CREATE TABLE bolumler (
     bolum_adi VARCHAR(255) NOT NULL,
     fakulte_id INT,
     FOREIGN KEY (fakulte_id) REFERENCES fakulte(id)
+);
+
+CREATE TABLE JuriIlan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ilan_id INT NOT NULL,
+    juri_id INT NOT NULL,
+    UNIQUE (ilan_id, juri_id), -- Aynı juri aynı ilana birden fazla kez atanamaz
+    FOREIGN KEY (ilan_id) REFERENCES Ilanlar(id) ON DELETE CASCADE,
+    FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
