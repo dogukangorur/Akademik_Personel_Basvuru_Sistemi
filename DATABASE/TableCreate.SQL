@@ -381,3 +381,13 @@ CREATE TABLE BasvuruJuri (
     basvuru_degerlendirme_durum ENUM('Beklemede', 'Olumlu', 'Olumsuz') NOT NULL DEFAULT 'Beklemede', 
     FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
+
+
+-- BaşvuruJüri tablosu güncelleme
+ALTER TABLE BasvuruJuri
+ADD basvuru_id INT;
+
+
+ALTER TABLE BasvuruJuri
+ADD CONSTRAINT fk_basvurujuri_basvuru
+FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE;
