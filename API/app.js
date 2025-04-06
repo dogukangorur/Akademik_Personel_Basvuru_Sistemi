@@ -1,11 +1,11 @@
 require("dotenv").config();
 const express = require("express");
-const api = require("./Routes/index.js"); // routes klasöründeki index.js dosyası tanımlandı
-const connection = require("./service/connection.js"); // service klasöründeki connection.js dosyası tanımlandı
+const api = require("./Routes/index.js");
+const connection = require("./Service/connection.js");
 const cors = require("cors");
 
-const app = express(); // express uygulaması oluşturuldu
-const port = process.env.PORT || 8080; // 3000 portunu kullanacak
+const app = express(); 
+const port = process.env.PORT || 8080; 
 app.use(express.json());
 app.use(
   cors({

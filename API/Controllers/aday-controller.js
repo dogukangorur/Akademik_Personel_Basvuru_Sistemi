@@ -1,7 +1,7 @@
 // const bcryptjs = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
 
-const connection = require("../service/connection.js");
+const connection = require("../Service/connection.js");
 
 exports.postAdayGiris = async (req, res) => {
     const q = `

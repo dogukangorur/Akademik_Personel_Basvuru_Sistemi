@@ -1,6 +1,7 @@
 const express = require("express");
 const user = require("./aday.js");
 const etkinlik = require("./etkinlik.js");
+const admin = require("./admin.js");
 
 const router = express.Router();
 
@@ -10,5 +11,6 @@ router.get("/", (req, res) => {
 
 router.use("/api/aday", user);
 router.use("/api/etkinlik", etkinlik);
+router.use("/api/admin", admin);
 
 module.exports = router;

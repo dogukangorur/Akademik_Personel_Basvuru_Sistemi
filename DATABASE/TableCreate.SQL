@@ -48,13 +48,16 @@ CREATE TABLE KullaniciRoller (
 CREATE TABLE Ilanlar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fakulte_id INT NOT NULL,
+    bolum_id INT NOT NULL,
     kadro_id INT NOT NULL,
     baslik NVARCHAR(255) NOT NULL,
+    aranan_sayi NVARCHAR(5) NOT NULL,
     aciklama TEXT NOT NULL,
     durum ENUM('aktif', 'pasif') NOT NULL DEFAULT 'aktif',
     baslangic_tarih DATE NOT NULL,
     bitis_tarih DATE NOT NULL,
     FOREIGN KEY (fakulte_id) REFERENCES Fakulte(id) ON DELETE CASCADE,
+    FOREIGN KEY (bolum_id) REFERENCES bolumler(id) ON DELETE CASCADE,
     FOREIGN KEY (kadro_id) REFERENCES Kadrolar(id) ON DELETE CASCADE
 );
 
@@ -380,4 +383,11 @@ CREATE TABLE BasvuruJuri (
     degerlendime_raporu_doc NVARCHAR(250) NOT NULL,
     basvuru_degerlendirme_durum ENUM('Beklemede', 'Olumlu', 'Olumsuz') NOT NULL DEFAULT 'Beklemede', 
     FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bolumler (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bolum_adi VARCHAR(255) NOT NULL,
+    fakulte_id INT,
+    FOREIGN KEY (fakulte_id) REFERENCES fakulte(id)
 );

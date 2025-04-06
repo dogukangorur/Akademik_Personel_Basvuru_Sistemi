@@ -6,17 +6,6 @@ const router = express.Router();
 const {
 
   etkinlikGetir,
-  bilimselGetir,
-  kitapGetir,
-  atifGetir,
-  egitimGetir,
-  tezGetir,
-  patentGetir,
-  arastirmaGetir,
-  editorGetir,
-  odulGetir,
-  idariGetir,
-  guzelGetir,
 
 } = require("../Controllers/etkinlik-controller.js");
 
