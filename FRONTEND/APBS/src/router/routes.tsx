@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import AuthGuard from './AuthGuard';
+import AdminDuzenle from '../pages/Admin/AdminDuzenle';
 const Index = lazy(() => import('../pages/Index'));
 const Login = lazy(() => import('../pages/Authentication/Login'));
 const Register = lazy(() => import('../pages/Authentication/Register'));
@@ -52,6 +53,12 @@ const routes = [
     {
         path: '/admin/ilan-olustur',
         element:<AdminIlanOlustur />,
+        layout: 'admin',
+    },
+    //Admin ilan duzenleme
+    {
+        path: '/admin/duzenle',
+        element:<AdminDuzenle />,
         layout: 'admin',
     },
     //Admin etkinlik duzenleme

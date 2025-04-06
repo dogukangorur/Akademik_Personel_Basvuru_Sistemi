@@ -10,14 +10,22 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/flatpickr.css';
 import { IRootState } from '../../store';
 import { format } from 'path';
+import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-const AdminIlanOlustur = () => {
+const AdminDuzenle = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(setPageTitle('İlan Oluştur'));
+        dispatch(setPageTitle('İlan Düzenle'));
     });
+
+    const MySwal = withReactContent(Swal);
+
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const ilanId = params.get('id');
+
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
     const [date1, setDate1] = useState<any>("");
     const [date2, setDate2] = useState<any>("");
@@ -31,14 +39,13 @@ const AdminIlanOlustur = () => {
     const [arananUnvan, setArananUnvan] = useState<any>("");
     const [selectedBolum, setSelectedBolum] = useState<any>("");
     const [arananUnvanList, setArananUnvanList] = useState([]);
-
-
-    const MySwal = withReactContent(Swal);
+    const [duzenlenenList, setDuzenlenenList] = useState([]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const formData = {
+            id: ilanId,
             baslik: baslik,
             fakulteAdi: selectedFakulte,
             bolumAdi: selectedBolum,
@@ -49,7 +56,7 @@ const AdminIlanOlustur = () => {
             bitisTarihi: date2
         };
 
-        const response = await fetch("http://localhost:8080/api/admin/ilanKayit", {
+        const response = await fetch("http://localhost:8080/api/admin/ilanDuzenle", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -60,7 +67,7 @@ const AdminIlanOlustur = () => {
         const result = await response.json();
         if(result){
             MySwal.fire({
-                title: 'İlan Oluşturuldu',
+                title: 'Düzenleme Başarılı',
                 toast: true,
                 position: 'bottom-start',
                 showConfirmButton: false,
@@ -99,6 +106,28 @@ const AdminIlanOlustur = () => {
 
     }, [selectedFakulte]);
 
+    
+
+
+    useEffect(() => {
+        if (!ilanId) return;
+    
+        fetch(`http://localhost:8080/api/admin/ilanGetir?id=${ilanId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                setBaslik(data[0].baslik || "");
+                setArananKisiSayisi(data[0].aranan_sayi || "");
+                setAciklama(data[0].aciklama || "");
+                setDate1(data[0].baslangic_tarih?.substring(0, 10) || "");
+                setDate2(data[0].bitis_tarih?.substring(0, 10) || "");
+    
+                // Artık doğrudan ID'leri kullanabilirsin
+                setSelectedFakulte(data[0].fakulte_id || "");
+                setSelectedBolum(data[0].bolum_id || "");
+                setArananUnvan(data[0].kadro_id || "");
+            })
+            .catch((err) => console.error("İlan verisi alınamadı", err));
+    }, [ilanId]);
 
     return (
         <div>
@@ -109,7 +138,7 @@ const AdminIlanOlustur = () => {
                         <form onSubmit={handleSubmit} method='POST'>
 
                             <div className="relative z-0  mb-8 group ">
-                                <input type="text" name="baslik" className="form-input border-2  focus:border-green-800" placeholder="İlan Başlığı" required onChange={(e) => setBaslik(e.target.value)} />
+                                <input type="text" value={baslik} name="baslik" className="form-input border-2  focus:border-green-800" placeholder="İlan Başlığı" required onChange={(e) => setBaslik(e.target.value)} />
                             </div>
 
                             <div className="relative z-0  mb-8 group ">
@@ -149,11 +178,11 @@ const AdminIlanOlustur = () => {
                             </div>
 
                             <div className="relative z-0  mb-8 group ">
-                                <input type="text" name="arananKisiSayisi" className="form-input border-2  focus:border-green-800" placeholder="Aranan Kişi Sayısı" required onChange={(e) => setArananKisiSayisi(e.target.value)} />
+                                <input type="text" name="arananKisiSayisi" value={arananKisiSayisi} className="form-input border-2  focus:border-green-800" placeholder="Aranan Kişi Sayısı" required onChange={(e) => setArananKisiSayisi(e.target.value)} />
                             </div>
 
                             <div className="relative z-0  mb-8 group ">
-                                <textarea name="aciklama" placeholder='Açıklama' className='form-input border-2  focus:border-green-800' rows={10} required onChange={(e) => setAciklama(e.target.value)}></textarea>
+                                <textarea name="aciklama" placeholder='Açıklama' value={aciklama} className='form-input border-2  focus:border-green-800' rows={10} required onChange={(e) => setAciklama(e.target.value)}></textarea>
                             </div>
 
 
@@ -177,7 +206,7 @@ const AdminIlanOlustur = () => {
                                 />
                             </div>
 
-                            <button type="submit" className="btn btn-danger">Oluştur</button>
+                            <button type="submit" className="btn btn-danger">Düzenle</button>
 
 
                         </form>
@@ -192,4 +221,4 @@ const AdminIlanOlustur = () => {
     );
 };
 
-export default AdminIlanOlustur;
+export default AdminDuzenle;
