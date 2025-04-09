@@ -1126,7 +1126,7 @@ const AdayProfil = () => {
                                             <h3 className="text-md font-semibold">Arastirma Proje {index + 1}</h3>
                                             <select className="form-input mb-3">
                                             <option>Faaliyet Türü</option>
-                                            {patentEtkinlik.map((faaliyet:any) => (
+                                            {arastirmaEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
                                                 {faaliyet.aciklama}
                                             </option>
