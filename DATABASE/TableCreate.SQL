@@ -45,6 +45,13 @@ CREATE TABLE KullaniciRoller (
     FOREIGN KEY (rolID) REFERENCES Rol(id) ON DELETE CASCADE
 );
 
+CREATE TABLE bolumler (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    bolum_adi VARCHAR(255) NOT NULL,
+    fakulte_id INT,
+    FOREIGN KEY (fakulte_id) REFERENCES fakulte(id)
+);
+
 CREATE TABLE Ilanlar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fakulte_id INT NOT NULL,
@@ -385,13 +392,6 @@ CREATE TABLE BasvuruJuri (
     basvuru_degerlendirme_durum ENUM('Beklemede', 'Olumlu', 'Olumsuz') NOT NULL DEFAULT 'Beklemede', 
     FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
-);
-
-CREATE TABLE bolumler (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    bolum_adi VARCHAR(255) NOT NULL,
-    fakulte_id INT,
-    FOREIGN KEY (fakulte_id) REFERENCES fakulte(id)
 );
 
 CREATE TABLE JuriIlan (
