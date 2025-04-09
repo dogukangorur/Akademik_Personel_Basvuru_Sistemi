@@ -76,6 +76,26 @@ exports.ilanKayit = async (req, res) => {
 };
 
 exports.ilanGetir = async (req, res) => {
+
+    const id = req.query.id;
+
+        if (id) {
+            const q = `select ilanlar.id,fakulte.id as fakulte_id,bolumler.id as bolum_id,kadrolar.id as kadro_id, ilanlar.baslik, ilanlar.aranan_sayi, ilanlar.aciklama, ilanlar.durum, ilanlar.baslangic_tarih, ilanlar.bitis_tarih, fakulte.fakulte_adi,bolumler.bolum_adi,kadrolar.kadro_adi 
+            from ilanlar join fakulte on ilanlar.fakulte_id=fakulte.id join bolumler on bolumler.id = ilanlar.bolum_id join kadrolar on kadrolar.id=ilanlar.kadro_id where ilanlar.id = ?`;
+            const values = [id];      
+            connection.query(q,values,(error,data)=>{
+                if(error){
+                    console.error('Error executing query:', error);
+                    return res.status(500).json({ message: error.message });
+                }
+                if (data.length === 0) {
+                    return res.status(404).json({ message: "bulunamadı." });
+                }
+                return res.json(data);
+            });
+
+        }
+        else{
     const q = `select ilanlar.id, ilanlar.baslik, ilanlar.aranan_sayi, ilanlar.aciklama, ilanlar.durum, ilanlar.baslangic_tarih, ilanlar.bitis_tarih, fakulte.fakulte_adi,bolumler.bolum_adi,kadrolar.kadro_adi 
     from ilanlar join fakulte on ilanlar.fakulte_id=fakulte.id join bolumler on bolumler.id = ilanlar.bolum_id join kadrolar on kadrolar.id=ilanlar.kadro_id`
     connection.query(q, (error, data) => {
@@ -87,5 +107,72 @@ exports.ilanGetir = async (req, res) => {
             return res.status(404).json({ message: "bulunamadı." });
         }
         return res.json(data);
+    });
+    }
+};
+
+exports.ilanDuzenle = async (req, res) => {
+   
+    const {id, baslik, fakulteAdi, bolumAdi, arananUnvan, arananKisiSayisi, aciklama, baslangicTarihi, bitisTarihi } = req.body;
+    
+    const q = `update ilanlar set fakulte_id = ?, bolum_id = ?, kadro_id = ?, baslik = ?, aranan_sayi = ?, aciklama= ?, baslangic_tarih = ?, bitis_tarih = ? where id = ?`;
+
+    const values = [fakulteAdi,bolumAdi,arananUnvan,baslik,arananKisiSayisi,aciklama,baslangicTarihi,bitisTarihi,id];
+
+    connection.query(q, values, (error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({ message: error.message });
+        }
+        
+        return res.status(200).json({ message: "başarılı" });
+    });
+};
+
+
+exports.ilanDuzenle = async (req, res) => {
+   
+    const {id, baslik, fakulteAdi, bolumAdi, arananUnvan, arananKisiSayisi, aciklama, baslangicTarihi, bitisTarihi } = req.body;
+    
+    const q = `update ilanlar set fakulte_id = ?, bolum_id = ?, kadro_id = ?, baslik = ?, aranan_sayi = ?, aciklama= ?, baslangic_tarih = ?, bitis_tarih = ? where id = ?`;
+
+    const values = [fakulteAdi,bolumAdi,arananUnvan,baslik,arananKisiSayisi,aciklama,baslangicTarihi,bitisTarihi,id];
+
+    connection.query(q, values, (error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({ message: error.message });
+        }
+        
+        return res.status(200).json({ message: "başarılı" });
+    });
+};
+
+
+exports.ilanSil = async (req, res) => {
+    const id = req.query.id;    
+    const q = `delete from ilanlar where id = ? `;
+    const values = [id];
+
+    connection.query(q, values, (error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({ message: error.message });
+        }
+        
+        return res.status(200).json({ message: "başarılı" });
+    });
+};
+exports.ilanDurumGuncelle = async (req, res) => {
+    const { id, durum } = req.query;  
+    const q = `update ilanlar set durum = ? where id = ?`;
+    const values = [durum,id];
+
+    connection.query(q, values, (error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({ message: error.message });
+        }
+        return res.status(200).json({ message: "başarılı" });
     });
 };
