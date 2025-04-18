@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import AuthGuard from './AuthGuard';
 import AdminDuzenle from '../pages/Admin/AdminDuzenle';
+import path from 'path';
 const Index = lazy(() => import('../pages/Index'));
 const Login = lazy(() => import('../pages/Authentication/Login'));
 const Register = lazy(() => import('../pages/Authentication/Register'));
@@ -17,6 +18,10 @@ const AdminIlanOlustur = lazy(() => import('../pages/Admin/AdminIlanOlustur'));
 
 //Yonetici
 const YoneticiAnasayfa = lazy(() => import('../pages/Yonetici/YoneticiAnasayfa'));
+const YoneticiIlanNihaiKarar = lazy(() => import('../pages/Yonetici/YoneticiIlanNihaiKarar'));
+const YoneticiIlanJuri = lazy(() => import('../pages/Yonetici/YoneticiIlanJuri'));
+const YoneticiNihaiKarar = lazy(() => import('../pages/Yonetici/YoneticiNihaiKarar'));
+const YoneticiJuriAtama = lazy(() => import('../pages/Yonetici/YoneticiJuriAtama'));
 //Jüri
 const JuriAnasayfa = lazy(() => import('../pages/Juri/JuriAnasayfa'));
 const JuriBasvuru = lazy(() => import('../pages/Juri/JuriBasvuru'));
@@ -120,9 +125,35 @@ const routes = [
     //Yönetici ana sayfa
     {
         path: '/yonetici/anasayfa',
-        element: <AuthGuard allowedRoles={['y']}><YoneticiAnasayfa /></AuthGuard>,
+        //element: <AuthGuard allowedRoles={['y']}><YoneticiAnasayfa /></AuthGuard>,
+        element: <YoneticiAnasayfa />,
         layout: 'yonetici',
     },
+    //Yönetici İlan Nihai Karar
+    {
+        path: '/yonetici/ilanlar-nihai-karar',
+        element: <YoneticiIlanNihaiKarar />,
+        layout: 'yonetici',
+    },
+    //Yönetici İlan Jüri 
+    {
+        path: '/yonetici/ilanlar-juri-atama',
+        element: <YoneticiIlanJuri />,
+        layout: 'yonetici',
+    },
+    //Yönetici Nihai Karar
+    {
+        path: '/yonetici/nihai-karar',
+        element: <YoneticiNihaiKarar />,
+        layout: 'yonetici',
+    },
+    //Yönetici Jüri Atama
+    {
+        path: '/yonetici/juri-atama',
+        element: <YoneticiJuriAtama />,
+        layout: 'yonetici',
+    }
+
 ];
 
 export { routes };
