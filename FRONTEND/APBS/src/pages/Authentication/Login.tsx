@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { setPageTitle, toggleRTL } from '../../store/themeConfigSlice';
 import Dropdown from '../../components/Dropdown';
 import i18next from 'i18next';
-
+import Swal from 'sweetalert2';
 import Header from '../Parts/Header';
+import withReactContent from 'sweetalert2-react-content';
 
 const LoginBoxed = () => {
     const dispatch = useDispatch();
@@ -25,6 +26,8 @@ const LoginBoxed = () => {
             dispatch(toggleRTL('ltr'));
         }
     };
+    const MySwal = withReactContent(Swal);
+    
     const [flag, setFlag] = useState(themeConfig.locale);
     const [password, setPassword] = useState('');
     const [tc, setTc] = useState('')
@@ -45,8 +48,17 @@ const LoginBoxed = () => {
 
             if (!response.ok) {
                 // Hata durumunda mesajı al ve state'e ata
-                console.log(data)
-                alert(data.message || 'TC yada şifre hatalı.');
+                MySwal.fire({
+                    title: data.message,
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    showCloseButton: true,
+                    customClass: {
+                        popup: `color-danger`,
+                    },
+                })
                 return;
             }
             console.log(data)

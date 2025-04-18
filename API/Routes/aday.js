@@ -6,12 +6,13 @@ const router = express.Router();
 const {
 
   postAdayGiris,
+  postAdayKayit,
 
 } = require("../Controllers/aday-controller.js");
 
 
 router.post("/postAdayGiris", postAdayGiris);
-
+router.post("/postAdayKayit", postAdayKayit);
 
 
 module.exports = router;

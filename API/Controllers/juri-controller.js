@@ -1,5 +1,8 @@
+
+/*
+
 //DÜZENLENECEK
-const connection = require("../service/connection.js");
+const connection = require("../Service/connection.js");
 
 // Jüriye atanmış ilanları getir (anasayfa)
 const getAssignedIlansForJuri = async (req, res) => {
@@ -73,3 +76,4 @@ module.exports = {
     getAssignedIlansForJuri,
     getBasvurularByIlan,
 };
+*/

@@ -13,6 +13,6 @@ router.get("/", (req, res) => {
 router.use("/api/aday", user);
 router.use("/api/etkinlik", etkinlik);
 router.use("/api/admin", admin);
-router.use("/api/juri", juri);
+// router.use("/api/juri", juri);
 
 module.exports = router;
