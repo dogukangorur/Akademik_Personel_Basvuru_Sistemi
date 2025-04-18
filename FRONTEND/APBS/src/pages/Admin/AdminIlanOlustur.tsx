@@ -34,7 +34,7 @@ const AdminIlanOlustur = () => {
 
 
     const MySwal = withReactContent(Swal);
-
+    const navigate = useNavigate();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -64,12 +64,14 @@ const AdminIlanOlustur = () => {
                 toast: true,
                 position: 'bottom-start',
                 showConfirmButton: false,
-                timer: 3000,
+                timer: 1500,
                 showCloseButton: true,
                 customClass: {
                     popup: `color-success`,
                 },
-            });
+            }).then(()=>{
+                navigate("/admin/anasayfa");
+            });;
         }
     };
 

@@ -22,6 +22,7 @@ type Ilan = {
   aciklama: string;
   durum: string;
   fakulte_adi:string;
+  kadro_adi:string;
 };
 
 const Ilanlar = () => {
@@ -128,14 +129,15 @@ const Ilanlar = () => {
                     </div>
                     <div className="mt-4">
                         <p className="my-5 text-md text-gray-700">{secilenIlan?.aciklama || 'Açıklama girilmemiş'}</p>
-              
+                        <hr />
+                        <p className="my-2 text-md text-gray-700"><b>Aranan Kadro : </b>{secilenIlan?.kadro_adi}</p>
                         <p className="my-2 text-md text-gray-700"><b>{secilenIlan?.aranan_sayi} Kontenjan bulunmaktadır.</b></p>
 
                     </div>
                     <div className="mt-6 flex justify-end">
                       <button
                         type="button"
-                        className="btn btn-primary"
+                        className="btn btn-danger"
                         onClick={() => setModalOpen(false)}
                       >
                         Kapat

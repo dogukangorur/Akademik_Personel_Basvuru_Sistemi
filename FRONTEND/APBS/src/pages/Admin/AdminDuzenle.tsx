@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import IconInstagram from '../../components/Icon/IconInstagram';
@@ -41,6 +41,9 @@ const AdminDuzenle = () => {
     const [arananUnvanList, setArananUnvanList] = useState([]);
     const [duzenlenenList, setDuzenlenenList] = useState([]);
 
+
+    const navigate = useNavigate();
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -71,11 +74,13 @@ const AdminDuzenle = () => {
                 toast: true,
                 position: 'bottom-start',
                 showConfirmButton: false,
-                timer: 3000,
+                timer: 1500,
                 showCloseButton: true,
                 customClass: {
                     popup: `color-success`,
                 },
+            }).then(()=>{
+                navigate("/admin/anasayfa");
             });
         }
     };

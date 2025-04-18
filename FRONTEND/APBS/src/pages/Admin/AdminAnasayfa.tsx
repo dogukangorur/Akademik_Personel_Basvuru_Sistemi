@@ -85,11 +85,12 @@ const AdminAnasayfa = () => {
             <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full ">
                 <div className="flex justify-between items-center  pb-2">
                     <div className="table-responsive mb-5 w-full">
-                        <table>
+                        <table className='table-fixed'>
                             <thead>
                                 <tr>
                                     <th>İlan Id</th>
                                     <th>İlan Adı</th>
+                                    <th>Açıklama</th>
                                     <th>Tarih</th>
                                     <th>Durum</th>
                                     <th></th>
@@ -102,6 +103,9 @@ const AdminAnasayfa = () => {
                                             <td>{ilan.id}</td>
                                             <td>
                                                 <div className="whitespace-nowrap">{ilan.baslik}</div>
+                                            </td>
+                                            <td>
+                                                {ilan.aciklama.substring(0,40)}...
                                             </td>
                                             <td>{formatDate(ilan.baslangic_tarih)} / {formatDate(ilan.bitis_tarih)}</td>
                                             <td >
