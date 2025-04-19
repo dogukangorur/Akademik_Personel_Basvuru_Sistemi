@@ -126,7 +126,7 @@ const AdminDuzenle = () => {
                 setDate1(data[0].baslangic_tarih?.substring(0, 10) || "");
                 setDate2(data[0].bitis_tarih?.substring(0, 10) || "");
     
-                // Artık doğrudan ID'leri kullanabilirsin
+                
                 setSelectedFakulte(data[0].fakulte_id || "");
                 setSelectedBolum(data[0].bolum_id || "");
                 setArananUnvan(data[0].kadro_id || "");

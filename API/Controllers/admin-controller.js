@@ -176,3 +176,17 @@ exports.ilanDurumGuncelle = async (req, res) => {
         return res.status(200).json({ message: "başarılı" });
     });
 };
+
+exports.ilanBasvuruGoruntule = async (req, res) => {
+    const { id } = req.query;  
+    const q = `select b.id,b.basvuru_tarihi,b.puanlanan_faaliyet_donemi,b.basvuru_durum,k.ad,k.soyad,k.kurumu from basvuru b join kullanici k on b.aday_id=k.id where b.ilan_id = ?`;
+    const values = [id];
+
+    connection.query(q, values, (error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({ success:false, message: error.message });
+        }
+        return res.status(200).json({ success: true , data:data});
+    });
+};

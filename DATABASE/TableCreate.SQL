@@ -230,7 +230,7 @@ CREATE TABLE Basvuru (
     aday_id INT NOT NULL,
     ilan_id INT NOT NULL,
     basvuru_tarihi DATE NOT NULL,
-    puanlanan_faaliyet_doneni ENUM('Profesör', 'Doçent', 'DR. Öğretim Üyesi', 'İlk DR. Öğretim Üyesi') NOT NULL,
+    puanlanan_faaliyet_donemi ENUM('Profesör', 'Doçent', 'DR. Öğretim Üyesi') NOT NULL,
 	basvuru_durum ENUM('Beklemede', 'Onaylandı', 'Reddedildi') NOT NULL DEFAULT 'Beklemede',
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (ilan_id) REFERENCES Ilanlar(id) ON DELETE CASCADE

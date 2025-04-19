@@ -75,7 +75,7 @@ const RegisterBoxed = () => {
                     popup: `color-success`,
                 },
             }).then(() => {
-                navigate('/login'); // örnek olarak giriş sayfasına yönlendir
+                navigate('/login'); 
               });;
         }
         else{

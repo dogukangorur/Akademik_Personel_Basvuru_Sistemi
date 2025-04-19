@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import AuthGuard from './AuthGuard';
 import AdminDuzenle from '../pages/Admin/AdminDuzenle';
 import path from 'path';
+import AdminIlanBasvuru from '../pages/Admin/AdminIlanBasvuru';
 const Index = lazy(() => import('../pages/Index'));
 const Login = lazy(() => import('../pages/Authentication/Login'));
 const Register = lazy(() => import('../pages/Authentication/Register'));
@@ -70,6 +71,12 @@ const routes = [
     {
         path: '/admin/etkinlik',
         element:<AdminEtkinlik />,
+        layout: 'admin',
+    },
+    //Admin ilan başvurularını görüntüleme
+    {
+        path: '/admin/ilan-basvuru-goruntule',
+        element:<AdminIlanBasvuru />,
         layout: 'admin',
     },
 
