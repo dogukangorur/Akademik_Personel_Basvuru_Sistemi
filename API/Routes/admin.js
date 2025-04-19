@@ -12,7 +12,8 @@ const {
     ilanGetir,
     ilanDuzenle,
     ilanSil,
-    ilanDurumGuncelle
+    ilanDurumGuncelle,
+    ilanBasvuruGoruntule
 
 } = require("../Controllers/admin-controller.js");
 
@@ -25,4 +26,5 @@ router.get("/ilanGetir", ilanGetir);
 router.post("/ilanDuzenle", ilanDuzenle);
 router.get("/ilanSil", ilanSil);
 router.get("/ilanDurumGuncelle", ilanDurumGuncelle);
+router.get("/ilanBasvuruGoruntule", ilanBasvuruGoruntule);
 module.exports = router;

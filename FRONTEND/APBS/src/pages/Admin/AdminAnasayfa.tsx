@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import IconTrash from '../../components/Icon/IconTrash';
 import IconEdit from '../../components/Icon/IconEdit';
+import IconEye from '../../components/Icon/IconEye';
 
 const AdminAnasayfa = () => {
     const MySwal = withReactContent(Swal);
@@ -56,6 +57,10 @@ const AdminAnasayfa = () => {
             .catch((err) => console.error("İlanlar alınamadı", err));
     
     };
+
+    const handleGoruntule = (id:number) => {
+        navigate(`/admin/ilan-basvuru-goruntule?id=${id}`);
+      };    
 
     const navigate = useNavigate();
     const handleDuzenle = (id:number) => {
@@ -117,8 +122,9 @@ const AdminAnasayfa = () => {
                                             </td>
                                             <td>
                                                 <div className='flex w-10'>
-                                                        <button type="button"  onClick={() => handleDuzenle(ilan.id)} className="btn btn-warning mx-2 "><IconEdit className="w-6 h-6"/></button>
-                                                        <button type="button" className="btn btn-danger" onClick={() => {setModal1(true); setSecilenIlanId(ilan.id);}}><IconTrash className="w-6 h-6" /></button>
+                                                        <button type="button"  onClick={() => handleDuzenle(ilan.id)} className="btn btn-warning mx-1 "><IconEdit className="w-4 h-4"/></button>
+                                                        <button type="button" className="btn btn-danger mx-1" onClick={() => {setModal1(true); setSecilenIlanId(ilan.id);}}><IconTrash className="w-4 h-4" /></button>
+                                                        <button type="button" className="btn btn-primary mx-1" onClick={() => handleGoruntule(ilan.id)}><IconEye className="w-4 h-4" /></button>
                                                 </div>
                                             </td>
                                         </tr>
