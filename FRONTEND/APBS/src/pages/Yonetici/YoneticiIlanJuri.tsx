@@ -16,7 +16,7 @@ const YoneticiIlanJuri = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/juri/ilanlarim', {
+                const response = await axios.get('/api/yonetici/ilanlar-juri', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
@@ -28,12 +28,11 @@ const YoneticiIlanJuri = () => {
                     setTableData(response.data);
                 } else {
                     console.warn("Beklenmeyen veri formatı:", response.data);
-                    setTableData([]); // hatalı veri gelirse boş dizi ata
+                    setTableData([]);
                 }
-
             } catch (error) {
                 console.error("İlanlar alınırken hata oluştu:", error);
-                setTableData([]); // hata durumunda yine boş dizi
+                setTableData([]);
             }
         };
 
@@ -42,7 +41,7 @@ const YoneticiIlanJuri = () => {
 
     const handleBasvuruyaGit = (ilanId: number) => {
         localStorage.setItem("secilenIlanId", ilanId.toString());
-        window.location.href = "/yonetici/juri-atama";//düzenlenecek
+        window.location.href = "/yonetici/juri-atama";
     };
 
     return (
@@ -54,10 +53,10 @@ const YoneticiIlanJuri = () => {
                 <table className="table-auto w-full border-collapse border border-gray-200">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="px-4 py-2 w-4/6">İlan Adı</th>
-                            <th className="px-4 py-2 w-1/6">Tarih Aralığı</th>
-                            <th className="px-4 py-2 w-1/6">Durum</th>
-                            <th className="px-4 py-2 w-1/6 text-center">Juri Atama</th>
+                            <th className="px-4 py-2 w-3/6">İlan Adı</th>
+                            <th className="px-4 py-2 w-1/6 text-center">Tarih Aralığı</th>
+                            <th className="px-4 py-2 w-1/6 text-center">Durum</th>
+                            <th className="px-4 py-2 w-1/6 text-center">Jüri Atama</th>
                         </tr>
                     </thead>
                     <tbody>
