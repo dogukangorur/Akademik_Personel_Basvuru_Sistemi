@@ -4,6 +4,7 @@ const etkinlik = require("./etkinlik.js");
 const admin = require("./admin.js");
 const juri = require("./juri.js");
 const anasayfa = require("./anasayfa.js");
+const yonetici = require("./yonetici.js");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -15,5 +16,6 @@ router.use("/api/etkinlik", etkinlik);
 router.use("/api/admin", admin);
 router.use("/api/anasayfa",anasayfa);
 // router.use("/api/juri", juri);
+router.use("/api/yonetici", yonetici);
 
 module.exports = router;

@@ -164,6 +164,87 @@ const juriSil = (req, res) => {
     });
 };
 
+//YoneticiIlanNihaiKarar.tsx
+const getNihaiKararaHazirIlanlar = (req, res) => {
+    const query = `
+        SELECT 
+            i.id AS id,
+            i.baslik AS ilanAdi,
+            CONCAT(DATE_FORMAT(i.baslangic_tarihi, '%d.%m.%Y'), ' - ', DATE_FORMAT(i.bitis_tarihi, '%d.%m.%Y')) AS tarihAraligi,
+            COUNT(DISTINCT b.id) AS basvuruSayisi,
+            COUNT(DISTINCT ji.juri_id) AS juriSayisi,
+            COUNT(bj.id) AS yapilanDegerlendirmeSayisi
+        FROM Ilanlar i
+        JOIN Basvuru b ON b.ilan_id = i.id
+        JOIN JuriIlan ji ON ji.ilan_id = i.id
+        LEFT JOIN BasvuruJuri bj ON bj.basvuru_id = b.id AND bj.juri_id = ji.juri_id
+        GROUP BY i.id
+        HAVING (basvuruSayisi * juriSayisi) = yapilanDegerlendirmeSayisi
+    `;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Veritabanı hatası:", err);
+            return res.status(500).json({ message: "Veri alınırken hata oluştu." });
+        }
+
+        res.status(200).json(results);
+    });
+};
+
+//YoneticiNihaiKarar.tsx
+const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
+    const ilanId = req.params.ilanId;
+
+    const query = `
+        SELECT 
+            b.id AS basvuru_id,
+            CONCAT(k_ad.ad, ' ', k_ad.soyad) AS adayAdi,
+            'Başvuru Belgesi' AS belgeAdi, -- İstersen burada belge türünü detaylandırabilirsin
+            k_juri.ad AS juriAd,
+            k_juri.soyad AS juriSoyad,
+            bj.degerlendime_raporu_doc AS belgeURL,
+            bj.aciklama AS metin,
+            bj.basvuru_degerlendirme_durum AS juriDegerlendirme
+        FROM Basvuru b
+        JOIN Kullanici k_ad ON k_ad.id = b.aday_id
+        JOIN BasvuruJuri bj ON bj.basvuru_id = b.id
+        JOIN Kullanici k_juri ON k_juri.id = bj.juri_id
+        WHERE b.ilan_id = ?
+        ORDER BY b.id, bj.juri_id
+    `;
+
+    connection.query(query, [ilanId], (err, results) => {
+        if (err) {
+            console.error("İlan başvuruları alınırken hata:", err);
+            return res.status(500).json({ message: "Veri alınamadı." });
+        }
+
+        // Verileri başvuru bazında grupla
+        const grouped = {};
+        results.forEach(row => {
+            const basvuruId = row.basvuru_id;
+            if (!grouped[basvuruId]) {
+                grouped[basvuruId] = {
+                    id: basvuruId,
+                    adayAdi: row.adayAdi,
+                    belgeAdi: row.belgeAdi,
+                    juriDegerlendirmeleri: []
+                };
+            }
+
+            grouped[basvuruId].juriDegerlendirmeleri.push({
+                juriAdi: `${row.juriAd} ${row.juriSoyad}`,
+                belgeURL: row.belgeURL,
+                metin: row.metin,
+                juriDegerlendirme: row.juriDegerlendirme
+            });
+        });
+
+        res.status(200).json(Object.values(grouped));
+    });
+};
+
 module.exports = {
     getIlanlarVeJuriDurumu, // önceki kodun da çalışmaya devam etmesi için
     getIlanById,
@@ -172,5 +253,7 @@ module.exports = {
     getTumKullanicilar,
     yetkilendirJuri,
     juriAta,
-    juriSil
+    juriSil,
+    getNihaiKararaHazirIlanlar,
+    getIlanBasvurulariVeDegerlendirmeler
 };

@@ -7,33 +7,33 @@ interface Ilan {
     id: number;
     ilanAdi: string;
     tarihAraligi: string;
-    durum: string;
 }
 
 const YoneticiIlanNihaiKarar = () => {
     const [tableData, setTableData] = useState<Ilan[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/juri/ilanlarim', {
+                const response = await axios.get('/api/yonetici/ilanlar-nihai-karar', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
                 });
 
-                console.log("API'den dönen veri:", response.data);
-
                 if (Array.isArray(response.data)) {
                     setTableData(response.data);
                 } else {
                     console.warn("Beklenmeyen veri formatı:", response.data);
-                    setTableData([]); // hatalı veri gelirse boş dizi ata
+                    setTableData([]);
                 }
-
             } catch (error) {
                 console.error("İlanlar alınırken hata oluştu:", error);
-                setTableData([]); // hata durumunda yine boş dizi
+                setError("İlanlar yüklenirken bir hata oluştu.");
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -42,42 +42,53 @@ const YoneticiIlanNihaiKarar = () => {
 
     const handleBasvuruyaGit = (ilanId: number) => {
         localStorage.setItem("secilenIlanId", ilanId.toString());
-        window.location.href = "/yonetici/nihai-karar";//düzenlenecek
+        window.location.href = "/yonetici/nihai-karar"; // Detay sayfası
     };
 
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
-            <div className="flex justify-between items-center border-b pb-2">
-                <h2 className="text-xl font-semibold mb-3">Nihai Karar Aşamasındaki İlanlar</h2>
+            <div className="flex justify-between items-center border-b pb-2 mb-3">
+                <h2 className="text-xl font-semibold">Nihai Karar Aşamasındaki İlanlar</h2>
             </div>
-            <div className="table-responsive mb-5">
-                <table className="table-auto w-full border-collapse border border-gray-200">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="px-4 py-2 w-5/6">İlan Adı</th>
-                            <th className="px-4 py-2 w-1/6 text-center">Başvuru Değerlendirmeleri</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tableData.map((data) => (
-                            <tr key={data.id} className="hover:bg-gray-50">
-                                <td className="border-gray-300 px-4 py-2">{data.ilanAdi}</td>
-                                <td className="px-4 py-2 text-center">
-                                    <Tippy content="Başvuruları Görüntüle">
-                                        <button
-                                            type="button"
-                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            onClick={() => handleBasvuruyaGit(data.id)}
-                                        >
-                                            Değerlendirmeler &gt;
-                                        </button>
-                                    </Tippy>
-                                </td>
+
+            {loading ? (
+                <p className="text-gray-500">Yükleniyor...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : tableData.length === 0 ? (
+                <p className="text-gray-600">Şu anda nihai karar aşamasında ilan bulunmamaktadır.</p>
+            ) : (
+                <div className="table-responsive mb-5">
+                    <table className="table-auto w-full border-collapse border border-gray-200">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="px-4 py-2 w-2/3">İlan Adı</th>
+                                <th className="px-4 py-2 w-1/3 text-center">Tarih Aralığı</th>
+                                <th className="px-4 py-2 text-center">Başvuru Değerlendirmeleri</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {tableData.map((data) => (
+                                <tr key={data.id} className="hover:bg-gray-50">
+                                    <td className="border px-4 py-2">{data.ilanAdi}</td>
+                                    <td className="border px-4 py-2 text-center">{data.tarihAraligi}</td>
+                                    <td className="border px-4 py-2 text-center">
+                                        <Tippy content="Başvuruları Görüntüle">
+                                            <button
+                                                type="button"
+                                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+                                                onClick={() => handleBasvuruyaGit(data.id)}
+                                            >
+                                                Değerlendirmeler &gt;
+                                            </button>
+                                        </Tippy>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };
