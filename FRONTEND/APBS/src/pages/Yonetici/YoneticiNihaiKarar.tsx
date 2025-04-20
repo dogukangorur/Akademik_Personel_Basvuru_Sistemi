@@ -36,7 +36,7 @@ const YoneticiNihaiKarar = () => {
       }
 
       try {
-        const response = await axios.get(`/api/yonetici/ilan-basvurulari/${secilenIlanId}`, {
+        const response = await axios.get(`http://localhost:8080/api/yonetici/ilan-basvurulari/${secilenIlanId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }

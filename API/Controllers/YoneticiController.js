@@ -28,7 +28,7 @@ const getIlanlarVeJuriDurumu = (req, res) => {
             return res.status(500).json({ message: "Sunucu hatası" });
         }
 
-        res.json(results);
+        return res.status(200).json(results);
     });
 };
 
@@ -246,7 +246,7 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
 };
 
 module.exports = {
-    getIlanlarVeJuriDurumu, // önceki kodun da çalışmaya devam etmesi için
+    getIlanlarVeJuriDurumu, 
     getIlanById,
     getJurilerByIlanId,
     getJuriHavuzu,

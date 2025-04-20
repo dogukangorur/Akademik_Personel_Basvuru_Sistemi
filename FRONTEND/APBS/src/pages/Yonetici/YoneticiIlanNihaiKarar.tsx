@@ -17,7 +17,7 @@ const YoneticiIlanNihaiKarar = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/yonetici/ilanlar-nihai-karar', {
+                const response = await axios.get('http://localhost:8080/api/yonetici/ilanlar-nihai-karar', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }

@@ -16,7 +16,7 @@ const YoneticiIlanJuri = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/yonetici/ilanlar-juri', {
+                const response = await axios.get('http://localhost:8080/api/yonetici/ilanlar-juri', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
