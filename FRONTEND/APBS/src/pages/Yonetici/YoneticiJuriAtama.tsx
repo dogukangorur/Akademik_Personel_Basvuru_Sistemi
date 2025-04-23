@@ -25,22 +25,22 @@ const YoneticiJuriAtama = () => {
     if (!ilanId) return;
 
     // İlan bilgisi
-    axios.get(`/api/yonetici/ilan/${ilanId}`).then(res => {
+    axios.get(`http://localhost:8080/api/yonetici/ilan/${ilanId}`).then(res => {
       setIlanBilgisi(res.data);
     });
 
     // Atanan jüriler
-    axios.get(`/api/yonetici/ilan/${ilanId}/juriler`).then(res => {
+    axios.get(`http://localhost:8080/api/yonetici/ilan/${ilanId}/juriler`).then(res => {
       setAtananJuriler(res.data);
     });
 
     // Jüri havuzu
-    axios.get(`/api/yonetici/juri-havuzu`).then(res => {
+    axios.get(`http://localhost:8080/api/yonetici/juri-havuzu`).then(res => {
       setTumJuriHavuzu(res.data);
     });
 
     // Tüm kullanıcılar
-    axios.get(`/api/yonetici/kullanicilar`).then(res => {
+    axios.get(`http://localhost:8080/api/yonetici/kullanicilar`).then(res => {
       setTumKullanicilar(res.data);
     });
   }, [ilanId]);
@@ -53,7 +53,7 @@ const YoneticiJuriAtama = () => {
     }
 
     try {
-      await axios.post(`/api/yonetici/ilan/${ilanId}/juri-ekle`, {
+      await axios.post(`http://localhost:8080/api/yonetici/ilan/${ilanId}/juri-ekle`, {
         juriId: juri.id,
       });
       setAtananJuriler((prev) => [...prev, juri]);
@@ -64,7 +64,7 @@ const YoneticiJuriAtama = () => {
 
   const juriSil = async (juriId: number) => {
     try {
-      await axios.delete(`/api/yonetici/ilan/${ilanId}/juri-sil/${juriId}`);
+      await axios.delete(`http://localhost:8080/api/yonetici/ilan/${ilanId}/juri-sil/${juriId}`);
       setAtananJuriler((prev) => prev.filter((j) => j.id !== juriId));
     } catch (err) {
       alert("Jüri silinirken hata oluştu.");
@@ -73,7 +73,7 @@ const YoneticiJuriAtama = () => {
 
   const juriYetkilendirVeEkle = async (kullanici: Kullanici) => {
     try {
-      await axios.post(`/api/yonetici/juri-yetkilendir`, {
+      await axios.post(`http://localhost:8080/api/yonetici/juri-yetkilendir`, {
         kullaniciId: kullanici.id,
       });
 

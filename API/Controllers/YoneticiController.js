@@ -28,7 +28,7 @@ const getIlanlarVeJuriDurumu = (req, res) => {
             return res.status(500).json({ message: "Sunucu hatası" });
         }
 
-        res.json(results);
+        return res.status(200).json(results);
     });
 };
 
@@ -96,18 +96,24 @@ const getJuriHavuzu = (req, res) => {
 // 4. Tüm kullanıcıları getir (arama için)
 const getTumKullanicilar = (req, res) => {
     const sql = `
-        SELECT id, CONCAT(ad, ' ', soyad) AS adSoyad
-        FROM Kullanici
+      SELECT k.id, CONCAT(k.ad, ' ', k.soyad) AS adSoyad
+      FROM Kullanici k
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM KullaniciRoller kr
+        JOIN Rol r ON kr.rolID = r.id
+        WHERE kr.kullaniciID = k.id AND r.tanimlama = 'Jüri'
+      )
     `;
-
+  
     connection.query(sql, (err, results) => {
-        if (err) {
-            console.error("Kullanıcılar alınamadı:", err);
-            return res.status(500).json({ message: "Sunucu hatası" });
-        }
-        res.json(results);
+      if (err) {
+        console.error("Jüri olmayan kullanıcılar alınamadı:", err);
+        return res.status(500).json({ message: "Sunucu hatası" });
+      }
+      res.json(results);
     });
-};
+  };
 
 // 5. Kullanıcıya jüri yetkisi ver
 const yetkilendirJuri = (req, res) => {
@@ -246,7 +252,7 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
 };
 
 module.exports = {
-    getIlanlarVeJuriDurumu, // önceki kodun da çalışmaya devam etmesi için
+    getIlanlarVeJuriDurumu, 
     getIlanById,
     getJurilerByIlanId,
     getJuriHavuzu,
