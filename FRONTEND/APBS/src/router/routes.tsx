@@ -3,6 +3,7 @@ import AuthGuard from './AuthGuard';
 import AdminDuzenle from '../pages/Admin/AdminDuzenle';
 import path from 'path';
 import AdminIlanBasvuru from '../pages/Admin/AdminIlanBasvuru';
+import AdayProfilGoruntule from '../pages/Aday/AdayProfilGoruntule';
 const Index = lazy(() => import('../pages/Index'));
 const Login = lazy(() => import('../pages/Authentication/Login'));
 const Register = lazy(() => import('../pages/Authentication/Register'));
@@ -99,6 +100,12 @@ const routes = [
     {
         path: '/aday/profil',
         element: <AdayProfil />,
+        layout: 'aday',
+    },
+    //Aday profil goruntuleme
+    {
+        path: '/aday/profil-goruntule',
+        element: <AdayProfilGoruntule />,
         layout: 'aday',
     },
     //Aday profil düzenleme

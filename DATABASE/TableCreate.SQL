@@ -101,6 +101,7 @@ CREATE TABLE PuanKriterleri (
 CREATE TABLE Makaleler (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
+    kullanici_id INT NOT NULL,
     etkinlik_id INT NOT NULL,
     yazarlar  NVARCHAR(500) NOT NULL,
 	makale_adi  NVARCHAR(500) NOT NULL,
@@ -108,7 +109,11 @@ CREATE TABLE Makaleler (
     cilt_no  NVARCHAR(10) NOT NULL,
     sayfa_no NVARCHAR(10) NOT NULL,
     yıl DATE NOT NULL,
+    makale_url NVARCHAR(500) NOT NULL,
+    isBaslicaYazar BOOLEAN DEFAULT FALSE,
+    isAsgariCalisma BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE BilimselToplantiFaaliyetleri (
@@ -121,40 +126,56 @@ CREATE TABLE BilimselToplantiFaaliyetleri (
     yapildigi_yer  NVARCHAR(10) NOT NULL,
     sayfa_no NVARCHAR(10) NOT NULL,
     tarih DATE NOT NULL,
+    kisi_sayisi INT NOT NULL,
+    bilimsel_url NVARCHAR(500) NOT NULL,
+    isBaslicaYazar BOOLEAN DEFAULT FALSE,
+    isAsgariCalisma BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Kitaplar (
     id INT AUTO_INCREMENT PRIMARY KEY,
 	aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     yazarlar  NVARCHAR(500) NOT NULL,
 	kitap_adi  NVARCHAR(500) NOT NULL,
-    yayinevi  NVARCHAR(500) NOT NULL,
     baski_sayisi  NVARCHAR(10) NOT NULL,
     yayinlandigi_yer NVARCHAR(50) NOT NULL,
+    kisi_sayisi INT NOT NULL,
     tarih DATE NOT NULL,
+    kitaplar_url NVARCHAR(500) NOT NULL,
+    isBaslicaYazar BOOLEAN DEFAULT FALSE,
+    isAsgariCalisma BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Atiflar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
+    kullanici_id INT NOT NULL,
     etkinlik_id INT NOT NULL,
     atifin_yapildigi_eser  NVARCHAR(500) NOT NULL,
-	atif_sayisi  INT NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+	yer NVARCHAR(500) NOT NULL,
+    atiflar_url NVARCHAR(500) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE EgitimOgretimFaaliyetleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     dersin_adi  NVARCHAR(500) NOT NULL,
 	programin_adi  NVARCHAR(500) NOT NULL,
     donemi ENUM('güz', 'bahar', 'yaz') NOT NULL,
+    egitim_url NVARCHAR(500) NOT NULL,
 	yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TezYoneticiligi (
@@ -162,67 +183,88 @@ CREATE TABLE TezYoneticiligi (
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
     ogrenci_adi  NVARCHAR(500) NOT NULL,
+    kullanici_id INT NOT NULL,
 	tezin_adi  NVARCHAR(500) NOT NULL,
     enstitüsü NVARCHAR(500) NOT NULL,
-	yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+	yili NVARCHAR(4) NOT NULL,
+    tez_url NVARCHAR(500) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Patentler (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     patent_adi  NVARCHAR(500) NOT NULL,
+    patent_url NVARCHAR(500) NOT NULL,
 	yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ArastirmaProjeleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     projenin_adi  NVARCHAR(500) NOT NULL,
 	proje_numarasi NVARCHAR(25) NOT NULL,
     proje_kurum NVARCHAR(150) NOT NULL,
-    yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    arastirma_url NVARCHAR(500) NOT NULL,
+    yili  NVARCHAR(4) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE EditorlukHakemlik (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     derginin_adi  NVARCHAR(500) NOT NULL,
     sayisi INT,
     yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    editor_url NVARCHAR(500) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Oduller (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     odul_veren_kurum_adi  NVARCHAR(500) NOT NULL,
     yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    odul_url NVARCHAR(500) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IdariGorevlerVeUniversiteyeKatkiFaaliyetleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     gorev_birimi  NVARCHAR(500) NOT NULL,
-    yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    yili DATE NOT NULL, 
+    idari_url NVARCHAR(500) NOT NULL,
+    guzel_url NVARCHAR(500) NOT NULL,
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE GuzelSanatlarFaaliyetleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     faaliyet_adi  NVARCHAR(500) NOT NULL,
     yili DATE NOT NULL,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Basvuru (
@@ -243,8 +285,6 @@ CREATE TABLE BasvuruMakale (
     makale_id INT NOT NULL,
     puan INT NOT NULL,
     nihai_puan INT NOT NULL,
-    asgari_calisma BOOLEAN NOT NULL DEFAULT FALSE,
-	baslica_yazar_calisma BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (makale_id) REFERENCES Makaleler(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -257,6 +297,7 @@ CREATE TABLE BasvuruBilimselToplantiFaaliyetleri (
     bilimsel_toplanti_id INT NOT NULL,
     puan INT NOT NULL,
     nihai_puan INT NOT NULL,
+    bilimsel_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (bilimsel_toplanti_id) REFERENCES BilimselToplantiFaaliyetleri(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -270,6 +311,7 @@ CREATE TABLE BasvuruKitaplar (
     yabanci_dil BOOLEAN NOT NULL DEFAULT FALSE,
     puan INT NOT NULL,
     nihai_puan INT NOT NULL,
+    kitaplar_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (kitaplar_id) REFERENCES Kitaplar(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -282,6 +324,7 @@ CREATE TABLE BasvuruAtiflar (
     atiflar_id INT NOT NULL,
     puan INT NOT NULL,
     nihai_puan INT NOT NULL,
+    atiflar_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (atiflar_id) REFERENCES Atiflar(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -293,6 +336,7 @@ CREATE TABLE BasvuruEgitimOgretimFaaliyetleri (
     basvuru_id INT NOT NULL,
     egitim_ogretim_faaliyetleri_id INT NOT NULL,
     puan INT NOT NULL,
+    egitim_ogretim_faaliyetleri_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (egitim_ogretim_faaliyetleri_id) REFERENCES EgitimOgretimFaaliyetleri(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -305,6 +349,7 @@ CREATE TABLE BasvuruTezYoneticiligi(
     tez_yoneticiligi_id INT NOT NULL,
     puan INT NOT NULL,
     asgari_calisma BOOLEAN NOT NULL DEFAULT FALSE,
+    tez_yoneticiligi_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (tez_yoneticiligi_id) REFERENCES TezYoneticiligi(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -317,6 +362,7 @@ CREATE TABLE BasvuruPatentler (
     patentler_id INT NOT NULL,
     puan INT NOT NULL,
     nihai_puan INT NOT NULL,
+    patentler_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (patentler_id) REFERENCES Patentler(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -329,6 +375,7 @@ CREATE TABLE BasvuruArastirmaProjeleri(
     arastirma_projeleri_id INT NOT NULL,
     puan INT NOT NULL,
     asgari_calisma BOOLEAN NOT NULL DEFAULT FALSE,
+    arastirma_projeleri_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (arastirma_projeleri_id) REFERENCES ArastirmaProjeleri(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -340,6 +387,7 @@ CREATE TABLE BasvuruEditorlukHakemlik (
     basvuru_id INT NOT NULL,
     editorluk_hakemlik_id INT NOT NULL,
     puan INT NOT NULL,
+    editorluk_hakemlik_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (editorluk_hakemlik_id) REFERENCES EditorlukHakemlik(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -351,6 +399,7 @@ CREATE TABLE BasvuruOduller (
     basvuru_id INT NOT NULL,
     oduller_id INT NOT NULL,
     puan INT NOT NULL,
+    oduller_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (oduller_id) REFERENCES Oduller(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -362,6 +411,7 @@ CREATE TABLE BasvuruIdariGorevlerVeUniversiteyeKatkiFaaliyetleri (
     basvuru_id INT NOT NULL,
     idari_gorevler_id INT NOT NULL,
     puan INT NOT NULL,
+    idari_gorevler_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (idari_gorevler_id) REFERENCES IdariGorevlerVeUniversiteyeKatkiFaaliyetleri(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
@@ -373,6 +423,7 @@ CREATE TABLE BasvuruGuzelSanatlarFaaliyetleri (
     basvuru_id INT NOT NULL,
     guzel_sanatlar_id INT NOT NULL,
     puan INT NOT NULL,
+    guzel_sanatlar_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
 	FOREIGN KEY (guzel_sanatlar_id) REFERENCES GuzelSanatlarFaaliyetleri(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
