@@ -1,47 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
-
-const accordionTitles = [
-    'MAKALELER',
-    'BİLİMSEL TOPLANTI FAALİYETLERİ',
-    'KİTAPLAR',
-    'ATIFLAR',
-    'EĞİTİM ÖĞRETİM FAALİYETLERİ',
-    'TEZ YÖNETİCİLİĞİ',
-    'PATENTLER',
-    'ARAŞTIRMA PROJELERİ',
-    'EDİTÖRLÜK, YAYIN KURULU ÜYELİĞİ VE HAKEMLİK FAALİYETLERİ',
-    'ÖDÜLLER (Temel alanı ile ilgili olmak üzere)',
-    'İDARİ GÖREVLER VE ÜNİVERSİTEYE KATKI FAALİYETLERİ',
-    'GÜZEL SANATLAR FAALİYETLERİ (Konservatuvar dahil)',
-];
+import axios from 'axios';
 
 const YoneticiFaaliyetTablosu = () => {
     const [active, setActive] = useState<string>('');
-    const [modalState, setModalState] = useState<{ open: boolean; accordionKey: string | null }>({ open: false, accordionKey: null });
+    const [modalState, setModalState] = useState<{ open: boolean; accordionKey: number | null }>({ open: false, accordionKey: null });
     const [newEntryMode, setNewEntryMode] = useState(false);
     const [formData, setFormData] = useState({ id: '', ad: '', puan: '' });
     const [editId, setEditId] = useState<number | null>(null);
 
-    const [faaliyetler, setFaaliyetler] = useState<{ [key: string]: { id: number; ad: string; puan: number }[] }>({
-        '1': [{ id: 101, ad: 'Makale Yayını', puan: 20 }],
-        '2': [{ id: 201, ad: 'Sempozyum Sunumu', puan: 10 }],
-        '3': [{ id: 301, ad: 'Kitap Bölümü Yazarlığı', puan: 25 }],
-        '4': [{ id: 401, ad: 'Atıf Alınması', puan: 15 }],
-    });
+    const [accordionTitles, setAccordionTitles] = useState<{ id: number; baslik_kod: string; baslik_adi: string }[]>([]);
+    const [faaliyetler, setFaaliyetler] = useState<{ [key: number]: { id: number; ad: string; puan: number }[] }>({});
 
-    const toggleAccordion = (key: string) => {
-        setActive((prev) => (prev === key ? '' : key));
+    useEffect(() => {
+        axios.get('http://localhost:8080/api/yonetici/basliklar').then((res) => {
+            setAccordionTitles(res.data);
+            res.data.forEach((b: any) => {
+                axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${b.id}`).then((etkinlikRes) => {
+                    setFaaliyetler((prev) => ({
+                        ...prev,
+                        [b.id]: etkinlikRes.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+                    }));
+                });
+            });
+        });
+    }, []);
+
+    const toggleAccordion = (key: number) => {
+        setActive((prev) => (prev === key.toString() ? '' : key.toString()));
     };
 
-    const openModalForNew = (key: string) => {
+    const openModalForNew = (key: number) => {
         setNewEntryMode(true);
         setEditId(null);
         setFormData({ id: '', ad: '', puan: '' });
         setModalState({ open: true, accordionKey: key });
     };
 
-    const openModalForEdit = (key: string, item: any) => {
+    const openModalForEdit = (key: number, item: any) => {
         setNewEntryMode(false);
         setEditId(item.id);
         setFormData({ id: item.id.toString(), ad: item.ad, puan: item.puan.toString() });
@@ -53,23 +49,33 @@ const YoneticiFaaliyetTablosu = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleKaydet = () => {
+    const handleKaydet = async () => {
         const key = modalState.accordionKey;
-        if (!key) return;
+        if (key == null) return;
+
         const yeniId = parseInt(formData.id);
         const yeniPuan = parseInt(formData.puan);
 
-        const yeniItem = { id: yeniId, ad: formData.ad, puan: yeniPuan };
+        const payload = {
+            baslik_id: key,
+            baslık_no: yeniId,
+            aciklama: formData.ad,
+            puan: yeniPuan,
+        };
 
-        setFaaliyetler((prev) => {
-            const list = prev[key] || [];
-            const guncellenmis = newEntryMode ? [...list, yeniItem] : list.map((f) => (f.id === editId ? yeniItem : f));
-            return { ...prev, [key]: guncellenmis };
-        });
+        if (newEntryMode) {
+            await axios.post('http://localhost:8080/api/yonetici/etkinlik', payload);
+        } else {
+            await axios.put(`http://localhost:8080/api/yonetici/etkinlik/${editId}`, payload);
+        }
 
-        setModalState({ open: false, accordionKey: null });
-        setEditId(null);
-        setFormData({ id: '', ad: '', puan: '' });
+        const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+        setFaaliyetler((prev) => ({
+            ...prev,
+            [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+        }));
+
+        handleIptal();
     };
 
     const handleIptal = () => {
@@ -78,23 +84,29 @@ const YoneticiFaaliyetTablosu = () => {
         setFormData({ id: '', ad: '', puan: '' });
     };
 
-    const handleSil = (key: string, id: number) => {
-        setFaaliyetler((prev) => {
-            const yeniListe = prev[key].filter((item) => item.id !== id);
-            return { ...prev, [key]: yeniListe };
-        });
+    const handleSil = async (key: number, id: number) => {
+        const found = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+        const etkinlik = found.data.find((e: any) => e.baslık_no === id);
+        if (!etkinlik) return;
+
+        await axios.delete(`/etkinlik/${etkinlik.id}`);
+        const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+        setFaaliyetler((prev) => ({
+            ...prev,
+            [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+        }));
     };
 
     return (
         <div className="p-4 space-y-4">
             {accordionTitles.map((title, idx) => {
-                const key = (idx + 1).toString();
+                const key = title.id;
                 return (
                     <div key={key} className="border border-[#d3d3d3] rounded dark:border-[#1b2e4b]">
                         <button className="p-4 w-full flex items-center justify-between text-white-dark dark:bg-[#1b2e4b]" onClick={() => toggleAccordion(key)}>
-                            <span>{title}</span>
+                            <span>{title.baslik_adi}</span>
                         </button>
-                        <AnimateHeight duration={300} height={active === key ? 'auto' : 0}>
+                        <AnimateHeight duration={300} height={active === key.toString() ? 'auto' : 0}>
                             <div className="p-4 border-t border-[#d3d3d3] dark:border-[#1b2e4b]">
                                 <table className="min-w-full table-auto border border-gray-300 text-sm mb-4">
                                     <thead className="bg-gray-100">

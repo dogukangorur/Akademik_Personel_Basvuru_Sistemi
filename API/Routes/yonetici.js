@@ -20,4 +20,14 @@ router.get("/ilanlar-nihai-karar", controller.getNihaiKararaHazirIlanlar);
 //YoneticiNihaiKarar.tsx
 router.get("/ilan-basvurulari/:ilanId", controller.getIlanBasvurulariVeDegerlendirmeler);
 
+//YoneticiFaaliyetTablosu.tsx
+// Başlıklar
+router.get('/basliklar', controller.getBasliklar);
+
+// Etkinlikler
+router.get('/etkinlikler/:baslikId', controller.getEtkinliklerByBaslikId);
+router.post('/etkinlik', controller.addEtkinlik);
+router.put('/etkinlik/:id', controller.updateEtkinlik);
+router.delete('/etkinlik/:id', controller.deleteEtkinlik);
+
 module.exports = router;

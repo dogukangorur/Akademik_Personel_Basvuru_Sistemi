@@ -9,9 +9,9 @@ const Register = lazy(() => import('../pages/Authentication/Register'));
 
 //Aday
 const AdayAnasayfa = lazy(() => import('../pages/Aday/AdayAnasayfa'));
-const AdayBasvurularim=lazy(()=>import('../pages/Aday/AdayBasvurularim'));
-const AdayProfil=lazy(()=>import('../pages/Aday/AdayProfil'));
-const AdayProfilDuzenle = lazy(()=>import('../pages/Aday/AdayProfilDuzenle'));
+const AdayBasvurularim = lazy(() => import('../pages/Aday/AdayBasvurularim'));
+const AdayProfil = lazy(() => import('../pages/Aday/AdayProfil'));
+const AdayProfilDuzenle = lazy(() => import('../pages/Aday/AdayProfilDuzenle'));
 //Admin
 const AdminAnasayfa = lazy(() => import('../pages/Admin/AdminAnasayfa'));
 const AdminEtkinlik = lazy(() => import('../pages/Admin/AdminEtkinlik'));
@@ -24,6 +24,7 @@ const YoneticiIlanJuri = lazy(() => import('../pages/Yonetici/YoneticiIlanJuri')
 const YoneticiNihaiKarar = lazy(() => import('../pages/Yonetici/YoneticiNihaiKarar'));
 const YoneticiJuriAtama = lazy(() => import('../pages/Yonetici/YoneticiJuriAtama'));
 const YoneticiFaaliyetTablosu = lazy(() => import('../pages/Yonetici/YoneticiFaaliyetTablosu'));
+const Test1 = lazy(() => import('../pages/Yonetici/test1'));
 //Jüri
 const JuriAnasayfa = lazy(() => import('../pages/Juri/JuriAnasayfa'));
 const JuriBasvuru = lazy(() => import('../pages/Juri/JuriBasvuru'));
@@ -53,35 +54,33 @@ const routes = [
     //Admin ana sayfa
     {
         path: '/admin/anasayfa',
-        element:<AdminAnasayfa />,//buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
+        element: <AdminAnasayfa />, //buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
         layout: 'admin',
     },
     //Admin ilan olusturma
     {
         path: '/admin/ilan-olustur',
-        element:<AdminIlanOlustur />,
+        element: <AdminIlanOlustur />,
         layout: 'admin',
     },
     //Admin ilan duzenleme
     {
         path: '/admin/duzenle',
-        element:<AdminDuzenle />,
+        element: <AdminDuzenle />,
         layout: 'admin',
     },
     //Admin etkinlik duzenleme
     {
         path: '/admin/etkinlik',
-        element:<AdminEtkinlik />,
+        element: <AdminEtkinlik />,
         layout: 'admin',
     },
     //Admin ilan başvurularını görüntüleme
     {
         path: '/admin/ilan-basvuru-goruntule',
-        element:<AdminIlanBasvuru />,
+        element: <AdminIlanBasvuru />,
         layout: 'admin',
     },
-
-    
 
     //Aday
     //Aday ana sayfa
@@ -109,14 +108,14 @@ const routes = [
         layout: 'aday',
     },
 
-     //Jüri ana sayfa
-     {
+    //Jüri ana sayfa
+    {
         path: '/juri/anasayfa',
         element: <JuriAnasayfa />,
         layout: 'juri',
     },
     //Jüri başvuru
- 
+
     {
         path: '/juri/basvuru',
         element: <JuriBasvuru />,
@@ -143,7 +142,7 @@ const routes = [
         element: <YoneticiIlanNihaiKarar />,
         layout: 'yonetici',
     },
-    //Yönetici İlan Jüri 
+    //Yönetici İlan Jüri
     {
         path: '/yonetici/ilanlar-juri-atama',
         element: <YoneticiIlanJuri />,
@@ -167,7 +166,12 @@ const routes = [
         element: <YoneticiFaaliyetTablosu />,
         layout: 'yonetici',
     },
-
+    //Yönetici test1
+    {
+        path: '/yonetici/test1',
+        element: <Test1 />,
+        layout: 'yonetici',
+    },
 ];
 
 export { routes };

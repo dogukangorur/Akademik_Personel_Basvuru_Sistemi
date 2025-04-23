@@ -251,6 +251,57 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
     });
 };
 
+//YoneticiFaaliyetTablosu.tsx
+// Tüm başlıkları getir
+const getBasliklar = (req, res) => {
+    const sql = "SELECT * FROM Baslik ORDER BY id";
+    connection.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+};
+
+// Seçilen başlığa ait etkinlikleri getir
+const getEtkinliklerByBaslikId = (req, res) => {
+    const baslikId = req.params.baslikId;
+    const sql = "SELECT * FROM Etkinlik WHERE baslik_id = ? ORDER BY baslık_no";
+    connection.query(sql, [baslikId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+};
+
+// Yeni etkinlik ekle
+const addEtkinlik = (req, res) => {
+    const { baslik_id, baslık_no, aciklama, puan } = req.body;
+    const sql = "INSERT INTO Etkinlik (baslik_id, baslık_no, aciklama, puan) VALUES (?, ?, ?, ?)";
+    connection.query(sql, [baslik_id, baslık_no, aciklama, puan], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ message: "Etkinlik eklendi", id: result.insertId });
+    });
+};
+
+// Etkinlik güncelle
+const updateEtkinlik = (req, res) => {
+    const etkinlikId = req.params.id;
+    const { baslık_no, aciklama, puan } = req.body;
+    const sql = "UPDATE Etkinlik SET baslık_no = ?, aciklama = ?, puan = ? WHERE id = ?";
+    connection.query(sql, [baslık_no, aciklama, puan, etkinlikId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Etkinlik güncellendi" });
+    });
+};
+
+// Etkinlik sil
+const deleteEtkinlik = (req, res) => {
+    const etkinlikId = req.params.id;
+    const sql = "DELETE FROM Etkinlik WHERE id = ?";
+    connection.query(sql, [etkinlikId], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Etkinlik silindi" });
+    });
+};
+
 module.exports = {
     getIlanlarVeJuriDurumu, 
     getIlanById,
@@ -261,5 +312,10 @@ module.exports = {
     juriAta,
     juriSil,
     getNihaiKararaHazirIlanlar,
-    getIlanBasvurulariVeDegerlendirmeler
+    getIlanBasvurulariVeDegerlendirmeler,
+    getBasliklar,
+    getEtkinliklerByBaslikId,
+    addEtkinlik,
+    updateEtkinlik,
+    deleteEtkinlik
 };
