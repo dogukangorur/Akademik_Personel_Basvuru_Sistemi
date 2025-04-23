@@ -302,6 +302,61 @@ const deleteEtkinlik = (req, res) => {
     });
 };
 
+//YoneticiEtkinlikSayıKriter.tsx
+// Faaliyet kriterlerini listele
+const getFaaliyetKriterleri = (req, res) => {
+    const sql = `
+      SELECT fk.*, fg.fakulte_grup_adi, k.kadro_adi
+      FROM FaaliyetKriterleri fk
+      JOIN FakulteGrup fg ON fk.fakulte_grup_id = fg.id
+      JOIN Kadrolar k ON fk.kadro_id = k.id
+    `;
+    connection.query(sql, (err, results) => {
+      if (err) return res.status(500).json(err);
+      res.json(results);
+    });
+  };
+  
+  // Yeni faaliyet kriteri ekle
+  const addFaaliyetKriteri = (req, res) => {
+    const { faaliyet_kodu, fakulte_grup_id, kadro_id, deger } = req.body;
+    const sql = `INSERT INTO FaaliyetKriterleri (faaliyet_kodu, fakulte_grup_id, kadro_id, deger) VALUES (?, ?, ?, ?)`;
+    connection.query(sql, [faaliyet_kodu, fakulte_grup_id, kadro_id, deger], (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json({ id: result.insertId });
+    });
+  };
+  
+  // Faaliyet kriterini güncelle (sadece değer)
+  const updateFaaliyetKriteri = (req, res) => {
+    const { id } = req.params;
+    const { deger } = req.body;
+    const sql = `UPDATE FaaliyetKriterleri SET deger = ? WHERE id = ?`;
+    connection.query(sql, [deger, id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json({ success: true });
+    });
+  };
+  
+  // Faaliyet kriterini sil
+  const deleteFaaliyetKriteri = (req, res) => {
+    const { id } = req.params;
+    const sql = `DELETE FROM FaaliyetKriterleri WHERE id = ?`;
+    connection.query(sql, [id], (err) => {
+      if (err) return res.status(500).json(err);
+      res.json({ success: true });
+    });
+  };
+
+  // Fakülte gruplarını listele
+  const getFakulteGruplari = (req, res) => {
+    const sql = "SELECT id, fakulte_grup_adi FROM FakulteGrup";
+    connection.query(sql, (err, results) => {
+      if (err) return res.status(500).json(err);
+      res.json(results);
+    });
+  };
+
 module.exports = {
     getIlanlarVeJuriDurumu, 
     getIlanById,
@@ -317,5 +372,10 @@ module.exports = {
     getEtkinliklerByBaslikId,
     addEtkinlik,
     updateEtkinlik,
-    deleteEtkinlik
+    deleteEtkinlik,
+    getFaaliyetKriterleri,
+    addFaaliyetKriteri,
+    updateFaaliyetKriteri,
+    deleteFaaliyetKriteri,
+    getFakulteGruplari
 };

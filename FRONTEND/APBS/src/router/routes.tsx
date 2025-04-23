@@ -25,7 +25,7 @@ const YoneticiIlanJuri = lazy(() => import('../pages/Yonetici/YoneticiIlanJuri')
 const YoneticiNihaiKarar = lazy(() => import('../pages/Yonetici/YoneticiNihaiKarar'));
 const YoneticiJuriAtama = lazy(() => import('../pages/Yonetici/YoneticiJuriAtama'));
 const YoneticiFaaliyetTablosu = lazy(() => import('../pages/Yonetici/YoneticiFaaliyetTablosu'));
-const Test1 = lazy(() => import('../pages/Yonetici/test1'));
+const YoneticiEtkinlikSayıKriter = lazy(() => import('../pages/Yonetici/YoneticiEtkinlikSayıKriter'));
 //Jüri
 const JuriAnasayfa = lazy(() => import('../pages/Juri/JuriAnasayfa'));
 const JuriBasvuru = lazy(() => import('../pages/Juri/JuriBasvuru'));
@@ -175,8 +175,8 @@ const routes = [
     },
     //Yönetici test1
     {
-        path: '/yonetici/test1',
-        element: <Test1 />,
+        path: '/yonetici/etkinlik-sayi-kriterleri',
+        element: <YoneticiEtkinlikSayıKriter />,
         layout: 'yonetici',
     },
 ];

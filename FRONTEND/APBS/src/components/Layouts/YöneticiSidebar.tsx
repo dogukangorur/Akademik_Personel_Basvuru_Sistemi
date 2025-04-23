@@ -7,9 +7,15 @@ import AnimateHeight from 'react-animate-height';
 import { IRootState } from '../../store';
 import { useState, useEffect } from 'react';
 import IconCaretsDown from '../Icon/IconCaretsDown';
+import IconCaretDown from '../Icon/IconCaretDown';
+import IconMenuDashboard from '../Icon/Menu/IconMenuDashboard';
+import IconMinus from '../Icon/IconMinus';
 import IconMenuDocumentation from '../Icon/Menu/IconMenuDocumentation';
+import IconOpenBook from '../Icon/IconOpenBook';
+import IconBookmark from '../Icon/IconBookmark';
 import IconBox from '../Icon/IconBox';
 import IconPlus from '../Icon/IconPlus';
+import IconUser from '../Icon/IconUser';
 
 const AdaySidear = () => {
     const [currentMenu, setCurrentMenu] = useState<string>('');
@@ -70,23 +76,39 @@ const AdaySidear = () => {
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative  bg-green-50">
                         <ul className="relative font-semibold space-y-0.5 p-4 py-5">
-                        <li className="nav-item">
-                            <NavLink to="/yonetici/ilanlar-juri-atama" className="group">
-                                <div className="flex items-center">
-                                    <IconMenuDocumentation className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlan Jüri Atama</span>
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to="/yonetici/ilanlar-nihai-karar" className="group">
-                                <div className="flex items-center">
-                                    <IconBox className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlan Nihai Karar</span>
-                                </div>
-                            </NavLink>
-                        </li>
-                      </ul>
+                            <li className="nav-item">
+                                <NavLink to="/yonetici/ilanlar-juri-atama" className="group">
+                                    <div className="flex items-center">
+                                        <IconUser className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlan Jüri Atama</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/yonetici/ilanlar-nihai-karar" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuDocumentation className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">İlan Nihai Karar</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/yonetici/faaliyet-tablosu" className="group">
+                                    <div className="flex items-center">
+                                        <IconOpenBook className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Faaliyet Puanlama</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/yonetici/etkinlik-sayi-kriter" className="group">
+                                    <div className="flex items-center">
+                                        <IconPlus className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvuru Etkinlik Kriterleri</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                        </ul>
                     </PerfectScrollbar>
                 </div>
             </nav>
