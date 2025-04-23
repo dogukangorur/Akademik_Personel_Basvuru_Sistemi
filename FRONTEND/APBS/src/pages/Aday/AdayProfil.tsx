@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,8 @@ import IconGoogle from '../../components/Icon/IconGoogle';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import  AnimateHeight  from 'react-animate-height';
-
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const AdayProfil = () => {
 
     const [active, setActive] = useState<string>('1');
@@ -18,7 +19,7 @@ const AdayProfil = () => {
             return oldValue === value ? '' : value;
         });
     };
-
+    const MySwal = withReactContent(Swal);
     interface Etkinlik {
         id: number;
         baslik_id: number;
@@ -27,7 +28,11 @@ const AdayProfil = () => {
         puan:number;
  
       }
-     
+       const storedUserInfo = localStorage.getItem('userInfo');
+       const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+
+
          const [makaleEtkinlik, setMakale] = useState<Etkinlik[]>([]);
          const [bilimselEtkinlik, setBilimsel] = useState<Etkinlik[]>([]);
          const [kitapEtkinlik, setKitap] = useState<Etkinlik[]>([]);
@@ -42,7 +47,7 @@ const AdayProfil = () => {
          const [guzelEtkinlik, setGuzel] = useState<Etkinlik[]>([]);
 
         useEffect(() => {
-          fetch("http://localhost:8080/api/etkinlik/etkinlikGetir") // endpoint adresini kendine göre güncelle
+          fetch("http://localhost:8080/api/etkinlik/etkinlikGetir")
             .then((res) => {
               if (!res.ok) {
                 throw new Error("Veri alınamadı");
@@ -84,11 +89,11 @@ const AdayProfil = () => {
 
     // Makaleler
     const [articles, setArticles] = useState([
-        { id: 1, author: "", title: "", journal: "", volume: "", pages: "", year: "", file: null, isBaslicaYazar: false }
+        { id: 1,faaliyet:"", yazar: "", baslik: "",kisiSayisi:"" ,dergi: "", cilt: "", sayfa: "", yil: "", file: null, isBaslicaYazar: false ,isAsgariCalisma:false}
       ]);
 
     const addArticle = () => {
-        setArticles([...articles, { id: Date.now(), author: "", title: "", journal: "", volume: "", pages: "", year: "", file: null, isBaslicaYazar: false}]);
+        setArticles([...articles, { id: Date.now(), faaliyet:"", kisiSayisi:"",yazar: "", baslik: "", dergi: "", cilt: "", sayfa: "", yil: "", file: null, isBaslicaYazar: false, isAsgariCalisma:false}]);
       };
        
     const updateArticle = (id: number, field: string, value: any) => {
@@ -102,12 +107,12 @@ const AdayProfil = () => {
   // Bilimsel Toplantı Faaliyetleri
 
   const [conferences, setConferences] = useState([
-    { id: 1, author: "", paperTitle: "", conferenceName: "", location: "", pages: "", date: "", isBaslicaYazar: false  }
+    { id: 1,faaliyet:"", yazar: "", bildiriAdi: "", konferansAdi: "", yer: "",kisiSayisi:"", sayfa: "", yil: "",file:null ,isBaslicaYazar: false,isAsgariCalisma:false }
   ]);
 
 
   const addConference = () => {
-    setConferences([...conferences, { id: Date.now(), author: "", paperTitle: "", conferenceName: "", location: "", pages: "", date: "", isBaslicaYazar: false }]);
+    setConferences([...conferences, { id: Date.now(), faaliyet:"",yazar: "", bildiriAdi: "", konferansAdi: "", yer: "", kisiSayisi:"",sayfa: "", yil: "",file:null ,isBaslicaYazar: false,isAsgariCalisma:false}]);
   };
 
  
@@ -123,11 +128,11 @@ const AdayProfil = () => {
   // Kitaplar
 
   const [kitaplar, setKitaplar] = useState([
-    { id: 1, author: "", kitapAdi: "", yayinEvi: "", baskiSayisi: "", yayimlandigiYer: "" ,yil:"",isBaslicaYazar: false }
+    { id: 1, faaliyet:"", yazar: "", kitapAdi: "", yer: "",baskiSayisi:"", yil: "",kisiSayisi:"",file:null ,isBaslicaYazar: false,isAsgariCalisma:false }
   ]);
 
   const addKitaplar = () => {
-    setKitaplar([...kitaplar, { id: Date.now(), author: "", kitapAdi: "", yayinEvi: "", baskiSayisi: "", yayimlandigiYer: "" , yil:"" ,isBaslicaYazar: false }]);
+    setKitaplar([...kitaplar, { id: Date.now(), faaliyet:"", yazar: "", kitapAdi: "", yer: "",baskiSayisi:"", yil: "",kisiSayisi:"",file:null ,isBaslicaYazar: false,isAsgariCalisma:false  }]);
   };
 
   const updateKitaplar = (id: number, field: string, value: any) => {
@@ -142,11 +147,11 @@ const AdayProfil = () => {
   // Atıflar
 
   const [atiflar, setAtiflar] = useState([
-    { id: 1, atifinYapildigiEser: "", atifSayisi: ""}
+    { id: 1,faaliyet:"",yazar:"" ,yer:"",file:null}
   ]);
 
   const addAtiflar = () => {
-    setAtiflar([...atiflar, { id: Date.now(),atifinYapildigiEser: "", atifSayisi: ""}]);
+    setAtiflar([...atiflar, { id: Date.now(),faaliyet:"",yazar:"" ,yer:"",file:null}]);
   };
 
   const updateAtiflar = (id: number, field: string, value: any) => {
@@ -160,11 +165,11 @@ const AdayProfil = () => {
   // Eğitim Faaliyetleri
 
   const [egitimFaaliyet, setEgitimFaaliyetler] = useState([
-    { id: 1, dersinAdi: "", programinAdi: "",donemi:"",yil:""}
+    { id: 1,faaliyet:"", dersinAdi: "", programinAdi: "",egitimDonemi:"",yil:"",file:null}
   ]);
 
   const addEgitimFaaliyetler = () => {
-    setEgitimFaaliyetler([...egitimFaaliyet, { id: Date.now(),dersinAdi: "", programinAdi: "",donemi:"",yil:""}]);
+    setEgitimFaaliyetler([...egitimFaaliyet, { id: Date.now(),faaliyet:"", dersinAdi: "", programinAdi: "",egitimDonemi:"",yil:"",file:null}]);
   };
 
   const updateEgitimFaaliyetler = (id: number, field: string, value: any) => {
@@ -178,11 +183,11 @@ const AdayProfil = () => {
  // Tez Yönetmeciği
 
   const [tezYonetmeciligi, setTezYonetmeciligi] = useState([
-    { id: 1, ogrenciAdi: "", tezAdi: "",enstutu:"",yil:""}
+    { id: 1,faaliyet:"", ogrenciAdi: "", tezAdi: "",enstutu:"",yil:"",file:null}
   ]);
 
   const addtezYonetmeciligi = () => {
-    setTezYonetmeciligi([...tezYonetmeciligi, { id: Date.now(), ogrenciAdi: "", tezAdi: "",enstutu:"",yil:""}]);
+    setTezYonetmeciligi([...tezYonetmeciligi, { id: Date.now(),faaliyet:"", ogrenciAdi: "", tezAdi: "",enstutu:"",yil:"",file:null}]);
   };
 
   const updateTezYonetmeciligi = (id: number, field: string, value: any) => {
@@ -197,11 +202,11 @@ const AdayProfil = () => {
  // Patentler
 
   const [patentler, setPatentler] = useState([
-    { id: 1, patentAdi: "", yil:"",isBaslicaYazar: false}
+    { id: 1,faaliyet:"", patentAdi: "", yil:"",file:null}
   ]);
 
   const addPatentler = () => {
-    setPatentler([...patentler, { id: Date.now(), patentAdi: "", yil:"",isBaslicaYazar: false}]);
+    setPatentler([...patentler, { id: Date.now(), faaliyet:"", patentAdi: "", yil:"",file:null}]);
   };
 
   const updatePatentler = (id: number, field: string, value: any) => {
@@ -215,11 +220,11 @@ const AdayProfil = () => {
    // Araştırma Projeler
 
    const [arastirmaProje, setArastirmaProjeler] = useState([
-    { id: 1, projeAdi: "", projeNumarasi:"",projeKurumAdi:"",yil:""}
+    { id: 1,faaliyet:"", projeAdi: "", projeNumarasi:"",projeKurumAdi:"",yil:"",file:null}
   ]);
 
   const addArastirmaProjeler = () => {
-    setArastirmaProjeler([...arastirmaProje, { id: Date.now(), projeAdi: "", projeNumarasi:"",projeKurumAdi:"",yil:""}]);
+    setArastirmaProjeler([...arastirmaProje, { id: Date.now(), faaliyet:"", projeAdi: "", projeNumarasi:"",projeKurumAdi:"",yil:"",file:null}]);
   };
 
   const updateArastirmaProjeler = (id: number, field: string, value: any) => {
@@ -234,11 +239,11 @@ const AdayProfil = () => {
    // Editörlük
 
    const [editorluk, setEditorluk] = useState([
-    { id: 1, dergiAdi: "", dergiSayisi:"",projeKurumAdi:"",yil:""}
+    { id: 1,faaliyet:"", dergiAdi: "", dergiSayisi:"",yil:"" ,file:null}
   ]);
 
   const addEditorluk = () => {
-    setEditorluk([...editorluk, { id: Date.now(), dergiAdi: "", dergiSayisi:"",projeKurumAdi:"",yil:""}]);
+    setEditorluk([...editorluk, { id: Date.now(), faaliyet:"", dergiAdi: "", dergiSayisi:"",yil:"" ,file:null}]);
   };
 
   const updateEditorluk = (id: number, field: string, value: any) => {
@@ -252,11 +257,11 @@ const AdayProfil = () => {
   // Ödüller
 
     const [oduller, setOduller] = useState([
-        { id: 1, kurumAdi: "",yil:""}
+        { id: 1,faaliyet:"", kurumAdi: "",yil:"",file:null}
       ]);
     
       const addOduller = () => {
-        setOduller([...oduller, { id: Date.now(), kurumAdi: "",yil:""}]);
+        setOduller([...oduller, { id: Date.now(),faaliyet:"", kurumAdi: "",yil:"",file:null}]);
       };
     
       const updateOduller = (id: number, field: string, value: any) => {
@@ -270,11 +275,11 @@ const AdayProfil = () => {
   // Idari görevler
 
     const [idariGorev, setIdariGorevler] = useState([
-        { id: 1, gorevBirimi: "",yil:""}
+        { faaliyet:"",id: 1, gorevBirimi: "",yil:"",file:null}
       ]);
     
-      const addIdariGorevler = () => {
-        setIdariGorevler([...idariGorev, { id: Date.now(), gorevBirimi: "",yil:""}]);
+      const addIdariGorevler = () => {  
+        setIdariGorevler([...idariGorev, { id: Date.now(), faaliyet:"", gorevBirimi: "",yil:"",file:null}]);
       };
     
       const updateIdariGorevler = (id: number, field: string, value: any) => {
@@ -288,11 +293,11 @@ const AdayProfil = () => {
    // Güzel Sanatlar
 
    const [guzelSanat, setGuzelSanatlar] = useState([
-    { id: 1, faaliyetAdi: "",yil:""}
+    { id: 1,faaliyet:"", faaliyetAdi: "",yil:"",file:null}
   ]);
 
   const addGuzelSanatlar = () => {
-    setGuzelSanatlar([...guzelSanat, { id: Date.now(), faaliyetAdi: "",yil:""}]);
+    setGuzelSanatlar([...guzelSanat, { id: Date.now(), faaliyet:"", faaliyetAdi: "",yil:"",file:null}]);
   };
 
   const updateGuzelSanatlar = (id: number, field: string, value: any) => {
@@ -302,6 +307,523 @@ const AdayProfil = () => {
   const removeGuzelSanatlar = (id: number) => {
     setGuzelSanatlar(guzelSanat.filter(sanat => sanat.id !== id));
   };     
+   
+    function makaleKaydet() {
+        const updatedArticles = articles.map((article) => {
+            if (article.file) {
+            
+                const fileName = article.baslik.toLowerCase().replace(/\s+/g, "_").replace(/[<>:"\/\\|?*]+/g, "") + "_"+article.yil.replace(/-/g, "") +"_"+ userInfo.kullaniciID +`_${Date.now()}`;
+                const uzanti= article.file.type.split("/")[1];
+
+                article.fileName = fileName+"."+uzanti; 
+                article.makaleUrl = `STORAGE/profil/${fileName}.${uzanti}`; 
+            }
+            return article;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            makaleler: updatedArticles
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("makaleler", JSON.stringify(updatedArticles)); // makaleler burada JSON.stringify ile string'e dönüştürülmeli
+
+        updatedArticles.forEach((article) => {
+            formData.append("files", article.file); // Dosyaları eklemeyi unutma
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilMakaleKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Makaleler Kayıt Edildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+   
+    function bilimselKaydet() {
+        const updatedBilimsel = conferences.map((bilimsel) => {
+            if (bilimsel.file) {
+            
+                const fileName = bilimsel.bildiriAdi.toLowerCase().replace(/\s+/g, "_").replace(/[<>:"\/\\|?*]+/g, "") + "_"+ userInfo.kullaniciID +"_"+bilimsel.yil.replace(/-/g, "") +`_${Date.now()}`;
+                const uzanti= bilimsel.file.type.split("/")[1];
+                bilimsel.fileName = fileName+"."+uzanti; 
+                bilimsel.bilimselUrl = `STORAGE/profil/${fileName}.${uzanti}`; 
+            }
+            return bilimsel;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            bilimsel: updatedBilimsel
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("bilimsel", JSON.stringify(updatedBilimsel)); // makaleler burada JSON.stringify ile string'e dönüştürülmeli
+
+        updatedBilimsel.forEach((bilimsel) => {
+            formData.append("files", bilimsel.file); // Dosyaları eklemeyi unutma
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilBilimselKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Bilimsel Toplanti Faaliyetleri Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function kitaplarKaydet() {
+        const updatedKitaplar = kitaplar.map((kitap) => {
+            if (kitap.file) {
+                const fileName = kitap.kitapAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID +"_"+ kitap.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = kitap.file.type.split("/")[1];
+                kitap.fileName = fileName + "." + uzanti;
+                kitap.kitaplarUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                kitap.kitaplarUrl = "";
+            }
+            return kitap;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            kitaplar: updatedKitaplar
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("kitaplar", JSON.stringify(updatedKitaplar));
+
+        updatedKitaplar.forEach((kitaplar) => {
+            formData.append("files", kitaplar.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilKitaplarKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Kitaplar Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function atiflarKaydet() {
+        const updatedAtiflar = atiflar.map((atif) => {
+            if (atif.file) {
+                const fileName = atif.yazar.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID  + `_${Date.now()}`;
+                const uzanti = atif.file.type.split("/")[1];
+                atif.fileName = fileName + "." + uzanti;
+                atif.atiflarUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                atif.atiflarUrl = "";
+            }
+            return atif;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            atiflar: updatedAtiflar
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("atiflar", JSON.stringify(updatedAtiflar));
+
+        updatedAtiflar.forEach((atif) => {
+            formData.append("files", atif.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilAtiflarKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Atıflar Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+    
+    function egitimKaydet() {
+        const updatedEgitimler = egitimFaaliyet.map((egitim) => {
+            if (egitim.file) {
+                const fileName = egitim.programinAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+egitim.yil.replace(/-/g, "")  + `_${Date.now()}`;
+                const uzanti = egitim.file.type.split("/")[1];
+                egitim.fileName = fileName + "." + uzanti;
+                egitim.egitimlerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                egitim.egitimlerUrl = "";
+            }
+            return egitim;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            atiflar: updatedEgitimler
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("egitimler", JSON.stringify(updatedEgitimler));
+
+        updatedEgitimler.forEach((egitim) => {
+            formData.append("files", egitim.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilEgitimKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Eğitimler Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function tezKaydet() {
+        const updatedTezler = tezYonetmeciligi.map((tez) => {
+            if (tez.file) {
+                const fileName = tez.ogrenciAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+tez.yil + `_${Date.now()}`;
+                const uzanti = tez.file.type.split("/")[1];
+                tez.fileName = fileName + "." + uzanti;
+                tez.tezlerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                tez.tezlerUrl = "";
+            }
+            return tez;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedTezler
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("tezler", JSON.stringify(updatedTezler));
+
+        updatedTezler.forEach((tez) => {
+            formData.append("files", tez.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilTezKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Tezler Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function patentKaydet() {
+        const updatedPatentler = patentler.map((patent) => {
+            if (patent.file) {
+                const fileName = patent.patentAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+patent.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = patent.file.type.split("/")[1];
+                patent.fileName = fileName + "." + uzanti;
+                patent.patentlerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                patent.patentlerUrl = "";
+            }
+            return patent;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedPatentler
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("patentler", JSON.stringify(updatedPatentler));
+
+        updatedPatentler.forEach((tez) => {
+            formData.append("files", tez.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilPatentKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Patentler Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function arastirmaKaydet() {
+        const updatedPatentler = arastirmaProje.map((arastirma) => {
+            if (arastirma.file) {
+                const fileName = arastirma.projeAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+arastirma.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = arastirma.file.type.split("/")[1];
+                arastirma.fileName = fileName + "." + uzanti;
+                arastirma.arastirmalarUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                arastirma.arastirmalarUrl = "";
+            }
+            return arastirma;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedPatentler
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("arastirmalar", JSON.stringify(updatedPatentler));
+
+        updatedPatentler.forEach((tez) => {
+            formData.append("files", tez.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilArastirmaKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Araştırmalar Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function editorlukKaydet() {
+        const updatedEditorler = editorluk.map((editor) => {
+            if (editor.file) {
+                const fileName = editor.dergiAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+editor.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = editor.file.type.split("/")[1];
+                editor.fileName = fileName + "." + uzanti;
+                editor.editorlerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                editor.editorlerUrl = "";
+            }
+            return editor;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedEditorler
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("editorler", JSON.stringify(updatedEditorler));
+
+        updatedEditorler.forEach((editor) => {
+            formData.append("files", editor.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilEditorKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Araştırmalar Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function odulKaydet() {
+        const updatedOduller = oduller.map((odul) => {
+            if (odul.file) {
+                const fileName = odul.kurumAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+odul.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = odul.file.type.split("/")[1];
+                odul.fileName = fileName + "." + uzanti;
+                odul.odullerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                odul.odullerUrl = "";
+            }
+            return odul;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedOduller
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("oduller", JSON.stringify(updatedOduller));
+
+        updatedOduller.forEach((odul) => {
+            formData.append("files", odul.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilOdulKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Araştırmalar Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function idariKaydet() {
+        const updatedIdari = idariGorev.map((idari) => {
+            if (idari.file) {
+                const fileName = idari.gorevBirimi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+idari.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = idari.file.type.split("/")[1];
+                idari.fileName = fileName + "." + uzanti;
+                idari.idarilerUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                idari.idarilerUrl = "";
+            }
+            return idari;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedIdari
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("idariler", JSON.stringify(updatedIdari));
+
+        updatedIdari.forEach((idari) => {
+            formData.append("files", idari.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilIdariKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'İdari Görevler Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+    function guzelKaydet() {
+        const updatedGuzelSanat = guzelSanat.map((guzelSanat) => {
+            if (guzelSanat.file) {
+                const fileName = guzelSanat.faaliyetAdi.toLowerCase().replace(/\s+/g, "_").replace(/\s+/g, "_") + "_" + userInfo.kullaniciID+"_"+guzelSanat.yil.replace(/-/g, "") + `_${Date.now()}`;
+                const uzanti = guzelSanat.file.type.split("/")[1];
+                guzelSanat.fileName = fileName + "." + uzanti;
+                guzelSanat.guzelSanatlarUrl = `STORAGE/profil/${fileName}.${uzanti}`;
+            } else {
+                guzelSanat.guzelSanatlarUrl = "";
+            }
+            return guzelSanat;
+        });
+    
+        const data = {
+            kullaniciId: userInfo.kullaniciID,
+            tezler: updatedGuzelSanat
+        };
+
+        const formData = new FormData();
+        formData.append("kullaniciId", userInfo.kullaniciID);
+        formData.append("guzelSanatlar", JSON.stringify(updatedGuzelSanat));
+
+        updatedGuzelSanat.forEach((guzelSanat) => {
+            formData.append("files", guzelSanat.file); 
+        });
+        
+        fetch("http://localhost:8080/api/aday/profilGuzelSanatlarKayit", {
+          method: "POST",
+          body: formData
+        }).then(()=>
+            MySwal.fire({
+                title: 'Güzel Sanatlar Faaliyetleri Kaydedildi.',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: {
+                    popup: `color-success`,
+                }
+        }));
+    }
+
+
     return (
         <div>
             <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
@@ -339,10 +861,10 @@ const AdayProfil = () => {
 
                                             <h3 className="text-md font-semibold mb-2">Makale {index + 1}</h3>
 
-                                            <select className="form-input mb-3">
-                                            <option>Faaliyet Türü</option>
+                                            <select className="form-input mb-3" onChange={(e) => updateArticle(article.id, "faaliyet", e.target.value)}>
+                                            <option >Faaliyet Türü</option>
                                             {makaleEtkinlik.map((faaliyet:any) => (
-                                            <option key={faaliyet.id} value={faaliyet.id}>
+                                            <option key={faaliyet.id} value={faaliyet.id} >
                                                 {faaliyet.aciklama}
                                             </option>
                                             ))}
@@ -352,24 +874,24 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Yazar/Yazarlar"
                                                 className="form-input mb-3"
-                                                value={article.author}
-                                                onChange={(e) => updateArticle(article.id, "author", e.target.value)}
+                                                value={article.yazar}
+                                                onChange={(e) => updateArticle(article.id, "yazar", e.target.value)}
                                             />
                                             
                                             <input
                                                 type="text"
                                                 placeholder="Makale Adı"
                                                className="form-input mb-3"
-                                                value={article.title}
-                                                onChange={(e) => updateArticle(article.id, "title", e.target.value)}
+                                                value={article.baslik}
+                                                onChange={(e) => updateArticle(article.id, "baslik", e.target.value)}
                                             />
 
                                             <input
                                                 type="text"
                                                 placeholder="Dergi Adı"
                                                className="form-input mb-3"
-                                                value={article.journal}
-                                                onChange={(e) => updateArticle(article.id, "journal", e.target.value)}
+                                                value={article.dergi}
+                                                onChange={(e) => updateArticle(article.id, "dergi", e.target.value)}
                                             />
 
                                             <div className="flex gap-2 mt-2">
@@ -377,27 +899,27 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Cilt No."
                                                 className="form-input mb-3"
-                                                value={article.volume}
-                                                onChange={(e) => updateArticle(article.id, "volume", e.target.value)}
+                                                value={article.cilt}
+                                                onChange={(e) => updateArticle(article.id, "cilt", e.target.value)}
                                                 />
                                                 <input
                                                 type="text"
                                                 placeholder="Sayfa"
                                                 className="form-input mb-3"
-                                                value={article.pages}
-                                                onChange={(e) => updateArticle(article.id, "pages", e.target.value)}
+                                                value={article.sayfa}
+                                                onChange={(e) => updateArticle(article.id, "sayfa", e.target.value)}
                                                 />
                                                 <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Yıl"
                                                 className="form-input mb-3"
-                                                value={article.year}
-                                                onChange={(e) => updateArticle(article.id, "year", e.target.value)}
+                                                value={article.yil}
+                                                onChange={(e) => updateArticle(article.id, "yil", e.target.value)}
                                                 />
                                             </div>
                                             <div className="flex gap-2 mt-2">
                                             <label className="flex items-center cursor-pointer">
-                                                Başlıca Yazar mı?
+                                                Başlıca Yazar mı ?
                                                 <input
                                                 type="checkbox"
                                                 className="form-checkbox ml-3"
@@ -405,8 +927,18 @@ const AdayProfil = () => {
                                                 onChange={(e) => updateArticle(article.id, 'isBaslicaYazar', e.target.checked)}
                                                 />
                                             </label>
+                                            <br />
+                                            <label className="flex items-center cursor-pointer">
+                                                Asgari Çalışma ?
+                                                <input
+                                                type="checkbox"
+                                                className="form-checkbox ml-3"
+                                                checked={article.isAsgariCalisma}
+                                                onChange={(e) => updateArticle(article.id, 'isAsgariCalisma', e.target.checked)}
+                                                />
+                                            </label>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateArticle(article.id, 'kisiSayisi', e.target.value)}>
                                                 <option>Kişi Sayısı</option>
                                                 <option>1</option>
                                                 <option>2</option>
@@ -432,9 +964,7 @@ const AdayProfil = () => {
                                             >
                                                 + Ekle
                                             </button>
-                                            <button
-                                                className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
-                                            >
+                                            <button className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=> makaleKaydet()}>
                                                 Kaydet
                                             </button>
 
@@ -471,7 +1001,7 @@ const AdayProfil = () => {
 
                                             <h3 className="text-md font-semibold">Bildiri {index + 1}</h3>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateConference(conf.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {bilimselEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -485,32 +1015,32 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Yazar/Yazarlar"
                                                 className="form-input mb-3"
-                                                value={conf.author}
-                                                onChange={(e) => updateConference(conf.id, "author", e.target.value)}
+                                                value={conf.yazar}
+                                                onChange={(e) => updateConference(conf.id, "yazar", e.target.value)}
                                             />
 
                                             <input
                                                 type="text"
                                                 placeholder="Bildiri Adı"
                                                 className="form-input mb-3"
-                                                value={conf.paperTitle}
-                                                onChange={(e) => updateConference(conf.id, "paperTitle", e.target.value)}
+                                                value={conf.bildiriAdi}
+                                                onChange={(e) => updateConference(conf.id, "bildiriAdi", e.target.value)}
                                             />
 
                                             <input
                                                 type="text"
                                                 placeholder="Konferansın Adı"
                                                 className="form-input mb-3"
-                                                value={conf.conferenceName}
-                                                onChange={(e) => updateConference(conf.id, "conferenceName", e.target.value)}
+                                                value={conf.konferansAdi}
+                                                onChange={(e) => updateConference(conf.id, "konferansAdi", e.target.value)}
                                             />
 
                                             <input
                                                 type="text"
                                                 placeholder="Yapıldığı Yer"
                                                 className="form-input mb-3"
-                                                value={conf.location}
-                                                onChange={(e) => updateConference(conf.id, "location", e.target.value)}
+                                                value={conf.yer}
+                                                onChange={(e) => updateConference(conf.id, "yer", e.target.value)}
                                             />
 
                                             <div className="flex gap-2 mt-2">
@@ -518,15 +1048,15 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Sayfa Sayıları"
                                                 className="form-input mb-3"
-                                                value={conf.pages}
-                                                onChange={(e) => updateConference(conf.id, "pages", e.target.value)}
+                                                value={conf.sayfa}
+                                                onChange={(e) => updateConference(conf.id, "sayfa", e.target.value)}
                                                 />
-                                                <input
+                                               <input
                                                 type="date"
-                                                placeholder="Tarih"
+                                                placeholder="Yıl"
                                                 className="form-input mb-3"
-                                                value={conf.date}
-                                                onChange={(e) => updateConference(conf.id, "date", e.target.value)}
+                                                value={conf.yil}
+                                                onChange={(e) => updateConference(conf.id, "yil", e.target.value)}
                                                 />
                                             </div>
                                             <div className="flex gap-2 mt-2">
@@ -539,8 +1069,18 @@ const AdayProfil = () => {
                                                 onChange={(e) => updateConference(conf.id, 'isBaslicaYazar', e.target.checked)}
                                                 />
                                             </label>
+                                            <br />
+                                            <label className="flex items-center cursor-pointer">
+                                                Asgari Çalışma 
+                                                <input
+                                                type="checkbox"
+                                                className="form-checkbox ml-3"
+                                                checked={conf.isAsgariCalisma}
+                                                onChange={(e) => updateConference(conf.id, 'isAsgariCalisma', e.target.checked)}
+                                                />
+                                            </label>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateConference(conf.id, "kisiSayisi", e.target.value)}>
                                                 <option>Kişi Sayısı</option>
                                                 <option>1</option>
                                                 <option>2</option>
@@ -553,7 +1093,7 @@ const AdayProfil = () => {
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
-                                                onChange={(e) => updateArticle(conf.id, "file", e.target.files?.[0] || null)}
+                                                onChange={(e) => updateConference(conf.id, "file", e.target.files?.[0] || null)}
                                             />
                                             
                                             </div>
@@ -568,7 +1108,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>bilimselKaydet()}
                                         >
                                             Kaydet
                                         </button>
@@ -605,7 +1145,7 @@ const AdayProfil = () => {
 
                                             <h3 className="text-md font-semibold">Kitap {index + 1}</h3>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3"  onChange={(e) => updateKitaplar(kitap.id, "faaliyet", e.target.value)} >
                                             <option>Faaliyet Türü</option>
                                             {kitapEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -618,8 +1158,8 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Yazar/Yazarlar"
                                                 className="form-input mb-3"
-                                                value={kitap.author}
-                                                onChange={(e) => updateConference(kitap.id, "author", e.target.value)}
+                                                value={kitap.yazar}
+                                                onChange={(e) => updateKitaplar(kitap.id, "yazar", e.target.value)}
                                             />
 
                                             <input
@@ -627,7 +1167,7 @@ const AdayProfil = () => {
                                                 placeholder="Kitap Adı"
                                                 className="form-input mb-3"
                                                 value={kitap.kitapAdi}
-                                                onChange={(e) => updateConference(kitap.id, "paperTitle", e.target.value)}
+                                                onChange={(e) => updateKitaplar(kitap.id, "kitapAdi", e.target.value)}
                                             />
 
 
@@ -635,8 +1175,8 @@ const AdayProfil = () => {
                                                 type="text"
                                                 placeholder="Yayımlandığı Yer"
                                                 className="form-input mb-3"
-                                                value={kitap.yayimlandigiYer}
-                                                onChange={(e) => updateConference(kitap.id, "location", e.target.value)}
+                                                value={kitap.yer}
+                                                onChange={(e) => updateKitaplar(kitap.id, "yer", e.target.value)}
                                             />
 
                                             <div className="flex gap-2 mt-2">
@@ -645,14 +1185,14 @@ const AdayProfil = () => {
                                                 placeholder="Baskı Sayısı"
                                                 className="form-input mb-3"
                                                 value={kitap.baskiSayisi}
-                                                onChange={(e) => updateConference(kitap.id, "pages", e.target.value)}
+                                                onChange={(e) => updateKitaplar(kitap.id, "baskiSayisi", e.target.value)}
                                                 />
                                                 <input
                                                 type="date"
                                                 placeholder="Yıl"
                                                 className="w-1/2 p-2 border rounded"
                                                 value={kitap.yil}
-                                                onChange={(e) => updateConference(kitap.id, "date", e.target.value)}
+                                                onChange={(e) => updateKitaplar(kitap.id, "yil", e.target.value)}
                                                 />
                                             </div>
 
@@ -663,11 +1203,20 @@ const AdayProfil = () => {
                                                 type="checkbox"
                                                 className="form-checkbox ml-3"
                                                 checked={kitap.isBaslicaYazar}
-                                                onChange={(e) => updateArticle(kitap.id, 'isBaslicaYazar', e.target.checked)}
+                                                onChange={(e) => updateKitaplar(kitap.id, 'isBaslicaYazar', e.target.checked)}
+                                                />
+                                            </label>
+                                            <label className="flex items-center cursor-pointer">
+                                                Başlıca Yazar mı?
+                                                <input
+                                                type="checkbox"
+                                                className="form-checkbox ml-3"
+                                                checked={kitap.isAsgariCalisma}
+                                                onChange={(e) => updateKitaplar(kitap.id, 'isAsgariCalisma', e.target.checked)}
                                                 />
                                             </label>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateKitaplar(kitap.id, 'kisiSayisi', e.target.value)}>
                                                 <option>Kişi Sayısı</option>
                                                 <option>1</option>
                                                 <option>2</option>
@@ -682,7 +1231,7 @@ const AdayProfil = () => {
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
-                                                onChange={(e) => updateArticle(kitap.id, "file", e.target.files?.[0] || null)}
+                                                onChange={(e) => updateKitaplar(kitap.id, "file", e.target.files?.[0] || null)}
                                             />
                                             </div>
                                         ))}
@@ -696,7 +1245,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>kitaplarKaydet()}
                                         >
                                             Kaydet
                                         </button>
@@ -735,7 +1284,7 @@ const AdayProfil = () => {
 
                                             <h3 className="text-md font-semibold">Atıf {index + 1}</h3>
 
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateAtiflar(atif.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {atifEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -746,25 +1295,25 @@ const AdayProfil = () => {
                                             
                                             <input
                                                 type="text"
-                                                placeholder="Yazar/Yazarlar"
+                                                placeholder="Atıfın Yapıldığı Eser"
                                                 className="form-input mb-3"
-                                                value={atif.atifinYapildigiEser}
-                                                onChange={(e) => updateAtiflar(atif.id, "atifinYapildigiEser", e.target.value)}
+                                                value={atif.yazar}
+                                                onChange={(e) => updateAtiflar(atif.id, "yazar", e.target.value)}
                                             />
 
                                             <input
                                                 type="text"
-                                                placeholder="Yayımlandığı Yer"
+                                                placeholder="Atıf Sayısı"
                                                 className="form-input mb-3"
-                                                value={atif.atifSayisi}
-                                                onChange={(e) => updateAtiflar(atif.id, "atifSayisi", e.target.value)}
+                                                value={atif.yer}
+                                                onChange={(e) => updateAtiflar(atif.id, "yer", e.target.value)}
                                             />
 
 
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
-                                                onChange={(e) => updateArticle(atif.id, "file", e.target.files?.[0] || null)}
+                                                onChange={(e) => updateAtiflar(atif.id, "file", e.target.files?.[0] || null)}
                                             />   
 
 
@@ -781,7 +1330,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>atiflarKaydet()}
                                         >
                                             Kaydet
                                         </button>
@@ -819,7 +1368,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Eğitim Faaliyeti {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateEgitimFaaliyetler(egitim.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {egitimEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -832,7 +1381,7 @@ const AdayProfil = () => {
                                                 placeholder="Programın Adı"
                                                 className="form-input mb-3"
                                                 value={egitim.programinAdi}
-                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "programinAdi", e.target.value)}
                                             />
 
 
@@ -841,23 +1390,21 @@ const AdayProfil = () => {
                                                 placeholder="Dersin Adı"
                                                 className="form-input mb-3"
                                                 value={egitim.dersinAdi}
-                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "dersinAdi", e.target.value)}
                                             />
 
 
+                                            <select className="form-input mb-3" onChange={(e) => updateEgitimFaaliyetler(egitim.id, "egitimDonemi", e.target.value)}>
+                                            <option value={"güz"}>Güz</option>
+                                            <option value={"bahar"}>Bahar</option>
+                                            <option value={"yaz"}>Yaz</option>
+                                             </select>
                                             <input
-                                                type="text"
-                                                placeholder="Eğitim Dönemi"
-                                                className="form-input mb-3"
-                                                value={egitim.donemi}
-                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "atifSayisi", e.target.value)}
-                                            />
-                                            <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Eğitim Yılı"
                                                 className="form-input mb-3"
                                                 value={egitim.yil}
-                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateEgitimFaaliyetler(egitim.id, "yil", e.target.value)}
                                             />
 
                                             <input
@@ -880,7 +1427,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{egitimKaydet()}} 
                                         >
                                             Kaydet
                                         </button>
@@ -918,7 +1465,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Eğitim Faaliyeti {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateTezYonetmeciligi(tez.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {tezEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -931,7 +1478,7 @@ const AdayProfil = () => {
                                                 placeholder="Öğrenci Adı"
                                                 className="form-input mb-3"
                                                 value={tez.ogrenciAdi}
-                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "ogrenciAdi", e.target.value)}
                                             />
 
 
@@ -940,7 +1487,7 @@ const AdayProfil = () => {
                                                 placeholder="Tez Adı"
                                                 className="form-input mb-3"
                                                 value={tez.tezAdi}
-                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "tezAdi", e.target.value)}
                                             />
 
 
@@ -949,14 +1496,14 @@ const AdayProfil = () => {
                                                 placeholder="Enstütü"
                                                 className="form-input mb-3"
                                                 value={tez.enstutu}
-                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "enstutu", e.target.value)}
                                             />
                                             <input
                                                 type="text"
                                                 placeholder="Tez Yılı"
                                                 className="form-input mb-3"
                                                 value={tez.yil}
-                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateTezYonetmeciligi(tez.id, "yil", e.target.value)}
                                             />
 
                                             <input
@@ -979,7 +1526,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{tezKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1018,7 +1565,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Patent {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3"  onChange={(e) => updatePatentler(patent.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {patentEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -1035,39 +1582,18 @@ const AdayProfil = () => {
                                             />
 
                                             <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Yılı"
                                                 className="form-input mb-3"
                                                 value={patent.yil}
                                                 onChange={(e) => updatePatentler(patent.id, "yil", e.target.value)}
                                             />
-                                           <div className="flex gap-2 mt-2">
-                                            <label className="flex items-center cursor-pointer">
-                                                Başlıca Yazar mı?
-                                                <input
-                                                type="checkbox"
-                                                className="form-checkbox ml-3"
-                                                checked={patent.isBaslicaYazar}
-                                                onChange={(e) => updatePatentler(patent.id, 'isBaslicaYazar', e.target.checked)}
-                                                />
-                                            </label>
-
-                                            <select className="form-input mb-3">
-                                                <option>Kişi Sayısı</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5-9</option>
-                                                <option>10+</option>
-                                             </select>
-                                            </div>
+                            
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
                                                 onChange={(e) => updatePatentler(patent.id, "file", e.target.files?.[0] || null)}
                                             />   
-
 
                                             </div>
                                             
@@ -1082,7 +1608,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{patentKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1124,7 +1650,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Arastirma Proje {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateArastirmaProjeler(arastirma.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {arastirmaEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -1137,7 +1663,7 @@ const AdayProfil = () => {
                                                 placeholder="Proje Adı"
                                                 className="form-input mb-3"
                                                 value={arastirma.projeAdi}
-                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "projeAdi", e.target.value)}
                                             />
 
 
@@ -1146,7 +1672,7 @@ const AdayProfil = () => {
                                                 placeholder="Kurum Adı"
                                                 className="form-input mb-3"
                                                 value={arastirma.projeKurumAdi}
-                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "projeKurumAdi", e.target.value)}
                                             />
 
 
@@ -1155,14 +1681,14 @@ const AdayProfil = () => {
                                                 placeholder="Proje Numarası"
                                                 className="form-input mb-3"
                                                 value={arastirma.projeNumarasi}
-                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "projeNumarasi", e.target.value)}
                                             />
                                             <input
                                                 type="text"
                                                 placeholder="Araştırma Yılı"
                                                 className="form-input mb-3"
                                                 value={arastirma.yil}
-                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateArastirmaProjeler(arastirma.id, "yil", e.target.value)}
                                             />
 
                                             <input
@@ -1185,7 +1711,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{arastirmaKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1225,7 +1751,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Editörlük {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateEditorluk(editor.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {editorEtkinlik.map((faaliyet:any) => (
                                                 <option key={faaliyet.id} value={faaliyet.id}>
@@ -1238,7 +1764,7 @@ const AdayProfil = () => {
                                                 placeholder="Dergi Adi"
                                                 className="form-input mb-3"
                                                 value={editor.dergiAdi}
-                                                onChange={(e) => updateArastirmaProjeler(editor.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateEditorluk(editor.id, "dergiAdi", e.target.value)}
                                             />
 
 
@@ -1247,21 +1773,22 @@ const AdayProfil = () => {
                                                 placeholder="Dergi Sayisi"
                                                 className="form-input mb-3"
                                                 value={editor.dergiSayisi}
-                                                onChange={(e) => updateArastirmaProjeler(editor.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateEditorluk(editor.id, "dergiSayisi", e.target.value)}
                                             />
 
                                             <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Dergi Yılı"
                                                 className="form-input mb-3"
                                                 value={editor.yil}
-                                                onChange={(e) => updateArastirmaProjeler(editor.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateEditorluk(editor.id, "yil", e.target.value)}
+
                                             />
 
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
-                                                onChange={(e) => updateArastirmaProjeler(editor.id, "file", e.target.files?.[0] || null)}
+                                                onChange={(e) => updateEditorluk(editor.id, "file", e.target.files?.[0] || null)}
                                             />   
 
 
@@ -1278,7 +1805,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{editorlukKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1317,7 +1844,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Ödül {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3" onChange={(e) => updateOduller(odul.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {odulEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -1330,18 +1857,18 @@ const AdayProfil = () => {
                                                 placeholder="Kurum Adi"
                                                 className="form-input mb-3"
                                                 value={odul.kurumAdi}
-                                                onChange={(e) => updateOduller(odul.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateOduller(odul.id, "kurumAdi", e.target.value)}
                                             />
 
 
                                             
 
                                             <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Odul Yılı"
                                                 className="form-input mb-3"
                                                 value={odul.yil}
-                                                onChange={(e) => updateOduller(odul.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateOduller(odul.id, "yil", e.target.value)}
                                             />
 
                                             <input
@@ -1364,7 +1891,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{odulKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1403,7 +1930,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Ödül {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3"  onChange={(e) => updateIdariGorevler(idariGorev.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {idariEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -1416,21 +1943,21 @@ const AdayProfil = () => {
                                                 placeholder="Görev Birimi"
                                                 className="form-input mb-3"
                                                 value={idariGorev.gorevBirimi}
-                                                onChange={(e) => updateOduller(idariGorev.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateIdariGorevler(idariGorev.id, "gorevBirimi", e.target.value)}
                                             />
 
                                             <input
-                                                type="text"
-                                                placeholder="Odul Yılı"
+                                                type="date"
+                                                placeholder="Görev Yılı"
                                                 className="form-input mb-3"
                                                 value={idariGorev.yil}
-                                                onChange={(e) => updateOduller(idariGorev.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateIdariGorevler(idariGorev.id, "yil", e.target.value)}
                                             />
 
                                             <input
                                                 type="file"
                                                 className="form-input mb-3"
-                                                onChange={(e) => updateOduller(idariGorev.id, "file", e.target.files?.[0] || null)}
+                                                onChange={(e) => updateIdariGorevler(idariGorev.id, "file", e.target.files?.[0] || null)}
                                             />   
 
                                             </div>
@@ -1446,7 +1973,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>{idariKaydet()}}
                                         >
                                             Kaydet
                                         </button>
@@ -1485,7 +2012,7 @@ const AdayProfil = () => {
                                             </button>
 
                                             <h3 className="text-md font-semibold">Güzel Sanatlar {index + 1}</h3>
-                                            <select className="form-input mb-3">
+                                            <select className="form-input mb-3"  onChange={(e) => updateGuzelSanatlar(sanat.id, "faaliyet", e.target.value)}>
                                             <option>Faaliyet Türü</option>
                                             {guzelEtkinlik.map((faaliyet:any) => (
                                             <option key={faaliyet.id} value={faaliyet.id}>
@@ -1498,15 +2025,15 @@ const AdayProfil = () => {
                                                 placeholder="Faaliyet Adı"
                                                 className="form-input mb-3"
                                                 value={sanat.faaliyetAdi}
-                                                onChange={(e) => updateGuzelSanatlar(sanat.id, "atifinYapildigiEser", e.target.value)}
+                                                onChange={(e) => updateGuzelSanatlar(sanat.id, "faaliyetAdi", e.target.value)}
                                             />
 
                                             <input
-                                                type="text"
+                                                type="date"
                                                 placeholder="Odul Yılı"
                                                 className="form-input mb-3"
                                                 value={sanat.yil}
-                                                onChange={(e) => updateGuzelSanatlar(sanat.id, "atifSayisi", e.target.value)}
+                                                onChange={(e) => updateGuzelSanatlar(sanat.id, "yil", e.target.value)}
                                             />
 
                                             <input
@@ -1528,7 +2055,7 @@ const AdayProfil = () => {
                                         </button>
                                        
                                         <button
-                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600"
+                                            className="w-full p-2 bg-green-500 text-white rounded mt-4 hover:bg-green-600" onClick={()=>guzelKaydet()}
                                         >
                                             Kaydet
                                         </button>

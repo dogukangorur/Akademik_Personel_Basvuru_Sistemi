@@ -5,7 +5,7 @@ const { response } = require("express");
 const connection = require("../Service/connection.js");
 
 exports.unvanGetir = async (req, res) => {
-    const q = "select * from kadrolar order by id asc";
+    const q = "select * from kadrolar where id in (6,7,8) order by id asc";
     connection.query(q, (error, data) => {
         if (error) {
             console.error('Error executing query:', error);

@@ -11,57 +11,32 @@ import 'tippy.js/dist/tippy.css';
 
 const AdayBasvurularim = () => {
 
-    // veri tabanından bilgi gelecek öylesine bir veri seti
-    const tableData = [
-        {
-            id: 1,
-            name: 'John Doe',
-            email: 'johndoe@yahoo.com',
-            date: '10/08/2020',
-            sale: 120,
-            status: 'Beklemede',
-            register: '5 min ago',
-            progress: '40%',
-            position: 'Developer',
-            office: 'London',
-        },
-        {
-            id: 2,
-            name: 'Shaun Park',
-            email: 'shaunpark@gmail.com',
-            date: '11/08/2020',
-            sale: 400,
-            status: 'Beklemede',
-            register: '11 min ago',
-            progress: '23%',
-            position: 'Designer',
-            office: 'New York',
-        },
-        {
-            id: 3,
-            name: 'Alma Clarke',
-            email: 'alma@gmail.com',
-            date: '12/02/2020',
-            sale: 310,
-            status: 'Onaylandı',
-            register: '1 hour ago',
-            progress: '80%',
-            position: 'Accountant',
-            office: 'Amazon',
-        },
-        {
-            id: 4,
-            name: 'Vincent Carpenter',
-            email: 'vincent@gmail.com',
-            date: '13/08/2020',
-            sale: 100,
-            status: 'Reddedildi',
-            register: '1 day ago',
-            progress: '60%',
-            position: 'Data Scientist',
-            office: 'Canada',
-        },
-    ];
+
+    const storedUserInfo = localStorage.getItem('userInfo');
+    const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+    const [basvurularim, setBasvurularim] = useState<any[]>([]);
+
+
+    useEffect(() => {
+        fetch("http://localhost:8080/api/aday/basvuruGetir", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ kullaniciId: userInfo.kullaniciID })
+          }).then(response => response.json()) 
+          .then(data => {
+              if (data.success) {
+                 setBasvurularim(data.data);
+              
+              } else {
+                  console.error("Veri alınamadı:", data.message);
+              }
+          })
+          .catch(error => {
+              console.error("Hata oluştu:", error);
+          });
+    }, []);
     
     return (
         <div>
@@ -71,30 +46,46 @@ const AdayBasvurularim = () => {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Başvuru</th>
+                                    <th>Fakülte</th>
+                                    <th>Bölüm</th>
+                                    <th>Kadro</th>
+                                    <th>Başlık</th>
+                                    <th>Tanım</th>
                                     <th>Tarih</th>
                                     <th>Durum</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {tableData.map((data) => {
+                                {basvurularim.map((basvuru) => {
                                     return (
-                                        <tr key={data.id}>
+                                        <tr key={basvuru.id}>
                                             <td>
-                                                <div className="whitespace-nowrap">{data.name}</div>
+                                                {basvuru.fakulte_adi}
                                             </td>
-                                            <td>{data.date}</td>
+                                            <td>
+                                                {basvuru.bolum_adi}
+                                            </td>
+                                            <td>
+                                                {basvuru.puanlanan_faaliyet_donemi}
+                                            </td>
+                                            <td>
+                                                {basvuru.baslik}
+                                            </td>
+                                            <td>
+                                                {basvuru.aciklama.substring(0, 50)}...
+                                            </td>
+                                            <td>{new Date(basvuru.basvuru_tarihi).toISOString().split("T")[0]}</td>
                                             <td >
                                                 <div
-                                                    className={`badge whitespace-nowrap text-center w-[100px] ${data.status === 'Beklemede'
+                                                    className={`badge whitespace-nowrap text-center w-[100px] ${basvuru.basvuru_durum === 'Beklemede'
                                                         ? 'bg-primary   '
-                                                        : data.status === 'Onaylandı'
+                                                        : basvuru.basvuru_durum === 'Onaylandı'
                                                             ? 'bg-success'
-                                                            : data.status === 'Reddedildi'
+                                                            : basvuru.basvuru_durum === 'Reddedildi'
                                                                 ? 'bg-danger' : ''
                                                         }`}
                                                 >
-                                                    {data.status}
+                                                    {basvuru.basvuru_durum}
                                                 </div>
                                             </td>
                                         </tr>
