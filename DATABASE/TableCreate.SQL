@@ -414,12 +414,20 @@ CREATE TABLE JuriIlan (
 --Asgari Yayın/Etkinlik Sayısı Kriterleri Tablosu
 CREATE TABLE FaaliyetKriterleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    faaliyet_kodu NVARCHAR(50) NOT NULL,
-    -- Örn: A.1-A.2, F.1 veya F.2, H.13-17
+    baslik_id INT NOT NULL,
+    baslik_no_min INT NOT NULL,
+    baslik_no_max INT NOT NULL,
     fakulte_grup_id INT NOT NULL,
     kadro_id INT NOT NULL,
     deger INT NOT NULL,
+    FOREIGN KEY (baslik_id) REFERENCES Baslik(id) ON DELETE CASCADE,
     FOREIGN KEY (fakulte_grup_id) REFERENCES FakulteGrup(id) ON DELETE CASCADE,
     FOREIGN KEY (kadro_id) REFERENCES Kadrolar(id) ON DELETE CASCADE,
-    UNIQUE (faaliyet_kodu, fakulte_grup_id, kadro_id)
+    UNIQUE (
+        baslik_id,
+        baslik_no_min,
+        baslik_no_max,
+        fakulte_grup_id,
+        kadro_id
+    )
 );

@@ -306,10 +306,11 @@ const deleteEtkinlik = (req, res) => {
 // Faaliyet kriterlerini listele
 const getFaaliyetKriterleri = (req, res) => {
     const sql = `
-      SELECT fk.*, fg.fakulte_grup_adi, k.kadro_adi
+      SELECT fk.*, fg.fakulte_grup_adi, k.kadro_adi, b.baslik_kod
       FROM FaaliyetKriterleri fk
       JOIN FakulteGrup fg ON fk.fakulte_grup_id = fg.id
       JOIN Kadrolar k ON fk.kadro_id = k.id
+      JOIN Baslik b ON fk.baslik_id = b.id
     `;
     connection.query(sql, (err, results) => {
       if (err) return res.status(500).json(err);
@@ -317,11 +318,19 @@ const getFaaliyetKriterleri = (req, res) => {
     });
   };
   
+  
   // Yeni faaliyet kriteri ekle
   const addFaaliyetKriteri = (req, res) => {
-    const { faaliyet_kodu, fakulte_grup_id, kadro_id, deger } = req.body;
-    const sql = `INSERT INTO FaaliyetKriterleri (faaliyet_kodu, fakulte_grup_id, kadro_id, deger) VALUES (?, ?, ?, ?)`;
-    connection.query(sql, [faaliyet_kodu, fakulte_grup_id, kadro_id, deger], (err, result) => {
+    const { baslik_id, baslik_no_min, baslik_no_max, fakulte_grup_id, kadro_id, deger } = req.body;
+  
+    const sql = `
+      INSERT INTO FaaliyetKriterleri
+      (baslik_id, baslik_no_min, baslik_no_max, fakulte_grup_id, kadro_id, deger)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const values = [baslik_id, baslik_no_min, baslik_no_max, fakulte_grup_id, kadro_id, deger];
+  
+    connection.query(sql, values, (err, result) => {
       if (err) return res.status(500).json(err);
       res.json({ id: result.insertId });
     });
@@ -331,6 +340,7 @@ const getFaaliyetKriterleri = (req, res) => {
   const updateFaaliyetKriteri = (req, res) => {
     const { id } = req.params;
     const { deger } = req.body;
+  
     const sql = `UPDATE FaaliyetKriterleri SET deger = ? WHERE id = ?`;
     connection.query(sql, [deger, id], (err, result) => {
       if (err) return res.status(500).json(err);
@@ -341,6 +351,7 @@ const getFaaliyetKriterleri = (req, res) => {
   // Faaliyet kriterini sil
   const deleteFaaliyetKriteri = (req, res) => {
     const { id } = req.params;
+  
     const sql = `DELETE FROM FaaliyetKriterleri WHERE id = ?`;
     connection.query(sql, [id], (err) => {
       if (err) return res.status(500).json(err);
@@ -354,6 +365,67 @@ const getFaaliyetKriterleri = (req, res) => {
     connection.query(sql, (err, results) => {
       if (err) return res.status(500).json(err);
       res.json(results);
+    });
+  };
+
+  //YoneticiEtkinlikPuanKriter.tsx
+  // Tüm puan kriterlerini listele
+const getPuanKriterleri = (req, res) => {
+    const sql = `
+      SELECT pk.*, fg.fakulte_grup_adi, k.kadro_adi, b.baslik_kod
+      FROM PuanKriterleri pk
+      JOIN FakulteGrup fg ON pk.fak_gur_id = fg.id
+      JOIN Kadrolar k ON pk.poz_id = k.id
+      JOIN Baslik b ON pk.baslik_id = b.id
+    `;
+    connection.query(sql, (err, results) => {
+      if (err) return res.status(500).json(err);
+      res.json(results);
+    });
+  };
+  
+  // Yeni kriter ekle
+  const addPuanKriteri = (req, res) => {
+    const { baslik_id, baslik_no_min, baslik_no_max, fak_gur_id, poz_id, asgari, azami } = req.body;
+  
+    const sql = `
+      INSERT INTO PuanKriterleri
+      (baslik_id, baslik_no_min, baslik_no_max, fak_gur_id, poz_id, asgari, azami)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [baslik_id, baslik_no_min, baslik_no_max, fak_gur_id, poz_id, asgari, azami];
+  
+    connection.query(sql, values, (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json({ id: result.insertId });
+    });
+  };
+  
+  
+  // Güncelleme
+  const updatePuanKriteri = (req, res) => {
+    const { id } = req.params;
+    const { asgari, azami } = req.body;
+  
+    const sql = `
+      UPDATE PuanKriterleri
+      SET asgari = ?, azami = ?
+      WHERE id = ?
+    `;
+    connection.query(sql, [asgari, azami, id], (err, result) => {
+      if (err) return res.status(500).json({ error: err });
+      res.json({ success: true, message: "Kriter başarıyla güncellendi." });
+    });
+  };
+  
+  // Silme
+  const deletePuanKriteri = (req, res) => {
+    const { id } = req.params;
+  
+    const sql = `DELETE FROM PuanKriterleri WHERE id = ?`;
+    connection.query(sql, [id], (err, result) => {
+      if (err) return res.status(500).json({ error: err });
+      res.json({ success: true, message: "Kriter başarıyla silindi." });
     });
   };
 
@@ -377,5 +449,9 @@ module.exports = {
     addFaaliyetKriteri,
     updateFaaliyetKriteri,
     deleteFaaliyetKriteri,
-    getFakulteGruplari
+    getFakulteGruplari,
+    getPuanKriterleri,
+    addPuanKriteri,
+    updatePuanKriteri,
+    deletePuanKriteri
 };

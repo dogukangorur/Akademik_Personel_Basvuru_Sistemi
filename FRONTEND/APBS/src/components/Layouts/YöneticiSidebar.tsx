@@ -101,10 +101,18 @@ const AdaySidear = () => {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to="/yonetici/etkinlik-sayi-kriter" className="group">
+                                <NavLink to="/yonetici/etkinlik-sayi-kriterleri" className="group">
                                     <div className="flex items-center">
                                         <IconPlus className="group-hover:!text-success shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvuru Etkinlik Kriterleri</span>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvuru Sayı Kriterleri</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to="/yonetici/etkinlik-puan-kriterleri" className="group">
+                                    <div className="flex items-center">
+                                        <IconPlus className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvuru Puan Kriterleri</span>
                                     </div>
                                 </NavLink>
                             </li>

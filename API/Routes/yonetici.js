@@ -36,4 +36,10 @@ router.put("/faaliyet-kriterleri/:id", controller.updateFaaliyetKriteri);
 router.delete("/faaliyet-kriterleri/:id", controller.deleteFaaliyetKriteri);
 router.get("/fakulte-gruplari", controller.getFakulteGruplari);
 
+//YoneticiEtkinlikPuanKriter.tsx
+router.get("/puan-kriterleri", controller.getPuanKriterleri);
+router.post("/puan-kriterleri", controller.addPuanKriteri);
+router.put("/puan-kriterleri/:id", controller.updatePuanKriteri);
+router.delete("/puan-kriterleri/:id", controller.deletePuanKriteri);
+
 module.exports = router;

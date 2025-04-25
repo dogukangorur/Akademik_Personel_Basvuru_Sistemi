@@ -11,15 +11,25 @@ interface Kadro {
     kadro_adi: string;
 }
 
+interface Baslik {
+    id: number;
+    baslik_kod: string;
+    baslik_adi: string;
+}
+
 const YoneticiEtkinlikSayıKriter = () => {
     const [formData, setFormData] = useState({
-        faaliyet_kodu: '',
+        baslik_id: 0,
+        baslik_no_min: 1,
+        baslik_no_max: 1,
         fakulte_grup_id: 0,
         kadro_id: 0,
         deger: 0,
     });
+
     const [veriler, setVeriler] = useState<any[]>([]);
     const [fakulteGruplari, setFakulteGruplari] = useState<FakulteGrup[]>([]);
+    const [basliklar, setBasliklar] = useState<Baslik[]>([]);
     const [duzenleMod, setDuzenleMod] = useState<any | null>(null);
     const [silmeMod, setSilmeMod] = useState<any | null>(null);
 
@@ -39,19 +49,24 @@ const YoneticiEtkinlikSayıKriter = () => {
             .get('http://localhost:8080/api/yonetici/fakulte-gruplari')
             .then((res) => setFakulteGruplari(res.data))
             .catch((err) => console.error('Fakülte grupları çekilemedi:', err));
+
+        axios
+            .get('http://localhost:8080/api/yonetici/basliklar')
+            .then((res) => setBasliklar(res.data))
+            .catch((err) => console.error('Başlıklar çekilemedi:', err));
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        const newValue = name === 'kadro_id' || name === 'fakulte_grup_id' ? Number(value) : value;
+        const newValue = ['kadro_id', 'fakulte_grup_id', 'baslik_id', 'baslik_no_min', 'baslik_no_max', 'deger'].includes(name) ? Number(value) : value;
         setFormData({ ...formData, [name]: newValue });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.fakulte_grup_id || !formData.kadro_id) {
-            alert('Lütfen Fakülte Grubu ve Kadro seçiniz.');
+        if (!formData.fakulte_grup_id || !formData.kadro_id || !formData.baslik_id) {
+            alert('Lütfen tüm alanları eksiksiz doldurunuz.');
             return;
         }
 
@@ -63,9 +78,10 @@ const YoneticiEtkinlikSayıKriter = () => {
                 id: yeniId,
                 fakulte_grup_adi: fakulteGruplari.find((fg) => fg.id === formData.fakulte_grup_id)?.fakulte_grup_adi,
                 kadro_adi: kadrolar.find((k) => k.id === formData.kadro_id)?.kadro_adi,
+                faaliyet_araligi: getFaaliyetAraligi(formData),
             };
             setVeriler([...veriler, yeniVeri]);
-            setFormData({ faaliyet_kodu: '', fakulte_grup_id: 0, kadro_id: 0, deger: 0 });
+            setFormData({ baslik_id: 0, baslik_no_min: 1, baslik_no_max: 1, fakulte_grup_id: 0, kadro_id: 0, deger: 0 });
         } catch (err) {
             console.error('Ekleme hatası:', err);
         }
@@ -95,8 +111,13 @@ const YoneticiEtkinlikSayıKriter = () => {
         }
     };
 
+    const getFaaliyetAraligi = (veri: any) => {
+        const kod = basliklar.find((b) => b.id === veri.baslik_id)?.baslik_kod;
+        return `${kod}.${veri.baslik_no_min} - ${kod}.${veri.baslik_no_max}`;
+    };
+
     return (
-        <div className="p-4 max-w-7xl mx-auto space-y-4">
+        <div className="p-4 space-y-4">
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow space-y-6">
                 <h2 className="text-xl font-bold text-gray-800">Yeni Faaliyet Kriteri Ekle</h2>
 
@@ -129,13 +150,30 @@ const YoneticiEtkinlikSayıKriter = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Faaliyet Kodu</label>
-                        <input name="faaliyet_kodu" value={formData.faaliyet_kodu} onChange={handleChange} className="mt-1 block w-full border rounded px-3 py-2" placeholder="Örn: A.1-A.4" required />
+                        <label className="block text-sm font-medium">Başlık</label>
+                        <select name="baslik_id" value={formData.baslik_id} onChange={handleChange} className="mt-1 block w-full border rounded px-3 py-2" required>
+                            <option value={0} disabled>
+                                Başlık Seçiniz
+                            </option>
+                            {basliklar.map((b) => (
+                                <option key={b.id} value={b.id}>
+                                    {b.baslik_kod} - {b.baslik_adi}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Değer</label>
-                        <input name="deger" type="number" value={formData.deger} onChange={handleChange} className="mt-1 block w-full border rounded px-3 py-2" required />
+                        <label className="block text-sm font-medium">Numara Aralığı</label>
+                        <div className="flex gap-2">
+                            <input type="number" name="baslik_no_min" value={formData.baslik_no_min} onChange={handleChange} className="w-1/2 border rounded px-2 py-2" min={1} />
+                            <input type="number" name="baslik_no_max" value={formData.baslik_no_max} onChange={handleChange} className="w-1/2 border rounded px-2 py-2" min={formData.baslik_no_min} />
+                        </div>
                     </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium">Değer</label>
+                    <input name="deger" type="number" value={formData.deger} onChange={handleChange} className="mt-1 block w-full border rounded px-3 py-2" required />
                 </div>
 
                 <div className="text-right">
@@ -160,9 +198,9 @@ const YoneticiEtkinlikSayıKriter = () => {
                     <tbody>
                         {veriler.map((v) => (
                             <tr key={v.id}>
-                                <td className="border px-2 py-1">{v.faaliyet_kodu}</td>
-                                <td className="border px-2 py-1">{v.fakulte_grup_adi}</td>
-                                <td className="border px-2 py-1">{v.kadro_adi}</td>
+                                <td className="border px-2 py-1">{getFaaliyetAraligi(v)}</td>
+                                <td className="border px-2 py-1">{fakulteGruplari.find((fg) => fg.id === v.fakulte_grup_id)?.fakulte_grup_adi}</td>
+                                <td className="border px-2 py-1">{kadrolar.find((k) => k.id === v.kadro_id)?.kadro_adi}</td>
                                 <td className="border px-2 py-1 text-center">{v.deger}</td>
                                 <td className="border px-2 py-1 text-center space-x-2">
                                     <button onClick={() => handleDuzenle(v)} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
@@ -178,31 +216,14 @@ const YoneticiEtkinlikSayıKriter = () => {
                 </table>
             </div>
 
-            {/* Modal: Düzenle */}
+            {/* Modaller */}
             {duzenleMod && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded w-[500px] space-y-4">
                         <h3 className="text-lg font-bold">Kriteri Düzenle</h3>
-                        <div>
-                            <p className="text-sm text-gray-500">
-                                <strong>Faaliyet Kodu:</strong> {duzenleMod.faaliyet_kodu}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                                <strong>Fakülte Grubu:</strong> {duzenleMod.fakulte_grup_adi}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                                <strong>Kadro:</strong> {duzenleMod.kadro_adi}
-                            </p>
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium">Değer</label>
-                            <input
-                                className="w-full border rounded px-3 py-2"
-                                type="number"
-                                value={duzenleMod.deger}
-                                onChange={(e) => setDuzenleMod({ ...duzenleMod, deger: parseInt(e.target.value) })}
-                            />
-                        </div>
+                        <p className="text-sm text-gray-600">{getFaaliyetAraligi(duzenleMod)}</p>
+                        <label className="block text-sm font-medium">Değer</label>
+                        <input className="w-full border rounded px-3 py-2" type="number" value={duzenleMod.deger} onChange={(e) => setDuzenleMod({ ...duzenleMod, deger: parseInt(e.target.value) })} />
                         <div className="flex justify-end gap-2">
                             <button onClick={() => setDuzenleMod(null)} className="px-4 py-2 bg-gray-300 rounded">
                                 İptal
@@ -215,13 +236,12 @@ const YoneticiEtkinlikSayıKriter = () => {
                 </div>
             )}
 
-            {/* Modal: Silme Onayı */}
             {silmeMod && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded w-[400px] space-y-4">
                         <h3 className="text-lg font-bold text-red-600">Silme Onayı</h3>
                         <p className="text-sm text-gray-700">
-                            <strong>{silmeMod.faaliyet_kodu}</strong> faaliyet koduna ait kayıt silinsin mi?
+                            <strong>{getFaaliyetAraligi(silmeMod)}</strong> kriteri silinsin mi?
                         </p>
                         <div className="flex justify-end gap-2">
                             <button onClick={() => setSilmeMod(null)} className="px-4 py-2 bg-gray-300 rounded">
