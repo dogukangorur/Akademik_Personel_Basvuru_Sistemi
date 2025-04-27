@@ -1,13 +1,9 @@
-
-/*
-
-//DÜZENLENECEK
 const connection = require("../Service/connection.js");
 
 // Jüriye atanmış ilanları getir (anasayfa)
 const getAssignedIlansForJuri = async (req, res) => {
     try {
-        const juriId = req.user.id; // Giriş yapan jürinin ID'si (JWT içinden)
+        const juriId = req.params.juriId; // Artık URL'den geliyor
 
         const query = `
             SELECT 
@@ -34,7 +30,7 @@ const getAssignedIlansForJuri = async (req, res) => {
             id: row.ilan_id,
             ilanAdi: `${row.kadro_adi} - ${row.fakulte_adi} / ${row.bolum_adi}`,
             tarihAraligi: `${row.baslangic_tarih} - ${row.bitis_tarih}`,
-            status:
+            durum:
                 row.durum === "aktif"
                     ? "Değerlendirme Aşamasında"
                     : row.durum === "pasif"
@@ -49,7 +45,7 @@ const getAssignedIlansForJuri = async (req, res) => {
     }
 };
 
-// 2. Seçilen ilana yapılan başvuruları getir
+// Seçilen ilana yapılan başvuruları getir
 const getBasvurularByIlan = async (req, res) => {
     const ilanId = req.params.ilanId;
     try {
@@ -76,4 +72,3 @@ module.exports = {
     getAssignedIlansForJuri,
     getBasvurularByIlan,
 };
-*/

@@ -61,7 +61,7 @@ const AdaySidear = () => {
             >
                 <div className="bg-white dark:bg-black h-full">
                     <div className="flex justify-between items-center px-4 py-3 bg-green-700 h-20">
-                        <NavLink to="/aday/anasayfa" className="main-logo flex items-center shrink-0">
+                        <NavLink to="/juri/anasayfa" className="main-logo flex items-center shrink-0">
                             <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline text-white-light">Menüler</span>
                         </NavLink>
 
@@ -75,23 +75,15 @@ const AdaySidear = () => {
                     </div>
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative  bg-green-50">
                         <ul className="relative font-semibold space-y-0.5 p-4 py-5">
-                        <li className="nav-item">
-                            <NavLink to="/aday/anasayfa" className="group">
-                                <div className="flex items-center">
-                                    <IconMenuDocumentation className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Açık İlanlar</span>
-                                </div>
-                            </NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to="/aday/basvurularım" className="group">
-                                <div className="flex items-center">
-                                    <IconBox className="group-hover:!text-success shrink-0" />
-                                    <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Başvurularım</span>
-                                </div>
-                            </NavLink>
-                        </li>
-                      </ul>
+                            <li className="nav-item">
+                                <NavLink to="/juri/anasayfa" className="group">
+                                    <div className="flex items-center">
+                                        <IconMenuDashboard className="group-hover:!text-success shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Anasayfa</span>
+                                    </div>
+                                </NavLink>
+                            </li>
+                        </ul>
                     </PerfectScrollbar>
                 </div>
             </nav>

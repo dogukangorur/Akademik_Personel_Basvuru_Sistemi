@@ -16,10 +16,18 @@ const JuriAnasayfa = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/juri/ilanlarim', {
+                const storedUserInfo = localStorage.getItem('userInfo');
+                const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+                if (!userInfo) {
+                    console.error('Kullanıcı bilgisi bulunamadı');
+                    return;
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.id}`, {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
                 });
 
                 console.log("API'den dönen veri:", response.data);
@@ -27,13 +35,12 @@ const JuriAnasayfa = () => {
                 if (Array.isArray(response.data)) {
                     setTableData(response.data);
                 } else {
-                    console.warn("Beklenmeyen veri formatı:", response.data);
-                    setTableData([]); // hatalı veri gelirse boş dizi ata
+                    console.warn('Beklenmeyen veri formatı:', response.data);
+                    setTableData([]);
                 }
-
             } catch (error) {
-                console.error("İlanlar alınırken hata oluştu:", error);
-                setTableData([]); // hata durumunda yine boş dizi
+                console.error('İlanlar alınırken hata oluştu:', error);
+                setTableData([]);
             }
         };
 
@@ -41,8 +48,8 @@ const JuriAnasayfa = () => {
     }, []);
 
     const handleBasvuruyaGit = (ilanId: number) => {
-        localStorage.setItem("secilenIlanId", ilanId.toString());
-        window.location.href = "/juri/basvuru";
+        localStorage.setItem('secilenIlanId', ilanId.toString());
+        window.location.href = '/juri/basvuru';
     };
 
     return (
@@ -65,22 +72,24 @@ const JuriAnasayfa = () => {
                             <tr key={data.id} className="hover:bg-gray-50">
                                 <td className="border-gray-300 px-4 py-2">{data.ilanAdi}</td>
                                 <td className="border-gray-300 px-4 py-2">{data.tarihAraligi}</td>
-                                <td className={`border-gray-300 px-4 py-2 font-semibold ${
-                                    data.durum === 'Tamamlandı' ? 'text-green-600' :
-                                    data.durum === 'Değerlendirme Aşamasında' ? 'text-blue-600' :
-                                    data.durum === 'Başvuru Aşamasında' ? 'text-yellow-600' :
-                                    data.durum === 'İptal Edildi' ? 'text-red-600' :
-                                    'text-gray-600'
-                                }`}>
+                                <td
+                                    className={`border-gray-300 px-4 py-2 font-semibold ${
+                                        data.durum === 'Tamamlandı'
+                                            ? 'text-green-600'
+                                            : data.durum === 'Değerlendirme Aşamasında'
+                                            ? 'text-blue-600'
+                                            : data.durum === 'Başvuru Aşamasında'
+                                            ? 'text-yellow-600'
+                                            : data.durum === 'İptal Edildi'
+                                            ? 'text-red-600'
+                                            : 'text-gray-600'
+                                    }`}
+                                >
                                     {data.durum}
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruları Görüntüle">
-                                        <button
-                                            type="button"
-                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            onClick={() => handleBasvuruyaGit(data.id)}
-                                        >
+                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleBasvuruyaGit(data.id)}>
                                             Başvurular &gt;
                                         </button>
                                     </Tippy>
