@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface Ilan {
     id: number;
@@ -20,27 +24,65 @@ const JuriAnasayfa = () => {
                 const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
 
                 if (!userInfo) {
-                    console.error('Kullanıcı bilgisi bulunamadı');
+                    MySwal.fire({
+                        title: 'Kullanıcı bilgisi bulunamadı!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-error' },
+                    });
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.id}`);
 
                 console.log("API'den dönen veri:", response.data);
 
                 if (Array.isArray(response.data)) {
                     setTableData(response.data);
+
+                    MySwal.fire({
+                        title: 'İlanlar başarıyla yüklendi!',
+                        icon: 'success',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-success' },
+                    });
                 } else {
                     console.warn('Beklenmeyen veri formatı:', response.data);
                     setTableData([]);
+
+                    MySwal.fire({
+                        title: 'Beklenmeyen veri formatı!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-error' },
+                    });
                 }
             } catch (error) {
                 console.error('İlanlar alınırken hata oluştu:', error);
                 setTableData([]);
+
+                MySwal.fire({
+                    title: 'İlanlar yüklenirken hata oluştu!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
             }
         };
 
@@ -49,7 +91,21 @@ const JuriAnasayfa = () => {
 
     const handleBasvuruyaGit = (ilanId: number) => {
         localStorage.setItem('secilenIlanId', ilanId.toString());
-        window.location.href = '/juri/basvuru';
+
+        MySwal.fire({
+            title: 'Başvuru listesine yönlendiriliyorsunuz...',
+            icon: 'info',
+            toast: true,
+            position: 'bottom-start',
+            timer: 1000,
+            showConfirmButton: false,
+            showCloseButton: true,
+            customClass: { popup: 'color-info' },
+        });
+
+        setTimeout(() => {
+            window.location.href = '/juri/basvuru';
+        }, 1000);
     };
 
     return (

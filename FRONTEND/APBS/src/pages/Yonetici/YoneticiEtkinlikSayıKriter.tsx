@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface FakulteGrup {
     id: number;
@@ -43,17 +47,50 @@ const YoneticiEtkinlikSayıKriter = () => {
         axios
             .get('http://localhost:8080/api/yonetici/faaliyet-kriterleri')
             .then((res) => setVeriler(res.data))
-            .catch((err) => console.error('Veri çekme hatası:', err));
+            .catch(() => {
+                MySwal.fire({
+                    title: 'Faaliyet kriterleri yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
+            });
 
         axios
             .get('http://localhost:8080/api/yonetici/fakulte-gruplari')
             .then((res) => setFakulteGruplari(res.data))
-            .catch((err) => console.error('Fakülte grupları çekilemedi:', err));
+            .catch(() => {
+                MySwal.fire({
+                    title: 'Fakülte grupları yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
+            });
 
         axios
             .get('http://localhost:8080/api/yonetici/basliklar')
             .then((res) => setBasliklar(res.data))
-            .catch((err) => console.error('Başlıklar çekilemedi:', err));
+            .catch(() => {
+                MySwal.fire({
+                    title: 'Başlıklar yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
+            });
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -66,7 +103,16 @@ const YoneticiEtkinlikSayıKriter = () => {
         e.preventDefault();
 
         if (!formData.fakulte_grup_id || !formData.kadro_id || !formData.baslik_id) {
-            alert('Lütfen tüm alanları eksiksiz doldurunuz.');
+            MySwal.fire({
+                title: 'Tüm alanları doldurun!',
+                icon: 'warning',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-warning' },
+            });
             return;
         }
 
@@ -82,8 +128,28 @@ const YoneticiEtkinlikSayıKriter = () => {
             };
             setVeriler([...veriler, yeniVeri]);
             setFormData({ baslik_id: 0, baslik_no_min: 1, baslik_no_max: 1, fakulte_grup_id: 0, kadro_id: 0, deger: 0 });
+
+            MySwal.fire({
+                title: 'Faaliyet kriteri başarıyla eklendi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                timer: 1500,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Ekleme hatası:', err);
+            MySwal.fire({
+                title: 'Ekleme sırasında hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 
@@ -92,8 +158,28 @@ const YoneticiEtkinlikSayıKriter = () => {
             await axios.delete(`http://localhost:8080/api/yonetici/faaliyet-kriterleri/${id}`);
             setVeriler(veriler.filter((v) => v.id !== id));
             setSilmeMod(null);
+
+            MySwal.fire({
+                title: 'Kriter başarıyla silindi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                timer: 1500,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Silme hatası:', err);
+            MySwal.fire({
+                title: 'Silme sırasında hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 
@@ -106,8 +192,28 @@ const YoneticiEtkinlikSayıKriter = () => {
             await axios.put(`http://localhost:8080/api/yonetici/faaliyet-kriterleri/${duzenleMod.id}`, { deger: duzenleMod.deger });
             setVeriler(veriler.map((v) => (v.id === duzenleMod.id ? { ...v, deger: duzenleMod.deger } : v)));
             setDuzenleMod(null);
+
+            MySwal.fire({
+                title: 'Kriter başarıyla güncellendi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                timer: 1500,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Güncelleme hatası:', err);
+            MySwal.fire({
+                title: 'Güncelleme sırasında hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 

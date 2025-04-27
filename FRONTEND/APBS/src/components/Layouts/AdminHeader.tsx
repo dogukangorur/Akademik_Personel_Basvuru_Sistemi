@@ -116,64 +116,60 @@ const Header = () => {
 
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
-                    <div className="flex  align-center p-2 bg-green-700">
-                        <button
-                            type="button"
-                            className="collapse-icon flex-none dark:text-[#d0d2d6] hover:bg-green-700 dark:hover:bg-green-700 flex lg:hidden ltr:ml-2 rtl:mr-2 p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:bg-white-light/90 dark:hover:bg-dark/60"
-                            onClick={() => {
-                                dispatch(toggleSidebar());
-                            }}
-                        >
-                            <IconMenu className="w-5 h-5" />
-                        </button>
-                        <a href="/" className="w-[200px] flex items-center mx-3"><img src="../assets/images/kouLogo.png" alt="" className="w-full h-16 mx-3" /></a>
-                        <h4 className="flex justify-between items-center w-full text-white text-xl ml-4">Akademik Personel Basvuru Sistemi</h4>
-                        <div className="w-full flex justify-end items-center mr-5">
-                        <div className="dropdown shrink-0 flex rounded-full hover:bg-green-200 bg-green-500 p-2 items-center">
-                            <Dropdown
-                                offset={[0, 8]}
-                                placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                btnClassName="relative group block"
-                                button={
-                                <IconUser className="w-6 h-6 shrink-0" />}
-                            >
-                                <ul className="text-dark dark:text-white-dark !py-0 w-[230px] font-semibold dark:text-white-light/90  !rounded-full">
-                                    <li className="bg-green-100 rounded-t-xl">
-                                        <div className="flex items-center px-4 py-4">
-                                            <div className="ltr:pl-4 rtl:pr-4 truncate">
-                                                <h4 className="text-base">
-                                                    {"userInfo?.isim"+" "+"userInfo?.soyisim"}
-                                                    <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Aday</span>
-                                                </h4>
-                                                <button type="button" className="text-black/60 hover:text-success dark:text-dark-light/60 dark:hover:text-white">
-                                                    {"userInfo?.eposta"}
-                                                </button>
-                                            </div>
+            <div className="flex  items-center p-2 bg-green-700">
+                <button
+                    type="button"
+                    className="collapse-icon flex-none dark:text-[#d0d2d6] hover:bg-green-700 dark:hover:bg-green-700 flex lg:hidden ltr:ml-2 rtl:mr-2 p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:bg-white-light/90 dark:hover:bg-dark/60"
+                    onClick={() => {
+                        dispatch(toggleSidebar());
+                    }}
+                >
+                    <IconMenu className="w-5 h-5" />
+                </button>
+                <a href="/" className="w-[200px] flex items-center mx-3">
+                    <img src="../assets/images/kouLogo.png" alt="" className="w-full h-16 mx-3" />
+                </a>
+                <h4 className="flex justify-between items-center w-full text-white text-xl ml-4">Akademik Personel Basvuru Sistemi</h4>
+                <div className="w-full flex justify-end items-center mr-5">
+                    <div className="dropdown shrink-0 flex rounded-full hover:bg-green-200 bg-green-500 p-2 items-center">
+                        <Dropdown offset={[0, 8]} placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`} btnClassName="relative group block" button={<IconUser className="w-6 h-6 shrink-0" />}>
+                            <ul className="text-dark dark:text-white-dark !py-0 w-[230px] font-semibold dark:text-white-light/90  !rounded-full">
+                                <li className="bg-green-100 rounded-t-xl">
+                                    <div className="flex items-center px-4 py-4">
+                                        <div className="ltr:pl-4 rtl:pr-4 truncate">
+                                            <h4 className="text-base">
+                                                {'userInfo?.isim' + ' ' + 'userInfo?.soyisim'}
+                                                <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Aday</span>
+                                            </h4>
+                                            <button type="button" className="text-black/60 hover:text-success dark:text-dark-light/60 dark:hover:text-white">
+                                                {'userInfo?.eposta'}
+                                            </button>
                                         </div>
-                                    </li>
-                                    <li className="bg-green-50 hover:text-success">
-                                        <Link to="/admin/Profil" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
-                                            <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0 hover:!text-success hover:!bg-sussess-light" />
-                                            Profil
-                                        </Link>
-                                    </li>
-                                    <li className="border-t border-white-light dark:border-white-light/10 bg-green-50">
-                                        <button
-                                            className="text-danger !py-3 flex items-center hover:!text-success hover:!bg-sussess-light"
-                                            onClick={() => {
-                                                localStorage.removeItem('userInfo'); // Kullanıcı bilgisini kaldır
-                                                window.location.href = '/'; // Giriş sayfasına yönlendir
-                                            }}
-                                        >
-                                            <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0 group-hover:!text-success" />
-                                            Terket
-                                        </button>
-                                    </li>
-                                </ul>
-                            </Dropdown>
-                        </div>   
-                        </div>
+                                    </div>
+                                </li>
+                                <li className="bg-green-50 hover:text-success">
+                                    <Link to="/admin/Profil" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
+                                        <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0 hover:!text-success hover:!bg-sussess-light" />
+                                        Profil
+                                    </Link>
+                                </li>
+                                <li className="border-t border-white-light dark:border-white-light/10 bg-green-50">
+                                    <button
+                                        className="text-danger !py-3 flex items-center hover:!text-success hover:!bg-sussess-light"
+                                        onClick={() => {
+                                            localStorage.removeItem('userInfo'); // Kullanıcı bilgisini kaldır
+                                            window.location.href = '/'; // Giriş sayfasına yönlendir
+                                        }}
+                                    >
+                                        <IconLogout className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 rotate-90 shrink-0 group-hover:!text-success" />
+                                        Terket
+                                    </button>
+                                </li>
+                            </ul>
+                        </Dropdown>
                     </div>
+                </div>
+            </div>
         </header>
     );
 };

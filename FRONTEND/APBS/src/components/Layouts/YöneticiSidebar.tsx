@@ -62,7 +62,7 @@ const AdaySidear = () => {
             >
                 <div className="bg-white dark:bg-black h-full">
                     <div className="flex justify-between items-center px-4 py-3 bg-green-700 h-20">
-                        <NavLink to="/aday/anasayfa" className="main-logo flex items-center shrink-0">
+                        <NavLink to="/yonetici/anasayfa" className="main-logo flex items-center shrink-0">
                             <span className="text-2xl ltr:ml-1.5 rtl:mr-1.5 font-semibold align-middle lg:inline text-white-light">Menüler</span>
                         </NavLink>
 

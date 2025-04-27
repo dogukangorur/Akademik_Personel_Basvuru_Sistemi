@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface Basvuru {
     id: number;
@@ -17,7 +21,16 @@ export default function ApplicationReviewTable() {
         const ilanId = localStorage.getItem('secilenIlanId');
 
         if (!ilanId) {
-            console.error('Seçilen ilan bulunamadı.');
+            MySwal.fire({
+                title: 'Seçilen ilan bulunamadı!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
             return;
         }
 
@@ -25,8 +38,30 @@ export default function ApplicationReviewTable() {
             try {
                 const response = await axios.get<Basvuru[]>(`http://localhost:8080/api/juri/basvurular/${ilanId}`);
                 setApplications(response.data);
+
+                MySwal.fire({
+                    title: 'Başvurular başarıyla yüklendi!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-success' },
+                });
             } catch (error) {
                 console.error('Başvurular alınırken hata oluştu:', error);
+
+                MySwal.fire({
+                    title: 'Başvurular yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
             }
         };
 
@@ -35,7 +70,21 @@ export default function ApplicationReviewTable() {
 
     const handleIncele = (basvuruId: number) => {
         localStorage.setItem('secilenBasvuruId', basvuruId.toString());
-        window.location.href = '/juri/basvuru-degerlendirme';
+
+        MySwal.fire({
+            title: 'Başvuru detayına yönlendiriliyorsunuz...',
+            icon: 'info',
+            toast: true,
+            position: 'bottom-start',
+            timer: 1000,
+            showConfirmButton: false,
+            showCloseButton: true,
+            customClass: { popup: 'color-info' },
+        });
+
+        setTimeout(() => {
+            window.location.href = '/juri/basvuru-degerlendirme';
+        }, 1000);
     };
 
     return (

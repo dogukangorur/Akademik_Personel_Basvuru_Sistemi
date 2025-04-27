@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import AnimateHeight from 'react-animate-height';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const YoneticiFaaliyetTablosu = () => {
     const [active, setActive] = useState<string>('');
@@ -13,17 +17,57 @@ const YoneticiFaaliyetTablosu = () => {
     const [faaliyetler, setFaaliyetler] = useState<{ [key: number]: { id: number; ad: string; puan: number }[] }>({});
 
     useEffect(() => {
-        axios.get('http://localhost:8080/api/yonetici/basliklar').then((res) => {
-            setAccordionTitles(res.data);
-            res.data.forEach((b: any) => {
-                axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${b.id}`).then((etkinlikRes) => {
-                    setFaaliyetler((prev) => ({
-                        ...prev,
-                        [b.id]: etkinlikRes.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
-                    }));
+        axios
+            .get('http://localhost:8080/api/yonetici/basliklar')
+            .then((res) => {
+                setAccordionTitles(res.data);
+
+                MySwal.fire({
+                    title: 'Başlıklar yüklendi!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-success' },
+                });
+
+                res.data.forEach((b: any) => {
+                    axios
+                        .get(`http://localhost:8080/api/yonetici/etkinlikler/${b.id}`)
+                        .then((etkinlikRes) => {
+                            setFaaliyetler((prev) => ({
+                                ...prev,
+                                [b.id]: etkinlikRes.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+                            }));
+                        })
+                        .catch(() => {
+                            MySwal.fire({
+                                title: `Etkinlikler yüklenemedi (${b.baslik_adi})!`,
+                                icon: 'error',
+                                toast: true,
+                                position: 'bottom-start',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                showCloseButton: true,
+                                customClass: { popup: 'color-error' },
+                            });
+                        });
+                });
+            })
+            .catch(() => {
+                MySwal.fire({
+                    title: 'Başlıklar yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
                 });
             });
-        });
     }, []);
 
     const toggleAccordion = (key: number) => {
@@ -63,19 +107,54 @@ const YoneticiFaaliyetTablosu = () => {
             puan: yeniPuan,
         };
 
-        if (newEntryMode) {
-            await axios.post('http://localhost:8080/api/yonetici/etkinlik', payload);
-        } else {
-            await axios.put(`http://localhost:8080/api/yonetici/etkinlik/${editId}`, payload);
+        try {
+            if (newEntryMode) {
+                await axios.post('http://localhost:8080/api/yonetici/etkinlik', payload);
+
+                MySwal.fire({
+                    title: 'Yeni faaliyet eklendi!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-success' },
+                });
+            } else {
+                await axios.put(`http://localhost:8080/api/yonetici/etkinlik/${editId}`, payload);
+
+                MySwal.fire({
+                    title: 'Faaliyet düzenlendi!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-success' },
+                });
+            }
+
+            const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+            setFaaliyetler((prev) => ({
+                ...prev,
+                [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+            }));
+
+            handleIptal();
+        } catch (err) {
+            MySwal.fire({
+                title: 'Faaliyet kaydedilirken hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
-
-        const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
-        setFaaliyetler((prev) => ({
-            ...prev,
-            [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
-        }));
-
-        handleIptal();
     };
 
     const handleIptal = () => {
@@ -85,16 +164,41 @@ const YoneticiFaaliyetTablosu = () => {
     };
 
     const handleSil = async (key: number, id: number) => {
-        const found = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
-        const etkinlik = found.data.find((e: any) => e.baslık_no === id);
-        if (!etkinlik) return;
+        try {
+            const found = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+            const etkinlik = found.data.find((e: any) => e.baslık_no === id);
+            if (!etkinlik) return;
 
-        await axios.delete(`/etkinlik/${etkinlik.id}`);
-        const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
-        setFaaliyetler((prev) => ({
-            ...prev,
-            [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
-        }));
+            await axios.delete(`/etkinlik/${etkinlik.id}`);
+
+            const updated = await axios.get(`http://localhost:8080/api/yonetici/etkinlikler/${key}`);
+            setFaaliyetler((prev) => ({
+                ...prev,
+                [key]: updated.data.map((e: any) => ({ id: e.baslık_no, ad: e.aciklama, puan: e.puan })),
+            }));
+
+            MySwal.fire({
+                title: 'Faaliyet başarıyla silindi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 1500,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
+        } catch (err) {
+            MySwal.fire({
+                title: 'Faaliyet silinirken hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
+        }
     };
 
     return (

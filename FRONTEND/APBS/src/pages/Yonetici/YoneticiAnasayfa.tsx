@@ -13,8 +13,7 @@ const YoneticiAnasayfa = () => {
         <div>
             <Ilanlar />
         </div>
-
     );
-}
+};
 
 export default YoneticiAnasayfa;
