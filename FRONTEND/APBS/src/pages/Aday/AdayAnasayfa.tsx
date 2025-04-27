@@ -8,6 +8,8 @@ import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
 import { Dialog, Transition,Tab, TransitionChild, DialogPanel,DialogTitle } from '@headlessui/react';
 import React, { Fragment } from "react";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 const AdayAnasayfa = () => {
     type Ilan = {
         id: number;
@@ -21,7 +23,9 @@ const AdayAnasayfa = () => {
         fakulte_adi: string;
         kadro_adi: string;
     };
-
+    const navigate = useNavigate();
+    const storedUserInfo = localStorage.getItem('userInfo');
+    const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Anasayfa'));
@@ -53,15 +57,73 @@ const AdayAnasayfa = () => {
       setModalOpen(true);
     };
 
-    // başvuru için buton tetikleme
-    const handleApply = (id: BigInt) => {
+    const MySwal = withReactContent(Swal);
+    const handleApply = (id: BigInt, kadro:string) => {
         if (id) {
-          console.log(id);
+          fetch("http://localhost:8080/api/aday/kriterKontrol_1", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ kullaniciId: userInfo.kullaniciID, pozisyon:kadro})
+          }).then(response => response.json()) 
+          .then(data => {
+              if (data.success) {
+                fetch("http://localhost:8080/api/aday/puanHesapla", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ kullaniciId: userInfo.kullaniciID, ilanId:id, pozisyon:kadro})
+                }).then(response => response.json()).then(data => {
+                    if(data.success){
+                      MySwal.fire({
+                        title: "Başvuru Yapıldı !!!",
+                        toast: true,
+                        position: 'bottom-start',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        showCloseButton: true,
+                        customClass: {
+                            popup: `color-success`,
+                        }}).then(()=>{
+                          navigate("/aday/basvurularım");
+                      });;
+                    }
+                    else{
+                      MySwal.fire({
+                        title: data.message,
+                        toast: true,
+                        position: 'bottom-start',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        showCloseButton: true,
+                        customClass: {
+                            popup: `color-danger`,
+                        }});
+                    }
+                })
+
+              } else {
+                MySwal.fire({
+                  title: data.message + " Başvuru geçersiz !!!",
+                  toast: true,
+                  position: 'bottom-start',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  showCloseButton: true,
+                  customClass: {
+                      popup: `color-danger`,
+                  }});
+              }
+          })
+          .catch(error => {
+              console.error("Hata oluştu:", error);
+          });
         } else {
             console.log('id mevcut değil!');
         }
     };
-    // veri tabanından bilgi gelecek
 
     return (
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full ">
@@ -84,7 +146,7 @@ const AdayAnasayfa = () => {
                             {ilan.bolum_adi}
                           </span>
                         </div>
-                        <button className="btn btn-danger" onClick={() => handleApply(ilan.id)}>
+                        <button className="btn btn-danger" onClick={() => handleApply(ilan.id, ilan.kadro_adi)}>
                             BAŞVUR
                         </button>
                       </div>

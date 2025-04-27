@@ -225,7 +225,6 @@ CREATE TABLE IdariGorevlerVeUniversiteyeKatkiFaaliyetleri (
     gorev_birimi NVARCHAR(500) NOT NULL,
     yili DATE NOT NULL,
     idari_url NVARCHAR(500) NOT NULL,
-    guzel_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
     FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
@@ -236,6 +235,7 @@ CREATE TABLE GuzelSanatlarFaaliyetleri (
     kullanici_id INT NOT NULL,
     faaliyet_adi NVARCHAR(500) NOT NULL,
     yili DATE NOT NULL,
+    guzel_url NVARCHAR(500) NOT NULL,
     FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
     FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
@@ -244,6 +244,7 @@ CREATE TABLE Basvuru (
     aday_id INT NOT NULL,
     ilan_id INT NOT NULL,
     basvuru_tarihi DATE NOT NULL,
+    basvuru_puan_url NVARCHAR(500) NOT NULL,
     puanlanan_faaliyet_donemi ENUM('Profesör', 'Doçent', 'DR. Öğretim Üyesi') NOT NULL,
     basvuru_durum ENUM('Beklemede', 'Onaylandı', 'Reddedildi') NOT NULL DEFAULT 'Beklemede',
     FOREIGN KEY (aday_id) REFERENCES Kullanici(id) ON DELETE CASCADE,

@@ -107,7 +107,7 @@ const AdminAnasayfa = () => {
                                         <tr key={ilan.id}>
                                             <td>{ilan.id}</td>
                                             <td>
-                                                <div className="whitespace-nowrap">{ilan.baslik}</div>
+                                                <div className="whitespace-nowrap">{ilan.baslik.substring(0,25)}...</div>
                                             </td>
                                             <td>
                                                 {ilan.aciklama.substring(0,40)}...

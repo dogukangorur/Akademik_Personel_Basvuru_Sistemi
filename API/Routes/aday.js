@@ -25,7 +25,10 @@ const {
   profilIdariKayit,
   profilGuzelSanatlarKayit,
   veriGetir,
-  basvuruGetir
+  basvuruGetir,
+  kriterKontrol_1,
+  kriterKontrol_2,
+  puanHesapla
 
 } = require("../Controllers/aday-controller.js");
 
@@ -47,5 +50,8 @@ router.post("/profilIdariKayit", upload.array("files"),profilIdariKayit);
 router.post("/profilGuzelSanatlarKayit", upload.array("files"),profilGuzelSanatlarKayit);
 router.post("/veriGetir", veriGetir);
 router.post("/basvuruGetir", basvuruGetir);
+router.post("/kriterKontrol_1", kriterKontrol_1);
+router.post("/puanHesapla", puanHesapla);
+
 
 module.exports = router;
