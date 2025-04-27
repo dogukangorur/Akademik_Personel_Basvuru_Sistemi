@@ -19,6 +19,7 @@ router.get("/ilanlar-nihai-karar", controller.getNihaiKararaHazirIlanlar);
 
 //YoneticiNihaiKarar.tsx
 router.get("/ilan-basvurulari/:ilanId", controller.getIlanBasvurulariVeDegerlendirmeler);
+router.post("/nihai-karar-ver", controller.verNihaiKarar);
 
 //YoneticiFaaliyetTablosu.tsx
 // Başlıklar

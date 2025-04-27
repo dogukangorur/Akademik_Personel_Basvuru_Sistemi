@@ -99,12 +99,14 @@ CREATE TABLE Makaleler (
     makale_url NVARCHAR(500) NOT NULL,
     isBaslicaYazar BOOLEAN DEFAULT FALSE,
     isAsgariCalisma BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 CREATE TABLE BilimselToplantiFaaliyetleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     aktif BOOLEAN NOT NULL DEFAULT TRUE,
     etkinlik_id INT NOT NULL,
+    kullanici_id INT NOT NULL,
     yazarlar NVARCHAR(500) NOT NULL,
     bildiri_adi NVARCHAR(500) NOT NULL,
     konferansin_adi NVARCHAR(500) NOT NULL,
@@ -115,7 +117,8 @@ CREATE TABLE BilimselToplantiFaaliyetleri (
     bilimsel_url NVARCHAR(500) NOT NULL,
     isBaslicaYazar BOOLEAN DEFAULT FALSE,
     isAsgariCalisma BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 CREATE TABLE Kitaplar (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -131,7 +134,8 @@ CREATE TABLE Kitaplar (
     kitaplar_url NVARCHAR(500) NOT NULL,
     isBaslicaYazar BOOLEAN DEFAULT FALSE,
     isAsgariCalisma BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
+    FOREIGN KEY (etkinlik_id) REFERENCES Etkinlik(id) ON DELETE CASCADE,
+    FOREIGN KEY (kullanici_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
 CREATE TABLE Atiflar (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -400,6 +404,7 @@ CREATE TABLE BasvuruJuri (
     basvuru_id INT NOT NULL,
     degerlendime_raporu_doc NVARCHAR(250) NOT NULL,
     basvuru_degerlendirme_durum ENUM('Beklemede', 'Olumlu', 'Olumsuz') NOT NULL DEFAULT 'Beklemede',
+    yorum_metni NVARCHAR(1000),
     FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE,
     FOREIGN KEY (basvuru_id) REFERENCES Basvuru(id) ON DELETE CASCADE
 );
@@ -408,11 +413,9 @@ CREATE TABLE JuriIlan (
     ilan_id INT NOT NULL,
     juri_id INT NOT NULL,
     UNIQUE (ilan_id, juri_id),
-    -- Aynı juri aynı ilana birden fazla kez atanamaz
     FOREIGN KEY (ilan_id) REFERENCES Ilanlar(id) ON DELETE CASCADE,
     FOREIGN KEY (juri_id) REFERENCES Kullanici(id) ON DELETE CASCADE
 );
---Asgari Yayın/Etkinlik Sayısı Kriterleri Tablosu
 CREATE TABLE FaaliyetKriterleri (
     id INT AUTO_INCREMENT PRIMARY KEY,
     baslik_id INT NOT NULL,

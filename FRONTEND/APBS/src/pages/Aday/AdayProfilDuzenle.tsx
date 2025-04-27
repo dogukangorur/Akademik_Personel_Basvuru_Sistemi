@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { setPageTitle } from '../../store/themeConfigSlice';
-import axios from 'axios'; // Axios paketi yüklenmeli!!!
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const AdayProfilDuzenle = () => {
     const location = useLocation();
@@ -22,28 +26,67 @@ const AdayProfilDuzenle = () => {
         e.preventDefault();
 
         if (password !== passwordAgain) {
-            setMessage('Şifreler uyuşmuyor.');
+            MySwal.fire({
+                title: 'Şifreler uyuşmuyor!',
+                icon: 'warning',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-warning' },
+            });
             return;
         }
 
-        // API endpointi güncellenecek, bu örnekte localhost:3000/api/update-password olarak varsayıyoruz
-        /*try {
-            const response = await axios.post('http://localhost:3000/api/update-password', {
-                tc: userInfo?.TC, // TC'yi backend'de kullanıcıyı tanımak için kullanıyoruz
+        try {
+            const response = await axios.post('http://localhost:8080/api/kullanici/update-password', {
+                tc: userInfo?.TC,
                 newPassword: password,
             });
 
             if (response.data.success) {
-                setMessage('Şifre başarıyla güncellendi.');
+                MySwal.fire({
+                    title: 'Şifre başarıyla güncellendi!',
+                    icon: 'success',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-success' },
+                });
+
                 setPassword('');
                 setPasswordAgain('');
+                setMessage(''); // eski message temizlensin
             } else {
-                setMessage('Şifre güncellenemedi: ' + response.data.message);
+                MySwal.fire({
+                    title: 'Şifre güncellenemedi!',
+                    text: response.data.message,
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
             }
         } catch (error) {
             console.error(error);
-            setMessage('Sunucu hatası oluştu.');
-        }*/
+
+            MySwal.fire({
+                title: 'Sunucu hatası oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                timer: 2000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
+        }
     };
 
     return (
@@ -89,11 +132,13 @@ const AdayProfilDuzenle = () => {
                         </div>
                     </div>
 
-                    <br /><br /><br />
-                    <h4 className='mb-5 text-green-800 text-xl'>ŞİFRE GÜNCELLEME</h4>
+                    <br />
+                    <br />
+                    <br />
+                    <h4 className="mb-5 text-green-800 text-xl">ŞİFRE GÜNCELLEME</h4>
 
                     <form onSubmit={handleSubmit} className="flex items-center justify-center">
-                        <div className='w-[400px] flex justify-center flex-col'>
+                        <div className="w-[400px] flex justify-center flex-col">
                             <div className="grid grid-cols-1 flex flex-col sm:flex justify-between gap-2 mb-3 items-center">
                                 <input
                                     type="password"
@@ -118,14 +163,14 @@ const AdayProfilDuzenle = () => {
                                 <button
                                     type="submit"
                                     className="w-[120px] text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 
-                                    font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                                    font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                                >
                                     Kaydet
                                 </button>
                             </div>
                             {message && <p className="text-center text-sm mt-2 text-red-600">{message}</p>}
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>

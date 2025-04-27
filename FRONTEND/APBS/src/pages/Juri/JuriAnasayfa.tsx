@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface Ilan {
     id: number;
@@ -16,24 +20,69 @@ const JuriAnasayfa = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('/api/juri/ilanlarim', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
+                const storedUserInfo = localStorage.getItem('userInfo');
+                const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+                if (!userInfo) {
+                    MySwal.fire({
+                        title: 'Kullanıcı bilgisi bulunamadı!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-error' },
+                    });
+                    return;
+                }
+
+                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.id}`);
 
                 console.log("API'den dönen veri:", response.data);
 
                 if (Array.isArray(response.data)) {
                     setTableData(response.data);
-                } else {
-                    console.warn("Beklenmeyen veri formatı:", response.data);
-                    setTableData([]); // hatalı veri gelirse boş dizi ata
-                }
 
+                    MySwal.fire({
+                        title: 'İlanlar başarıyla yüklendi!',
+                        icon: 'success',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-success' },
+                    });
+                } else {
+                    console.warn('Beklenmeyen veri formatı:', response.data);
+                    setTableData([]);
+
+                    MySwal.fire({
+                        title: 'Beklenmeyen veri formatı!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'bottom-start',
+                        timer: 2000,
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-error' },
+                    });
+                }
             } catch (error) {
-                console.error("İlanlar alınırken hata oluştu:", error);
-                setTableData([]); // hata durumunda yine boş dizi
+                console.error('İlanlar alınırken hata oluştu:', error);
+                setTableData([]);
+
+                MySwal.fire({
+                    title: 'İlanlar yüklenirken hata oluştu!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    timer: 2000,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
             }
         };
 
@@ -41,8 +90,22 @@ const JuriAnasayfa = () => {
     }, []);
 
     const handleBasvuruyaGit = (ilanId: number) => {
-        localStorage.setItem("secilenIlanId", ilanId.toString());
-        window.location.href = "/juri/basvuru";
+        localStorage.setItem('secilenIlanId', ilanId.toString());
+
+        MySwal.fire({
+            title: 'Başvuru listesine yönlendiriliyorsunuz...',
+            icon: 'info',
+            toast: true,
+            position: 'bottom-start',
+            timer: 1000,
+            showConfirmButton: false,
+            showCloseButton: true,
+            customClass: { popup: 'color-info' },
+        });
+
+        setTimeout(() => {
+            window.location.href = '/juri/basvuru';
+        }, 1000);
     };
 
     return (
@@ -65,22 +128,24 @@ const JuriAnasayfa = () => {
                             <tr key={data.id} className="hover:bg-gray-50">
                                 <td className="border-gray-300 px-4 py-2">{data.ilanAdi}</td>
                                 <td className="border-gray-300 px-4 py-2">{data.tarihAraligi}</td>
-                                <td className={`border-gray-300 px-4 py-2 font-semibold ${
-                                    data.durum === 'Tamamlandı' ? 'text-green-600' :
-                                    data.durum === 'Değerlendirme Aşamasında' ? 'text-blue-600' :
-                                    data.durum === 'Başvuru Aşamasında' ? 'text-yellow-600' :
-                                    data.durum === 'İptal Edildi' ? 'text-red-600' :
-                                    'text-gray-600'
-                                }`}>
+                                <td
+                                    className={`border-gray-300 px-4 py-2 font-semibold ${
+                                        data.durum === 'Tamamlandı'
+                                            ? 'text-green-600'
+                                            : data.durum === 'Değerlendirme Aşamasında'
+                                            ? 'text-blue-600'
+                                            : data.durum === 'Başvuru Aşamasında'
+                                            ? 'text-yellow-600'
+                                            : data.durum === 'İptal Edildi'
+                                            ? 'text-red-600'
+                                            : 'text-gray-600'
+                                    }`}
+                                >
                                     {data.durum}
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruları Görüntüle">
-                                        <button
-                                            type="button"
-                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            onClick={() => handleBasvuruyaGit(data.id)}
-                                        >
+                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleBasvuruyaGit(data.id)}>
                                             Başvurular &gt;
                                         </button>
                                     </Tippy>

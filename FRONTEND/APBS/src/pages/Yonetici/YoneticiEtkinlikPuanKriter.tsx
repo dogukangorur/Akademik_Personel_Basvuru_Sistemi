@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface PuanKriterForm {
     baslik_id: number;
@@ -44,8 +48,28 @@ const YoneticiEtkinlikPuanKriter = () => {
             setListe(kriterRes.data);
             setBasliklar(baslikRes.data);
             setFakulteGruplari(fakulteRes.data);
+
+            MySwal.fire({
+                title: 'Veriler başarıyla yüklendi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 1500,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Veri çekme hatası:', err);
+            MySwal.fire({
+                title: 'Veriler yüklenirken hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 
@@ -62,7 +86,16 @@ const YoneticiEtkinlikPuanKriter = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (formData.fak_gur_id <= 0 || formData.poz_id <= 0 || formData.baslik_id <= 0) {
-            alert('Tüm alanları eksiksiz doldurunuz.');
+            MySwal.fire({
+                title: 'Tüm alanları eksiksiz doldurun!',
+                icon: 'warning',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-warning' },
+            });
             return;
         }
         try {
@@ -77,8 +110,28 @@ const YoneticiEtkinlikPuanKriter = () => {
                 asgari: 0,
                 azami: 0,
             });
+
+            MySwal.fire({
+                title: 'Puan kriteri başarıyla eklendi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 1500,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Kayıt ekleme hatası:', err);
+            MySwal.fire({
+                title: 'Kayıt eklenirken hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 
@@ -93,8 +146,28 @@ const YoneticiEtkinlikPuanKriter = () => {
             });
             await fetchData();
             setDuzenleMod(null);
+
+            MySwal.fire({
+                title: 'Kriter başarıyla güncellendi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 1500,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Güncelleme hatası:', err);
+            MySwal.fire({
+                title: 'Güncelleme sırasında hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 
@@ -103,8 +176,28 @@ const YoneticiEtkinlikPuanKriter = () => {
             await axios.delete(`http://localhost:8080/api/yonetici/puan-kriterleri/${silMod.id}`);
             await fetchData();
             setSilMod(null);
+
+            MySwal.fire({
+                title: 'Kriter başarıyla silindi!',
+                icon: 'success',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 1500,
+                showCloseButton: true,
+                customClass: { popup: 'color-success' },
+            });
         } catch (err) {
-            console.error('Silme hatası:', err);
+            MySwal.fire({
+                title: 'Silme sırasında hata oluştu!',
+                icon: 'error',
+                toast: true,
+                position: 'bottom-start',
+                showConfirmButton: false,
+                timer: 2000,
+                showCloseButton: true,
+                customClass: { popup: 'color-error' },
+            });
         }
     };
 

@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 interface Ilan {
     id: number;
@@ -17,21 +21,53 @@ const YoneticiIlanNihaiKarar = () => {
     useEffect(() => {
         const fetchIlanlar = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/yonetici/ilanlar-nihai-karar', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
+                const response = await axios.get('http://localhost:8080/api/yonetici/ilanlar-nihai-karar');
 
                 if (Array.isArray(response.data)) {
                     setTableData(response.data);
+
+                    // BAŞARI toast: İlanlar başarıyla yüklendi
+                    MySwal.fire({
+                        title: 'İlanlar başarıyla yüklendi!',
+                        icon: 'success',
+                        toast: true,
+                        position: 'bottom-start',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-success' },
+                    });
                 } else {
-                    console.warn("Beklenmeyen veri formatı:", response.data);
+                    console.warn('Beklenmeyen veri formatı:', response.data);
                     setTableData([]);
+
+                    // HATA toast: Beklenmeyen veri formatı
+                    MySwal.fire({
+                        title: 'Beklenmeyen veri formatı!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'bottom-start',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        showCloseButton: true,
+                        customClass: { popup: 'color-error' },
+                    });
                 }
             } catch (error) {
-                console.error("İlanlar alınırken hata oluştu:", error);
-                setError("İlanlar yüklenirken bir hata oluştu.");
+                console.error('İlanlar alınırken hata oluştu:', error);
+                setError('İlanlar yüklenirken bir hata oluştu.');
+
+                // HATA toast: API isteği başarısız
+                MySwal.fire({
+                    title: 'İlanlar yüklenemedi!',
+                    icon: 'error',
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    showCloseButton: true,
+                    customClass: { popup: 'color-error' },
+                });
             } finally {
                 setLoading(false);
             }
@@ -41,8 +77,20 @@ const YoneticiIlanNihaiKarar = () => {
     }, []);
 
     const handleBasvuruyaGit = (ilanId: number) => {
-        localStorage.setItem("secilenIlanId", ilanId.toString());
-        window.location.href = "/yonetici/nihai-karar"; // Detay sayfası
+        localStorage.setItem('secilenIlanId', ilanId.toString());
+        window.location.href = '/yonetici/nihai-karar';
+
+        // BİLGİ toast: Başvuru detayına yönlendiriliyor
+        MySwal.fire({
+            title: 'Başvuru detayına yönlendiriliyorsunuz...',
+            icon: 'info',
+            toast: true,
+            position: 'bottom-start',
+            showConfirmButton: false,
+            timer: 1500,
+            showCloseButton: true,
+            customClass: { popup: 'color-info' },
+        });
     };
 
     return (
@@ -74,11 +122,7 @@ const YoneticiIlanNihaiKarar = () => {
                                     <td className="border px-4 py-2 text-center">{data.tarihAraligi}</td>
                                     <td className="border px-4 py-2 text-center">
                                         <Tippy content="Başvuruları Görüntüle">
-                                            <button
-                                                type="button"
-                                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                                onClick={() => handleBasvuruyaGit(data.id)}
-                                            >
+                                            <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleBasvuruyaGit(data.id)}>
                                                 Değerlendirmeler &gt;
                                             </button>
                                         </Tippy>

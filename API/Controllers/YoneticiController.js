@@ -1,4 +1,5 @@
 const connection = require("../Service/connection.js");
+const nodemailer = require("nodemailer");
 
 //**YöneticiIlanJuri.tsx**
 const getIlanlarVeJuriDurumu = (req, res) => {
@@ -206,7 +207,7 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
         SELECT 
             b.id AS basvuru_id,
             CONCAT(k_ad.ad, ' ', k_ad.soyad) AS adayAdi,
-            'Başvuru Belgesi' AS belgeAdi, -- İstersen burada belge türünü detaylandırabilirsin
+            'Başvuru Belgesi' AS belgeAdi, 
             k_juri.ad AS juriAd,
             k_juri.soyad AS juriSoyad,
             bj.degerlendime_raporu_doc AS belgeURL,
@@ -248,6 +249,80 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
         });
 
         res.status(200).json(Object.values(grouped));
+    });
+};
+
+// Mail gönderici ayarları
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'umuttepetest@gmail.com', // Buraya kendi mail adresin
+        pass: 'yrwe gtou ciqk jqti'      // Buraya Gmail uygulama şifresi (normal şifre değil!)
+    }
+});
+
+// Nihai Karar Verme ve Mail Gönderme
+// Yönetici Nihai Karar Veriyor ve Mail Gönderiliyor
+const verNihaiKarar = (req, res) => {
+    const { basvuruId, karar } = req.body; // karar: 'Onaylandı' ya da 'Reddedildi'
+
+    if (!basvuruId || !karar) {
+        return res.status(400).json({ message: "Başvuru ID ve karar bilgisi gönderilmelidir." });
+    }
+
+    // 1. Basvuru durumunu güncelle (Basvuru tablosunda basvuru_durum alanı var)
+    const updateQuery = `
+        UPDATE Basvuru
+        SET basvuru_durum = ?
+        WHERE id = ?
+    `;
+
+    connection.query(updateQuery, [karar, basvuruId], (updateErr, updateResult) => {
+        if (updateErr) {
+            console.error("Başvuru durumu güncellenemedi:", updateErr);
+            return res.status(500).json({ message: "Başvuru güncellenirken hata oluştu." });
+        }
+
+        // Eğer güncelleme başarılıysa, adayın mail adresini alalım
+        const getAdayMailQuery = `
+            SELECT k.mail, k.ad, k.soyad
+            FROM Basvuru b
+            JOIN Kullanici k ON b.aday_id = k.id
+            WHERE b.id = ?
+        `;
+
+        connection.query(getAdayMailQuery, [basvuruId], (mailErr, mailResult) => {
+            if (mailErr || mailResult.length === 0) {
+                console.error("Aday bilgisi alınamadı:", mailErr);
+                return res.status(500).json({ message: "Adayın mail adresi bulunamadı." });
+            }
+
+            const adayMail = mailResult[0].mail;
+            const adayAdSoyad = `${mailResult[0].ad} ${mailResult[0].soyad}`;
+
+            // 3. Maili oluştur ve gönder
+            const subject = karar === "Onaylandı" ? "Akademik Başvurunuz Onaylandı" : "Akademik Başvurunuz Reddedildi";
+            const text = karar === "Onaylandı"
+                ? `Sayın ${adayAdSoyad},\n\nTebrikler! Akademik personel başvurunuz olumlu sonuçlanmıştır. Detaylar için sisteme giriş yapabilirsiniz.\n\nKocaeli Üniversitesi`
+                : `Sayın ${adayAdSoyad},\n\nÜzgünüz, akademik personel başvurunuz olumsuz sonuçlanmıştır. Detaylı bilgi için sisteme giriş yapabilirsiniz.\n\nKocaeli Üniversitesi`;
+
+            const mailOptions = {
+                from: '"KOÜ Akademik Personel Sistemi" <seninmail@gmail.com>',
+                to: adayMail,
+                subject,
+                text
+            };
+
+            transporter.sendMail(mailOptions, (sendErr, info) => {
+                if (sendErr) {
+                    console.error("Mail gönderimi sırasında hata oluştu:", sendErr);
+                    return res.status(500).json({ message: "Başvuru kaydedildi ancak e-posta gönderilemedi." });
+                }
+
+                console.log("Mail başarıyla gönderildi:", info.response);
+                res.status(200).json({ message: "Başvuru durumu güncellendi ve bilgilendirme maili gönderildi." });
+            });
+        });
     });
 };
 
@@ -453,5 +528,6 @@ module.exports = {
     getPuanKriterleri,
     addPuanKriteri,
     updatePuanKriteri,
-    deletePuanKriteri
+    deletePuanKriteri,
+    verNihaiKarar
 };

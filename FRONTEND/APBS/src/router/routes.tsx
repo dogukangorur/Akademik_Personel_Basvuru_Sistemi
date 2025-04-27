@@ -17,6 +17,7 @@ const AdayProfilDuzenle = lazy(() => import('../pages/Aday/AdayProfilDuzenle'));
 const AdminAnasayfa = lazy(() => import('../pages/Admin/AdminAnasayfa'));
 const AdminEtkinlik = lazy(() => import('../pages/Admin/AdminEtkinlik'));
 const AdminIlanOlustur = lazy(() => import('../pages/Admin/AdminIlanOlustur'));
+const AdminProfilDuzenle = lazy(() => import('../pages/Admin/AdminProfilDuzenle'));
 
 //Yonetici
 const YoneticiAnasayfa = lazy(() => import('../pages/Yonetici/YoneticiAnasayfa'));
@@ -27,10 +28,12 @@ const YoneticiJuriAtama = lazy(() => import('../pages/Yonetici/YoneticiJuriAtama
 const YoneticiFaaliyetTablosu = lazy(() => import('../pages/Yonetici/YoneticiFaaliyetTablosu'));
 const YoneticiEtkinlikSayıKriter = lazy(() => import('../pages/Yonetici/YoneticiEtkinlikSayıKriter'));
 const YoneticiEtkinlikPuanKriter = lazy(() => import('../pages/Yonetici/YoneticiEtkinlikPuanKriter'));
+const YoneticiProfilDuzenle = lazy(() => import('../pages/Yonetici/YoneticiProfilDuzenle'));
 //Jüri
 const JuriAnasayfa = lazy(() => import('../pages/Juri/JuriAnasayfa'));
 const JuriBasvuru = lazy(() => import('../pages/Juri/JuriBasvuru'));
 const JuriBasvuruDegerlendirme = lazy(() => import('../pages/Juri/JuriBasvuruDegerlendirme'));
+const JuriProfilDuzenle = lazy(() => import('../pages/Juri/JuriProfilDuzenle'));
 
 const routes = [
     // index sayfası
@@ -81,6 +84,12 @@ const routes = [
     {
         path: '/admin/ilan-basvuru-goruntule',
         element: <AdminIlanBasvuru />,
+        layout: 'admin',
+    },
+    //Admin profil duzenleme
+    {
+        path: '/admin/profil-duzenle',
+        element: <AdminProfilDuzenle />,
         layout: 'admin',
     },
 
@@ -135,6 +144,12 @@ const routes = [
         element: <JuriBasvuruDegerlendirme />,
         layout: 'juri',
     },
+    //Jüri profil düzenleme
+    {
+        path: '/juri/profil-duzenle',
+        element: <JuriProfilDuzenle />,
+        layout: 'juri',
+    },
 
     //Yönetici
     //Yönetici ana sayfa
@@ -184,6 +199,12 @@ const routes = [
     {
         path: '/yonetici/etkinlik-puan-kriterleri',
         element: <YoneticiEtkinlikPuanKriter />,
+        layout: 'yonetici',
+    },
+    //Yönetici profil düzenleme
+    {
+        path: '/yonetici/profil-duzenle',
+        element: <YoneticiProfilDuzenle />,
         layout: 'yonetici',
     },
 ];
