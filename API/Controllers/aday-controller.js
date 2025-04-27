@@ -190,7 +190,6 @@ exports.profilBilimselKayit = async (req,res) =>{
         for (let i = 0; i < bilimselParsed.length; i++) {
           const bilimsel = bilimselParsed[i];
           const dosya = req.files[i];
-          console.log(dosya);
         
         if (dosya) {
             const tamYol = path.join(dosyaKlasoru, bilimsel.fileName);
