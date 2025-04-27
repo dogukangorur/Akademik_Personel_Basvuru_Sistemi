@@ -193,7 +193,7 @@ exports.profilBilimselKayit = async (req,res) =>{
           console.log(dosya);
         
         if (dosya) {
-            const tamYol = path.join(dosyaKlasoru, makale.fileName);
+            const tamYol = path.join(dosyaKlasoru, bilimsel.fileName);
             fs.writeFileSync(tamYol, dosya.buffer);
         }
 
