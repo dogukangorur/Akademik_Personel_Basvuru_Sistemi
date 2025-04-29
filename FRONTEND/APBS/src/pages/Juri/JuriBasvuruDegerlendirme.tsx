@@ -20,6 +20,7 @@ const JuriBasvuruDegerlendirme = () => {
     const [yorum, setYorum] = useState<string>('');
 
     const secilenAdayAdi = localStorage.getItem('secilenAdayAdi') || 'Aday Adı Bulunamadı';
+    const secilenAdayAd = localStorage.getItem('secilenAdayAd') || 'Aday Adı Bulunamadı';
     const secilenBasvuruId = localStorage.getItem('secilenBasvuruId');
     const storedUserInfo = localStorage.getItem('userInfo');
     const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
@@ -161,7 +162,7 @@ const JuriBasvuruDegerlendirme = () => {
             {/* 1. Alan: Belgeler */}
             <div>
                 <h3 className="text-lg mb-4">
-                    İncelenen Aday: <span className="font-bold">{secilenAdayAdi}</span>
+                    İncelenen Aday: <span className="font-bold">{secilenAdayAd} {secilenAdayAdi}</span>
                 </h3>
                 <div className="border rounded p-4 mb-5">
                     <h4 className="mb-3">Belgeler ve Tablolar</h4>
@@ -194,15 +195,30 @@ const JuriBasvuruDegerlendirme = () => {
                                     </td>
                                     <td className="px-4 py-2 text-center">
                                         <Tippy content="Belgeyi indir">
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    (window.location.href = `http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${belge.dosyaAdi}`)
+                                        <button
+                                            type="button"
+                                            onClick={async () => {
+                                                try {
+                                                    const response = await fetch(`http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${belge.dosyaAdi}`);
+                                                    if (!response.ok) {
+                                                        throw new Error('Dosya indirilemedi');
+                                                    }
+                                                    const blob = await response.blob();
+                                                    const url = window.URL.createObjectURL(blob);
+                                                    const a = document.createElement('a');
+                                                    a.href = url;
+                                                    a.download = belge.dosyaAdi;
+                                                    document.body.appendChild(a);
+                                                    a.click();
+                                                    a.remove();
+                                                } catch (error) {
+                                                    console.error('İndirme hatası:', error);
                                                 }
-                                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            >
-                                                İndir
-                                            </button>
+                                            }}
+                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+                                        >
+                                            İndir
+                                        </button>
                                         </Tippy>
                                     </td>
                                 </tr>

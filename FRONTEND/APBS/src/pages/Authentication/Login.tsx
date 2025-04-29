@@ -80,7 +80,6 @@ const LoginBoxed = () => {
                 rolID:String(data.rolID)
             };
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
-            console.log(userInfo);
             navigate('/aday/anasayfa');
         } catch (error) {
             // İstek sırasında hata olursa mesajı ayarla
@@ -118,9 +117,10 @@ const LoginBoxed = () => {
                 })
                 return;
             }
+            
             // Kullanıcı bilgilerini kaydet
             const userInfo = {
-                kullaniciID: data.data[0].id,
+                kullaniciID: data.data[0].kullaniciID,
                 Ad: data.data[0].ad,
                 Soyad: data.data[0].soyad,
                 TC : data.data[0].tc,
@@ -132,12 +132,16 @@ const LoginBoxed = () => {
                 rolID:String(data.data[0].rolID)
             };
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
+         
             if(data.data[0].rolID===1){
                 navigate('/admin/anasayfa');
+               
             }else if(data.data[0].rolID===3){
                 navigate('/juri/anasayfa');
+               
             }else{
                 navigate('/yonetici/anasayfa');
+               
             }
             
         } catch (error) {

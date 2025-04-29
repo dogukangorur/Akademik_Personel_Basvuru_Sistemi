@@ -725,7 +725,7 @@ const AdayProfil = () => {
           body: formData
         }).then(()=>
             MySwal.fire({
-                title: 'Araştırmalar Kaydedildi.',
+                title: 'Ödüller Kaydedildi.',
                 toast: true,
                 position: 'bottom-start',
                 showConfirmButton: false,

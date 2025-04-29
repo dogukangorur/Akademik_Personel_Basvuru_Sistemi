@@ -1116,7 +1116,7 @@ exports.puanHesapla = async (req, res) => {
       });
 
       IdariGorevlerVeUniversiteyeKatkiFaaliyetleri.forEach(idari => {
-        idarPuan +=idari.puan;
+        idariPuan +=idari.puan;
       });
 
       GuzelSanatlarFaaliyetleri.forEach(guzel => {

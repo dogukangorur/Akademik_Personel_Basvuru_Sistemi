@@ -36,13 +36,14 @@ const JuriAnasayfa = () => {
                     });
                     return;
                 }
+            
+                console.log(userInfo);
+                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.kullaniciID}`);
 
-                const response = await axios.get(`http://localhost:8080/api/juri/ilanlarim/${userInfo.id}`);
+                console.log("API'den dönen veri:", response.data.data[0]);  
 
-                console.log("API'den dönen veri:", response.data);
-
-                if (Array.isArray(response.data)) {
-                    setTableData(response.data);
+                if (Array.isArray(response.data.data)) {
+                    setTableData(response.data.data);
 
                     MySwal.fire({
                         title: 'İlanlar başarıyla yüklendi!',
@@ -55,7 +56,7 @@ const JuriAnasayfa = () => {
                         customClass: { popup: 'color-success' },
                     });
                 } else {
-                    console.warn('Beklenmeyen veri formatı:', response.data);
+                    console.warn('Beklenmeyen veri formatı:', response.data.data);
                     setTableData([]);
 
                     MySwal.fire({

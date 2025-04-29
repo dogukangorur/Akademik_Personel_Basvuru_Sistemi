@@ -9,6 +9,7 @@ const MySwal = withReactContent(Swal);
 
 interface Basvuru {
     id: number;
+    ad:string;
     aday_adi: string;
     tarih: string;
     basvuru_durum: 'Beklemede' | 'Onaylandı' | 'Reddedildi';
@@ -19,7 +20,7 @@ export default function ApplicationReviewTable() {
 
     useEffect(() => {
         const ilanId = localStorage.getItem('secilenIlanId');
-
+        console.log(ilanId);
         if (!ilanId) {
             MySwal.fire({
                 title: 'Seçilen ilan bulunamadı!',
@@ -68,9 +69,10 @@ export default function ApplicationReviewTable() {
         fetchData();
     }, []);
 
-    const handleIncele = (basvuruId: number, adayAdi: string) => {
+    const handleIncele = (basvuruId: number, adayAdi: string, adaySoyadi:string) => {
         localStorage.setItem('secilenBasvuruId', basvuruId.toString());
-        localStorage.setItem('secilenAdayAdi', adayAdi);
+        localStorage.setItem('secilenAdayAd', adayAdi);
+        localStorage.setItem('secilenAdayAdi', adaySoyadi);
 
         MySwal.fire({
             title: 'Başvuru detayına yönlendiriliyorsunuz...',
@@ -108,7 +110,7 @@ export default function ApplicationReviewTable() {
                         {applications.map((app, index) => (
                             <tr key={app.id} className="hover:bg-gray-50">
                                 <td className="px-4 py-2 text-center">{index + 1}</td>
-                                <td className="px-4 py-2">{app.aday_adi}</td>
+                                <td className="px-4 py-2">{app.ad} {app.aday_adi}</td>
                                 <td className="px-4 py-2">{app.tarih}</td>
                                 <td
                                     className={`px-4 py-2 font-semibold ${
@@ -119,7 +121,7 @@ export default function ApplicationReviewTable() {
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruyu İncele">
-                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id, app.aday_adi)}>
+                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id, app.ad ,app.aday_adi)}>
                                             İncele &gt;
                                         </button>
                                     </Tippy>

@@ -164,36 +164,6 @@ const AdayProfilGoruntule = () => {
                         </table> 
 
 
-<h4 className='my-5 text-lg font-bold text-green-800'>Kitaplarım</h4>
-
-                               <table className='table-fixed'>
-                            <thead>
-                                <tr>
-                                    <th>Yazarlar</th>
-                                    <th>Kitap Adı</th>
-                                    <th>Baskı Sayısı</th>
-                                    <th>Yayınlandığı Yer</th>
-                                    <th>Tarih</th>
-                                    <th>Faaliyet</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {kitap.map((kitap,index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{kitap.yazarlar}</td>
-                                            <td>{kitap.kitap_adi}</td>
-                                            <td>{kitap.baski_sayisi}</td>
-                                            <td>{kitap.yayinlandigi_yer}</td>
-                                            <td>{new Date(kitap.tarih).toISOString().split("T")[0]}</td>
-                                            <td>{kitap.aciklama}</td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table> 
-
-
                         <h4 className='my-5 text-lg font-bold text-green-800'>Atıflarım</h4>
 
                                <table className='table-fixed'>
