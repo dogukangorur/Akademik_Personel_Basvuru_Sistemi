@@ -90,7 +90,6 @@ const getBasvurularByIlan = async (req, res) => {
     }
 };
 
-// 🎯 Jüri değerlendirme dosyasını yükle ve veritabanına kaydet
 const uploadDegerlendirmeDosyasi = async (req, res) => {
     const basvuruId = req.params.basvuruId;
     const juriId = req.body.juriId;
@@ -107,29 +106,51 @@ const uploadDegerlendirmeDosyasi = async (req, res) => {
             SET degerlendime_raporu_doc = ?
             WHERE basvuru_id = ? AND juri_id = ?
         `;
-        await connection.pool.query(sql, [dosyaAdi, basvuruId, juriId]);
+        const values = [dosyaAdi, basvuruId, juriId];
 
-        res.status(200).json({ message: 'Dosya başarıyla yüklendi.' });
+     
+        connection.query(sql, values, (error, data) => {
+            if (error) {
+                console.error('Error executing query:', error);
+                return res.status(500).json({ success: false, message: error.message });
+            }
+
+            if (data.affectedRows === 0) {
+                return res.status(404).json({ success: false, message: "İlan bulunamadı." });
+            }
+
+            
+            return res.status(200).json({ message: 'Dosya başarıyla yüklendi.' });
+        });
+
     } catch (error) {
         console.error('Değerlendirme dosyası kaydedilirken hata:', error);
-        res.status(500).json({ error: 'Dosya kaydedilemedi.' });
+        return res.status(500).json({ error: 'Dosya kaydedilemedi.' });
     }
 };
 
-// 🎯 Jüri nihai sonucu ve yorumu kaydet
+
 const kaydetNihaiSonuc = async (req, res) => {
     const basvuruId = req.params.basvuruId;
     const { juriId, nihaiSonuc, yorum } = req.body;
 
     try {
         const sql = `
-            UPDATE BasvuruJuri
-            SET basvuru_degerlendirme_durum = ?, yorum_metni = ?
-            WHERE basvuru_id = ? AND juri_id = ?
+        INSERT INTO BasvuruJuri (juri_id,degerlendime_raporu_doc,basvuru_degerlendirme_durum,basvuru_id,yorum_metni)
+        VALUES(?,?,?,?,?)
         `;
-        await connection.pool.query(sql, [nihaiSonuc, yorum, basvuruId, juriId]);
-
-        res.status(200).json({ message: 'Nihai sonuç ve yorum başarıyla kaydedildi.' });
+        const values =[juriId,rapor,nihaiSonuc,,basvuruId,yorum];
+        connection.query(sql, values, (error, data) => {
+            if (error) {
+                console.error('Error executing query:', error);
+                return res.status(500).json({ success: false, message: error.message });
+            }
+    
+            if (data.length === 0) {
+                return res.status(404).json({ success: false, message: "İlan bulunamadı." });
+            }
+           return res.status(200).json(data);
+        });
     } catch (error) {
         console.error('Nihai sonuç kaydedilirken hata:', error);
         res.status(500).json({ error: 'Sonuç kaydedilemedi.' });
@@ -224,15 +245,18 @@ const downloadBelge = (req, res) => {
 
     let folderPath;
     if (type === 'puan') {
-        folderPath = path.join(__dirname, '../STORAGE/puan/');
+        folderPath = path.join(__dirname, '../../STORAGE/puan/');
     } else if (type === 'profil') {
-        folderPath = path.join(__dirname, '../STORAGE/profil/');
+        folderPath = path.join(__dirname, '../../STORAGE/profil/');
     } else {
         return res.status(400).json({ error: "Geçersiz belge türü." });
     }
 
-    const filePath = path.join(folderPath, filename);
-
+    const safeFilename = path.basename(filename); // ../ gibi şeyleri atar
+    const filePath = path.join(folderPath, safeFilename);
+    console.log("Belge tipi:", type);
+    console.log("Dosya adı:", filename);
+    console.log("Tam dosya yolu:", filePath);
     // Dosya gerçekten var mı kontrol ediyoruz
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
@@ -249,6 +273,32 @@ const downloadBelge = (req, res) => {
     });
 };
 
+const goruntuleBelge = (req, res) => {
+    const { type, filename } = req.params;
+
+    let folderPath;
+    if (type === 'puan') {
+        folderPath = path.join(__dirname, '../../STORAGE/puan/');
+    } else if (type === 'profil') {
+        folderPath = path.join(__dirname, '../../STORAGE/profil/');
+    } else {
+        return res.status(400).json({ error: "Geçersiz belge türü." });
+    }
+
+    const safeFilename = path.basename(filename); // güvenlik için
+    const filePath = path.join(folderPath, safeFilename);
+
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error('Dosya bulunamadı:', filePath);
+            return res.status(404).json({ error: "Dosya bulunamadı." });
+        }
+
+        res.type('application/pdf'); // MIME tipi belirt
+        res.sendFile(filePath);
+    });
+};
+
 
 module.exports = {
     getAssignedIlansForJuri,
@@ -257,4 +307,5 @@ module.exports = {
     kaydetNihaiSonuc,
     getAdayBelgeleri,
     downloadBelge,
+    goruntuleBelge
 };

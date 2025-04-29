@@ -121,7 +121,7 @@ const JuriBasvuruDegerlendirme = () => {
 
         try {
             await axios.post(`http://localhost:8080/api/juri/basvuru/${secilenBasvuruId}/kaydet-nihai-sonuc`, {
-                juriId: userInfo.id,
+                juriId: userInfo.kullaniciID,
                 nihaiSonuc,
                 yorum,
             });
@@ -181,17 +181,17 @@ const JuriBasvuruDegerlendirme = () => {
                                     <td className="py-2">{belge.kategori}</td>
                                     <td>{belge.dosyaAdi}</td>
                                     <td className="px-4 py-2 text-center">
-                                        <Tippy content="Belgeyi görüntüle">
-                                            <button
-                                                type="button"
-                                                onClick={() =>
-                                                    window.open(`http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${belge.dosyaAdi}`, '_blank')
-                                                }
-                                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-                                            >
-                                                Görüntüle
-                                            </button>
-                                        </Tippy>
+                                    <Tippy content="Belgeyi görüntüle">
+    <button
+        type="button"
+        onClick={() =>
+            window.open(`http://localhost:8080/api/juri/view/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`, '_blank')
+        }
+        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+    >
+        Görüntüle
+    </button>
+</Tippy>
                                     </td>
                                     <td className="px-4 py-2 text-center">
                                         <Tippy content="Belgeyi indir">
@@ -199,7 +199,7 @@ const JuriBasvuruDegerlendirme = () => {
                                             type="button"
                                             onClick={async () => {
                                                 try {
-                                                    const response = await fetch(`http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${belge.dosyaAdi}`);
+                                                    const response = await fetch(`http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`);
                                                     if (!response.ok) {
                                                         throw new Error('Dosya indirilemedi');
                                                     }
