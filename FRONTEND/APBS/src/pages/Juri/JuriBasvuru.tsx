@@ -68,8 +68,9 @@ export default function ApplicationReviewTable() {
         fetchData();
     }, []);
 
-    const handleIncele = (basvuruId: number) => {
+    const handleIncele = (basvuruId: number, adayAdi: string) => {
         localStorage.setItem('secilenBasvuruId', basvuruId.toString());
+        localStorage.setItem('secilenAdayAdi', adayAdi);
 
         MySwal.fire({
             title: 'Başvuru detayına yönlendiriliyorsunuz...',
@@ -118,7 +119,7 @@ export default function ApplicationReviewTable() {
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruyu İncele">
-                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id)}>
+                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id, app.aday_adi)}>
                                             İncele &gt;
                                         </button>
                                     </Tippy>

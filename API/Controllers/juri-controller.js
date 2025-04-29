@@ -1,4 +1,6 @@
 const connection = require("../Service/connection");
+const path = require('path');
+const fs = require('fs');
 
 // 🎯 Jüriye atanmış ilanları getir (anasayfa)
 const getAssignedIlansForJuri = async (req, res) => {
@@ -114,9 +116,111 @@ const kaydetNihaiSonuc = async (req, res) => {
     }
 };
 
+// Adayın tüm belgelerini getir
+const getAdayBelgeleri = async (req, res) => {
+    const basvuruId = req.params.basvuruId;
+
+    try {
+        // 1. Basvuru tablosundan aday_id ve puan tablosu url'yi alalım
+        const [basvuruResult] = await connection.pool.query(
+            `SELECT aday_id, basvuru_puan_url FROM Basvuru WHERE id = ?`,
+            [basvuruId]
+        );
+
+        if (basvuruResult.length === 0) {
+            return res.status(404).json({ error: "Başvuru bulunamadı." });
+        }
+
+        const adayId = basvuruResult[0].aday_id;
+        const basvuruPuanUrl = basvuruResult[0].basvuru_puan_url;
+
+        const belgeler = [];
+
+        // 2. Başvuru puan tablosunu ekle
+        if (basvuruPuanUrl) {
+            belgeler.push({
+                kategori: "Puan Tablosu",
+                dosyaAdi: basvuruPuanUrl,
+                url: `/storage/puan/${basvuruPuanUrl}`, // ✅ Artık doğru klasör
+            });
+        }
+
+        // 3. Diğer belgeleri sırayla çekelim
+        const belgeTablolari = [
+            { tablo: "Makaleler", kolon: "makale_url", kategori: "Makale" },
+            { tablo: "BilimselToplantiFaaliyetleri", kolon: "bilimsel_url", kategori: "Bildiri" },
+            { tablo: "Kitaplar", kolon: "kitaplar_url", kategori: "Kitap" },
+            { tablo: "Atiflar", kolon: "atiflar_url", kategori: "Atıf" },
+            { tablo: "EgitimOgretimFaaliyetleri", kolon: "egitim_url", kategori: "Eğitim-Öğretim" },
+            { tablo: "TezYoneticiligi", kolon: "tez_url", kategori: "Tez Yöneticiliği" },
+            { tablo: "Patentler", kolon: "patent_url", kategori: "Patent" },
+            { tablo: "ArastirmaProjeleri", kolon: "arastirma_url", kategori: "Araştırma Projesi" },
+            { tablo: "EditorlukHakemlik", kolon: "editor_url", kategori: "Editörlük-Hakemlik" },
+            { tablo: "Oduller", kolon: "odul_url", kategori: "Ödül" },
+            { tablo: "IdariGorevlerVeUniversiteyeKatkiFaaliyetleri", kolon: "idari_url", kategori: "İdari Görev" },
+            { tablo: "GuzelSanatlarFaaliyetleri", kolon: "guzel_url", kategori: "Güzel Sanatlar" },
+        ];
+
+        for (const belgeTablo of belgeTablolari) {
+            const query = `SELECT ${belgeTablo.kolon} AS belge FROM ${belgeTablo.tablo} WHERE kullanici_id = ? AND aktif = TRUE`;
+            const [results] = await connection.pool.query(query, [adayId]);
+
+            results.forEach((row) => {
+                if (row.belge) {
+                    belgeler.push({
+                        kategori: belgeTablo.kategori,
+                        dosyaAdi: row.belge,
+                        url: `/storage/profil/${row.belge}`, // ✅ Artık doğru klasör
+                    });
+                }
+            });
+        }
+
+        res.status(200).json(belgeler);
+
+    } catch (error) {
+        console.error("Aday belgeleri alınırken hata:", error);
+        res.status(500).json({ error: "Belgeler getirilemedi." });
+    }
+};
+
+// Belgeyi güvenli bir şekilde indirme
+const downloadBelge = (req, res) => {
+    const { type, filename } = req.params;
+
+    let folderPath;
+    if (type === 'puan') {
+        folderPath = path.join(__dirname, '../STORAGE/puan');
+    } else if (type === 'profil') {
+        folderPath = path.join(__dirname, '../STORAGE/profil');
+    } else {
+        return res.status(400).json({ error: "Geçersiz belge türü." });
+    }
+
+    const filePath = path.join(folderPath, filename);
+
+    // Dosya gerçekten var mı kontrol ediyoruz
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error('Dosya bulunamadı:', filePath);
+            return res.status(404).json({ error: "Dosya bulunamadı." });
+        }
+
+        res.download(filePath, filename, (err) => {
+            if (err) {
+                console.error('Dosya indirilemedi:', err);
+                res.status(500).json({ error: "Dosya indirilemedi." });
+            }
+        });
+    });
+};
+
+
 module.exports = {
     getAssignedIlansForJuri,
     getBasvurularByIlan,
     uploadDegerlendirmeDosyasi,
     kaydetNihaiSonuc,
+    getAdayBelgeleri,
+    downloadBelge,
 };

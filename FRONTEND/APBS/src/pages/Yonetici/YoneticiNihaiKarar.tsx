@@ -115,6 +115,8 @@ const YoneticiNihaiKarar = () => {
                 karar,
             });
 
+            setBasvurular((prev) => prev.filter((b) => b.id !== basvuruId));
+
             // BAŞARI toast: Karar verildi ve mail gönderildi
             MySwal.fire({
                 title: response.data.message,
@@ -172,7 +174,7 @@ const YoneticiNihaiKarar = () => {
 
                                             <div className="flex items-center justify-between text-sm">
                                                 <span>📎 Yüklenen Belge</span>
-                                                <a href={degerlendirme.belgeURL} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                                                <a href={degerlendirme.belgeURL} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
                                                     Görüntüle / İndir
                                                 </a>
                                             </div>

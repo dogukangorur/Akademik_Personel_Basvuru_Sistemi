@@ -1,5 +1,6 @@
 const connection = require("../Service/connection.js");
 const nodemailer = require("nodemailer");
+const path = require('path');
 
 //**YöneticiIlanJuri.tsx**
 const getIlanlarVeJuriDurumu = (req, res) => {
@@ -210,7 +211,7 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
             'Başvuru Belgesi' AS belgeAdi, 
             k_juri.ad AS juriAd,
             k_juri.soyad AS juriSoyad,
-            bj.degerlendime_raporu_doc AS belgeURL,
+            bj.degerlendime_raporu_doc AS belgeDosyaAdi,
             bj.aciklama AS metin,
             bj.basvuru_degerlendirme_durum AS juriDegerlendirme
         FROM Basvuru b
@@ -227,7 +228,6 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
             return res.status(500).json({ message: "Veri alınamadı." });
         }
 
-        // Verileri başvuru bazında grupla
         const grouped = {};
         results.forEach(row => {
             const basvuruId = row.basvuru_id;
@@ -240,9 +240,12 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
                 };
             }
 
+            const belgeURL = `http://localhost:8080/api/yonetici/download/juri/${row.belgeDosyaAdi}`;
+
+
             grouped[basvuruId].juriDegerlendirmeleri.push({
                 juriAdi: `${row.juriAd} ${row.juriSoyad}`,
-                belgeURL: row.belgeURL,
+                belgeURL,
                 metin: row.metin,
                 juriDegerlendirme: row.juriDegerlendirme
             });
@@ -307,7 +310,7 @@ const verNihaiKarar = (req, res) => {
                 : `Sayın ${adayAdSoyad},\n\nÜzgünüz, akademik personel başvurunuz olumsuz sonuçlanmıştır. Detaylı bilgi için sisteme giriş yapabilirsiniz.\n\nKocaeli Üniversitesi`;
 
             const mailOptions = {
-                from: '"KOÜ Akademik Personel Sistemi" <seninmail@gmail.com>',
+                from: '"KOÜ Akademik Personel Sistemi" <umuttepetest@gmail.com>',
                 to: adayMail,
                 subject,
                 text
@@ -504,6 +507,26 @@ const getPuanKriterleri = (req, res) => {
     });
   };
 
+  // 📥 Jüri dosyası indirme fonksiyonu
+const downloadJuriDosyasi = (req, res) => {
+    const fileName = req.params.fileName;
+
+    // Eğer dosya adı boş veya kötü niyetliyse (örneğin ".." gibi) kontrol edelim
+    if (!fileName || fileName.includes("..")) {
+        return res.status(400).json({ message: "Geçersiz dosya adı." });
+    }
+
+    // 📂 Dosya yolu
+    const filePath = path.join(__dirname, '../../STORAGE/juri', fileName);
+
+    res.download(filePath, fileName, (err) => {
+        if (err) {
+            console.error('Dosya indirme hatası:', err);
+            return res.status(404).json({ message: 'Dosya bulunamadı veya indirilemedi.' });
+        }
+    });
+};
+
 module.exports = {
     getIlanlarVeJuriDurumu, 
     getIlanById,
@@ -529,5 +552,6 @@ module.exports = {
     addPuanKriteri,
     updatePuanKriteri,
     deletePuanKriteri,
-    verNihaiKarar
+    verNihaiKarar,
+    downloadJuriDosyasi
 };

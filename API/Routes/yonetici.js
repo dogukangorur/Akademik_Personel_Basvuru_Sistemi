@@ -21,6 +21,8 @@ router.get("/ilanlar-nihai-karar", controller.getNihaiKararaHazirIlanlar);
 router.get("/ilan-basvurulari/:ilanId", controller.getIlanBasvurulariVeDegerlendirmeler);
 router.post("/nihai-karar-ver", controller.verNihaiKarar);
 
+router.get('/download/juri/:fileName', controller.downloadJuriDosyasi);
+
 //YoneticiFaaliyetTablosu.tsx
 // Başlıklar
 router.get('/basliklar', controller.getBasliklar);

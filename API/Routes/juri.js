@@ -4,7 +4,9 @@ const {
     getAssignedIlansForJuri,
     getBasvurularByIlan,
     uploadDegerlendirmeDosyasi,
-    kaydetNihaiSonuc
+    kaydetNihaiSonuc,
+    downloadBelge,
+    getAdayBelgeleri,
 } = require('../Controllers/juri-controller');
 const multer = require('multer');
 const path = require('path');
@@ -27,5 +29,10 @@ router.get('/juri/basvurular/:ilanId', getBasvurularByIlan);
 // 🎯 Yeni endpointler
 router.post('/juri/basvuru/:basvuruId/upload-degerlendirme', upload.single('dosya'), uploadDegerlendirmeDosyasi);
 router.post('/juri/basvuru/:basvuruId/kaydet-nihai-sonuc', kaydetNihaiSonuc);
+router.get('/juri/download/:type/:filename', downloadBelge);
+
+// Adayın tüm belgelerini getir
+router.get('/juri/basvuru/:basvuruId/aday-belgeleri', getAdayBelgeleri);
+
 
 module.exports = router;
