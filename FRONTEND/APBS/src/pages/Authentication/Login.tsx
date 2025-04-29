@@ -32,6 +32,9 @@ const LoginBoxed = () => {
     const [password, setPassword] = useState('');
     const [tc, setTc] = useState('')
 
+    const [sifre, setSifre] = useState('');
+    const [tcNo, setTcNo] = useState('');
+    const [rol, setRol] = useState('');
 
     const submitFormAday = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,10 +76,70 @@ const LoginBoxed = () => {
                 Telefon: data.Telefon,
                 DogumTarihi: data.DogumTarihi,
                 KadroID: data.KadroID,
-                Kadro: data.Kadro
+                Kadro: data.Kadro,
+                rolID:String(data.rolID)
             };
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            console.log(userInfo);
             navigate('/aday/anasayfa');
+        } catch (error) {
+            // İstek sırasında hata olursa mesajı ayarla
+            alert('A network error occurred. Please check your connection.');
+        }
+    };
+
+
+
+    const submitFormAdmin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:8080/api/anasayfa/postAdminGiris', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tc:tcNo, sifre: sifre, rol:rol}),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Hata durumunda mesajı al ve state'e ata
+                MySwal.fire({
+                    title: data.message,
+                    toast: true,
+                    position: 'bottom-start',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    showCloseButton: true,
+                    customClass: {
+                        popup: `color-danger`,
+                    },
+                })
+                return;
+            }
+            // Kullanıcı bilgilerini kaydet
+            const userInfo = {
+                kullaniciID: data.data[0].id,
+                Ad: data.data[0].ad,
+                Soyad: data.data[0].soyad,
+                TC : data.data[0].tc,
+                Mail: data.data[0].mail,
+                Kurumu: data.data[0].kurumu,
+                Telefon: data.data[0].telNo,
+                DogumTarihi: data.data[0].dogum_tarihi,
+                KadroID: data.data[0].bulundugu_kadro_id,
+                rolID:String(data.data[0].rolID)
+            };
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            if(data.data[0].rolID===1){
+                navigate('/admin/anasayfa');
+            }else if(data.data[0].rolID===3){
+                navigate('/juri/anasayfa');
+            }else{
+                navigate('/yonetici/anasayfa');
+            }
+            
         } catch (error) {
             // İstek sırasında hata olursa mesajı ayarla
             alert('A network error occurred. Please check your connection.');
@@ -154,29 +217,29 @@ const LoginBoxed = () => {
 
                         {activeTab === "admin" && (
                             <div className="p-4 rounded-lg ">
-                                <form action="#" className="flex items-center justify-center">
+                                <form action="#" className="flex items-center justify-center" onSubmit={submitFormAdmin}>
 
                                     <div className='w-[200px] flex justify-center flex-col'>
 
                                         <div className="flex justify-center mb-8">
-                                            <select id="select" className="form-select border-2  focus:border-green-800" required>
+                                            <select id="select" name='rol' className="form-select border-2  focus:border-green-800" required onChange={(e) => setRol(e.target.value)}>
                                                 <option selected>Rol</option>
-                                                <option value="a">Admin</option>
-                                                <option value="y">Yönetici</option>
-                                                <option value="j">Jüri</option>
+                                                <option value="1">Admin</option>
+                                                <option value="4">Yönetici</option>
+                                                <option value="3">Jüri</option>
                                             </select>
                                         </div>
 
                                         <div className="relative z-0  mb-8 group ">
-                                            <input type="text" name="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required />
+                                            <input type="text" name="tcNo" minLength={11} maxLength={11} className="form-input border-2  focus:border-green-800" placeholder="TC" required  onChange={(e) => setTcNo(e.target.value)}/>
                                         </div>
 
                                         <div className="relative z-0  mb-8 group">
-                                            <input type="password" name="sifre" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required />
+                                            <input type="password" name="sifre" className="form-input border-2  focus:border-green-800" placeholder="Şifre" required onChange={(e) => setSifre(e.target.value)}/>
                                         </div>
                                         <div className="flex items-start mb-8">
                                             <div className="flex items-start h-5 ">
-                                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
+                                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-green-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-green-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"/>
                                             </div>
                                             <label htmlFor="remember" className="ms-2 text-sm font-medium text-dark-900 dark:text-dark-300">Beni Hatırla</label>
                                         </div>

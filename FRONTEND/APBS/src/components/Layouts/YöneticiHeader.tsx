@@ -141,7 +141,7 @@ const Header = () => {
                                         <div className="ltr:pl-4 rtl:pr-4 truncate">
                                             <h4 className="text-base">
                                                 {userInfo?.Ad + ' ' + userInfo?.Soyad}
-                                                <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Aday</span>
+                                                <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Yönetici</span>
                                             </h4>
                                             <button type="button" className="text-black/60 hover:text-success dark:text-dark-light/60 dark:hover:text-white">
                                                 {userInfo?.Mail}

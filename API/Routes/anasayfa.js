@@ -6,11 +6,12 @@ const router = express.Router();
 const {
 
     ilanGetir,
+    postAdminGiris
 
 
 } = require("../Controllers/anasayfa-controller.js");
 
 
 router.get("/ilanGetir", ilanGetir);
-
+router.post("/postAdminGiris", postAdminGiris);
 module.exports = router;

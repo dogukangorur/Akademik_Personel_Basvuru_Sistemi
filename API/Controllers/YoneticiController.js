@@ -178,7 +178,7 @@ const getNihaiKararaHazirIlanlar = (req, res) => {
         SELECT 
             i.id AS id,
             i.baslik AS ilanAdi,
-            CONCAT(DATE_FORMAT(i.baslangic_tarihi, '%d.%m.%Y'), ' - ', DATE_FORMAT(i.bitis_tarihi, '%d.%m.%Y')) AS tarihAraligi,
+            CONCAT(DATE_FORMAT(i.baslangic_tarih, '%d.%m.%Y'), ' - ', DATE_FORMAT(i.bitis_tarih, '%d.%m.%Y')) AS tarihAraligi,
             COUNT(DISTINCT b.id) AS basvuruSayisi,
             COUNT(DISTINCT ji.juri_id) AS juriSayisi,
             COUNT(bj.id) AS yapilanDegerlendirmeSayisi

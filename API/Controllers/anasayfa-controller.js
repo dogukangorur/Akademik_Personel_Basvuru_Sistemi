@@ -20,3 +20,23 @@ exports.ilanGetir = async (req, res) => {
         return res.json({success:true ,data:data});
     });
 };
+
+
+
+exports.postAdminGiris = async (req, res) => {
+
+    const q = `
+       select * from kullanici join kullaniciroller on kullanici.id = kullaniciroller.kullaniciID where kullanici.tc= ? and kullanici.sifre= ? and rolID= ?
+    `;
+    const values = [req.body.tc, req.body.sifre, parseInt(req.body.rol)];
+    connection.query(q,values,(error, data) => {
+        if (error) {
+            console.error('Error executing query:', error);
+            return res.status(500).json({success:false, message: error.message });
+        }
+        if (data.length === 0) {
+            return res.status(404).json({success:false, message: "Kullanıcı Bulunamadı !!!" });
+        }
+        return res.json({success:true ,data:data});
+    });
+};

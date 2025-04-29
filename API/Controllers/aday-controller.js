@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
 
 exports.postAdayGiris = async (req, res) => {
     const q = `
-        SELECT
+       SELECT
             Kullanici.id AS ID,
             Kullanici.ad AS Ad,
             Kullanici.soyad AS Soyad,
@@ -24,10 +24,12 @@ exports.postAdayGiris = async (req, res) => {
             Kullanici.telNo AS Telefon,
             Kullanici.dogum_tarihi AS DogumTarihi,
             Kullanici.bulundugu_kadro_id AS KadroID,
-            Kadrolar.kadro_adi AS Kadro
+            Kadrolar.kadro_adi AS Kadro,
+            kullaniciroller.rolID as rolID
         FROM
             Kullanici
         INNER JOIN Kadrolar ON Kadrolar.id = kullanici.bulundugu_kadro_id
+        INNER JOIN kullaniciroller on kullaniciroller.kullaniciID=kullanici.id
         WHERE
             Kullanici.tc = ?
         AND Kullanici.sifre = ?
@@ -81,12 +83,32 @@ exports.postAdayKayit = async (req, res) => {
                 const q = `INSERT INTO kullanici (ad, soyad, tc, telNo, mail, sifre, kurumu, bulundugu_kadro_id, dogum_tarihi) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
                 const values =[ad, soyad, tc, telNo, email, sifre, kurum, kadroId, dogumYili]
                 connection.query(q, values, (err, result) => {
-
                     if (err) {
+                        console.log(err.message);
                         return res.status(500).json({ message: "Veritabanı hatası", details: err.message });
                     }
-                    return res.json({ success: true, message: "Kullanıcı kaydedildi!" });
+      
+                    const q2 = `select id from kullanici  order by id desc limit 1`;
+                    connection.query(q2, (err, data) => {
+                        if (err) {
+                            return res.status(500).json({ message: "Veritabanı hatası", details: err.message });
+                        }
+                        
+                        const q3 = `INSERT INTO kullaniciroller (kullaniciID, rolID) VALUES (?,2)`;
+                        const values3 = [data[0].id];
+                        connection.query(q3, values3, (err, result) => {
+    
+                          if (err) {
+                              return res.status(500).json({ message: "Veritabanı hatası", details: err.message });
+                          }
+                          return res.json({ success: true, message: "Kullanıcı kaydedildi!" });
+                      });
+    
+                    });
                 });
+
+
+
             } else {
                 return res.status(400).json({ success: false, message: "Kimlik doğrulama başarısız!" });
             }

@@ -59,37 +59,37 @@ const routes = [
     //Admin ana sayfa
     {
         path: '/admin/anasayfa',
-        element: <AdminAnasayfa />, //buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
+        element: <AuthGuard allowedRoles={['1']}><AdminAnasayfa /></AuthGuard>, //buradaki indexler değişecek örnek olarak eklendi sayfanın tasarlaması lazım
         layout: 'admin',
     },
     //Admin ilan olusturma
     {
         path: '/admin/ilan-olustur',
-        element: <AdminIlanOlustur />,
+        element: <AuthGuard allowedRoles={['1']}><AdminIlanOlustur /></AuthGuard>,
         layout: 'admin',
     },
     //Admin ilan duzenleme
     {
         path: '/admin/duzenle',
-        element: <AdminDuzenle />,
+        element:<AuthGuard allowedRoles={['1']}> <AdminDuzenle /></AuthGuard>,
         layout: 'admin',
     },
     //Admin etkinlik duzenleme
     {
         path: '/admin/etkinlik',
-        element: <AdminEtkinlik />,
+        element:<AuthGuard allowedRoles={['1']}> <AdminEtkinlik /></AuthGuard>,
         layout: 'admin',
     },
     //Admin ilan başvurularını görüntüleme
     {
         path: '/admin/ilan-basvuru-goruntule',
-        element: <AdminIlanBasvuru />,
+        element: <AuthGuard allowedRoles={['1']}><AdminIlanBasvuru /></AuthGuard>,
         layout: 'admin',
     },
     //Admin profil duzenleme
     {
         path: '/admin/profil-duzenle',
-        element: <AdminProfilDuzenle />,
+        element: <AuthGuard allowedRoles={['1']}><AdminProfilDuzenle /></AuthGuard>,
         layout: 'admin',
     },
 
@@ -97,57 +97,57 @@ const routes = [
     //Aday ana sayfa
     {
         path: '/aday/anasayfa',
-        element: <AdayAnasayfa />,
+        element: <AuthGuard allowedRoles={['2']}><AdayAnasayfa /></AuthGuard>,
         layout: 'aday',
     },
     //Aday basvurularım
     {
         path: '/aday/basvurularım',
-        element: <AdayBasvurularim />,
+        element: <AuthGuard allowedRoles={['2']}><AdayBasvurularim /></AuthGuard>,
         layout: 'aday',
     },
     //Aday profil
     {
         path: '/aday/profil',
-        element: <AdayProfil />,
+        element: <AuthGuard allowedRoles={['2']}><AdayProfil /></AuthGuard>,
         layout: 'aday',
     },
     //Aday profil goruntuleme
     {
         path: '/aday/profil-goruntule',
-        element: <AdayProfilGoruntule />,
+        element: <AuthGuard allowedRoles={['2']}><AdayProfilGoruntule /></AuthGuard>,
         layout: 'aday',
     },
     //Aday profil düzenleme
     {
         path: '/aday/duzenle',
-        element: <AdayProfilDuzenle />,
+        element: <AuthGuard allowedRoles={['2']}><AdayProfilDuzenle /></AuthGuard>,
         layout: 'aday',
     },
 
     //Jüri ana sayfa
     {
         path: '/juri/anasayfa',
-        element: <JuriAnasayfa />,
+        element: <AuthGuard allowedRoles={['3']}><JuriAnasayfa /></AuthGuard>,
         layout: 'juri',
     },
     //Jüri başvuru
 
     {
         path: '/juri/basvuru',
-        element: <JuriBasvuru />,
+        element: <AuthGuard allowedRoles={['3']}><JuriBasvuru /></AuthGuard>,
         layout: 'juri',
     },
     //Jüri başvuru değerlendirme
     {
         path: '/juri/basvuru-degerlendirme',
-        element: <JuriBasvuruDegerlendirme />,
+        element:<AuthGuard allowedRoles={['3']}><JuriBasvuruDegerlendirme /></AuthGuard>,
         layout: 'juri',
     },
     //Jüri profil düzenleme
     {
         path: '/juri/profil-duzenle',
-        element: <JuriProfilDuzenle />,
+        element: <AuthGuard allowedRoles={['3']}><JuriProfilDuzenle /></AuthGuard>,
         layout: 'juri',
     },
 
@@ -155,56 +155,55 @@ const routes = [
     //Yönetici ana sayfa
     {
         path: '/yonetici/anasayfa',
-        //element: <AuthGuard allowedRoles={['y']}><YoneticiAnasayfa /></AuthGuard>,
-        element: <YoneticiAnasayfa />,
+        element:<AuthGuard allowedRoles={['4']}><YoneticiAnasayfa /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici İlan Nihai Karar
     {
         path: '/yonetici/ilanlar-nihai-karar',
-        element: <YoneticiIlanNihaiKarar />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiIlanNihaiKarar /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici İlan Jüri
     {
         path: '/yonetici/ilanlar-juri-atama',
-        element: <YoneticiIlanJuri />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiIlanJuri /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici Nihai Karar
     {
         path: '/yonetici/nihai-karar',
-        element: <YoneticiNihaiKarar />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiNihaiKarar /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici Jüri Atama
     {
         path: '/yonetici/juri-atama',
-        element: <YoneticiJuriAtama />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiJuriAtama /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici Faaliyet Tablosu
     {
         path: '/yonetici/faaliyet-tablosu',
-        element: <YoneticiFaaliyetTablosu />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiFaaliyetTablosu /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici Etkinlik Sayı Kriterleri Tablosu
     {
         path: '/yonetici/etkinlik-sayi-kriterleri',
-        element: <YoneticiEtkinlikSayıKriter />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiEtkinlikSayıKriter /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici Etkinlik Puan Kriterleri Tablosu
     {
         path: '/yonetici/etkinlik-puan-kriterleri',
-        element: <YoneticiEtkinlikPuanKriter />,
+        element:<AuthGuard allowedRoles={['4']}> <YoneticiEtkinlikPuanKriter /></AuthGuard>,
         layout: 'yonetici',
     },
     //Yönetici profil düzenleme
     {
         path: '/yonetici/profil-duzenle',
-        element: <YoneticiProfilDuzenle />,
+        element: <AuthGuard allowedRoles={['4']}><YoneticiProfilDuzenle /></AuthGuard>,
         layout: 'yonetici',
     },
 ];
