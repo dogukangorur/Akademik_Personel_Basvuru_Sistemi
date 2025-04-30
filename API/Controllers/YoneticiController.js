@@ -208,15 +208,14 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
         SELECT 
             b.id AS basvuru_id,
             CONCAT(k_ad.ad, ' ', k_ad.soyad) AS adayAdi,
-            'Başvuru Belgesi' AS belgeAdi, 
-            k_juri.ad AS juriAd,
-            k_juri.soyad AS juriSoyad,
             bj.degerlendime_raporu_doc AS belgeDosyaAdi,
-            bj.aciklama AS metin,
-            bj.basvuru_degerlendirme_durum AS juriDegerlendirme
-        FROM Basvuru b
+            bj.yorum_metni AS metin,
+            bj.basvuru_degerlendirme_durum AS juriDegerlendirme,
+            k_juri.ad AS juriAd,
+            k_juri.soyad AS juriSoyad
+        FROM BasvuruJuri bj
+        JOIN Basvuru b ON b.id = bj.basvuru_id
         JOIN Kullanici k_ad ON k_ad.id = b.aday_id
-        JOIN BasvuruJuri bj ON bj.basvuru_id = b.id
         JOIN Kullanici k_juri ON k_juri.id = bj.juri_id
         WHERE b.ilan_id = ?
         ORDER BY b.id, bj.juri_id
@@ -228,20 +227,21 @@ const getIlanBasvurulariVeDegerlendirmeler = (req, res) => {
             return res.status(500).json({ message: "Veri alınamadı." });
         }
 
+        // Başvuru bazlı gruplayalım
         const grouped = {};
         results.forEach(row => {
             const basvuruId = row.basvuru_id;
+
             if (!grouped[basvuruId]) {
                 grouped[basvuruId] = {
                     id: basvuruId,
                     adayAdi: row.adayAdi,
-                    belgeAdi: row.belgeAdi,
+                    belgeAdi: 'Başvuru Belgesi',
                     juriDegerlendirmeleri: []
                 };
             }
 
             const belgeURL = `http://localhost:8080/api/yonetici/download/juri/${row.belgeDosyaAdi}`;
-
 
             grouped[basvuruId].juriDegerlendirmeleri.push({
                 juriAdi: `${row.juriAd} ${row.juriSoyad}`,
@@ -527,6 +527,24 @@ const downloadJuriDosyasi = (req, res) => {
     });
 };
 
+const gosterJuriDosyasi = (req, res) => {
+    const fileName = req.params.fileName;
+
+    // Güvenlik kontrolü
+    if (!fileName || fileName.includes("..")) {
+        return res.status(400).json({ message: "Geçersiz dosya adı." });
+    }
+
+    const filePath = path.join(__dirname, '../../STORAGE/juri', fileName);
+
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error('Dosya gösterilemedi:', err);
+            return res.status(404).json({ message: 'Dosya bulunamadı veya görüntülenemedi.' });
+        }
+    });
+};
+
 module.exports = {
     getIlanlarVeJuriDurumu, 
     getIlanById,
@@ -553,5 +571,6 @@ module.exports = {
     updatePuanKriteri,
     deletePuanKriteri,
     verNihaiKarar,
-    downloadJuriDosyasi
+    downloadJuriDosyasi,
+    gosterJuriDosyasi,
 };

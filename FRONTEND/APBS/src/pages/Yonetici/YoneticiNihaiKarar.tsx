@@ -172,11 +172,21 @@ const YoneticiNihaiKarar = () => {
                                         <div key={juriIndex} className="p-4 border rounded bg-white dark:bg-[#1e293b] space-y-3">
                                             <div className="font-bold text-sm text-blue-300">{degerlendirme.juriAdi}</div>
 
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span>📎 Yüklenen Belge</span>
-                                                <a href={degerlendirme.belgeURL} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700">
-                                                    Görüntüle / İndir
-                                                </a>
+                                            <div className="text-sm flex items-center justify-between gap-4">
+                                                <span className="whitespace-nowrap">📎 Yüklenen Belge</span>
+                                                <div className="flex gap-2">
+                                                    <a
+                                                        href={degerlendirme.belgeURL.replace('/download/', '/goster/')}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+                                                    >
+                                                        Görüntüle
+                                                    </a>
+                                                    <a href={degerlendirme.belgeURL} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700">
+                                                        İndir
+                                                    </a>
+                                                </div>
                                             </div>
 
                                             <div>

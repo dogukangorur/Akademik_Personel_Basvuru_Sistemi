@@ -139,7 +139,7 @@ const Header = () => {
                                 <li className="bg-green-100 rounded-t-xl">
                                     <div className="flex items-center px-4 py-4">
                                         <div className="ltr:pl-4 rtl:pr-4 truncate">
-                                             <h4 className="text-base">
+                                            <h4 className="text-base">
                                                 {userInfo?.Ad + ' ' + userInfo?.Soyad}
                                                 <span className="text-xs bg-primary-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Admin</span>
                                             </h4>
@@ -150,7 +150,7 @@ const Header = () => {
                                     </div>
                                 </li>
                                 <li className="bg-green-50 hover:text-success">
-                                    <Link to="/admin/Profil" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
+                                    <Link to="/admin/profil-duzenle" className="dark:hover:text-white hover:!text-success hover:!bg-sussess-light">
                                         <IconUser className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0 hover:!text-success hover:!bg-sussess-light" />
                                         Profil
                                     </Link>

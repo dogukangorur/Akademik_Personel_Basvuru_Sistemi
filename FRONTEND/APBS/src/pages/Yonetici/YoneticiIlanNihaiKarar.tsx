@@ -123,7 +123,7 @@ const YoneticiIlanNihaiKarar = () => {
                                     <td className="border px-4 py-2 text-center">
                                         <Tippy content="Başvuruları Görüntüle">
                                             <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleBasvuruyaGit(data.id)}>
-                                                Değerlendirmeler &gt;
+                                                Nihai Karar &gt;
                                             </button>
                                         </Tippy>
                                     </td>

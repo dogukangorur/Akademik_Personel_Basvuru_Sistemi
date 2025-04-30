@@ -9,10 +9,10 @@ const MySwal = withReactContent(Swal);
 
 interface Basvuru {
     id: number;
-    ad:string;
+    ad: string;
     aday_adi: string;
     tarih: string;
-    basvuru_durum: 'Beklemede' | 'Onaylandı' | 'Reddedildi';
+    basvuru_durum: 'Beklemede' | 'Değerlendirildi'; // 🔥 güncelledik
 }
 
 export default function ApplicationReviewTable() {
@@ -20,10 +20,12 @@ export default function ApplicationReviewTable() {
 
     useEffect(() => {
         const ilanId = localStorage.getItem('secilenIlanId');
-        console.log(ilanId);
-        if (!ilanId) {
+        const storedUserInfo = localStorage.getItem('userInfo');
+        const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+        if (!ilanId || !userInfo) {
             MySwal.fire({
-                title: 'Seçilen ilan bulunamadı!',
+                title: 'İlan veya kullanıcı bilgisi eksik!',
                 icon: 'error',
                 toast: true,
                 position: 'bottom-start',
@@ -37,7 +39,7 @@ export default function ApplicationReviewTable() {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get<Basvuru[]>(`http://localhost:8080/api/juri/basvurular/${ilanId}`);
+                const response = await axios.get<Basvuru[]>(`http://localhost:8080/api/juri/basvurular-durum/${ilanId}/${userInfo.kullaniciID}`);
                 setApplications(response.data);
 
                 MySwal.fire({
@@ -52,7 +54,6 @@ export default function ApplicationReviewTable() {
                 });
             } catch (error) {
                 console.error('Başvurular alınırken hata oluştu:', error);
-
                 MySwal.fire({
                     title: 'Başvurular yüklenemedi!',
                     icon: 'error',
@@ -69,7 +70,7 @@ export default function ApplicationReviewTable() {
         fetchData();
     }, []);
 
-    const handleIncele = (basvuruId: number, adayAdi: string, adaySoyadi:string) => {
+    const handleIncele = (basvuruId: number, adayAdi: string, adaySoyadi: string) => {
         localStorage.setItem('secilenBasvuruId', basvuruId.toString());
         localStorage.setItem('secilenAdayAd', adayAdi);
         localStorage.setItem('secilenAdayAdi', adaySoyadi);
@@ -110,18 +111,14 @@ export default function ApplicationReviewTable() {
                         {applications.map((app, index) => (
                             <tr key={app.id} className="hover:bg-gray-50">
                                 <td className="px-4 py-2 text-center">{index + 1}</td>
-                                <td className="px-4 py-2">{app.ad} {app.aday_adi}</td>
-                                <td className="px-4 py-2">{app.tarih}</td>
-                                <td
-                                    className={`px-4 py-2 font-semibold ${
-                                        app.basvuru_durum === 'Onaylandı' ? 'text-green-600' : app.basvuru_durum === 'Beklemede' ? 'text-yellow-600' : 'text-red-600'
-                                    }`}
-                                >
-                                    {app.basvuru_durum}
+                                <td className="px-4 py-2">
+                                    {app.ad} {app.aday_adi}
                                 </td>
+                                <td className="px-4 py-2">{app.tarih}</td>
+                                <td className={`px-4 py-2 font-semibold ${app.basvuru_durum === 'Değerlendirildi' ? 'text-green-600' : 'text-yellow-600'}`}>{app.basvuru_durum}</td>
                                 <td className="px-4 py-2 text-center">
                                     <Tippy content="Başvuruyu İncele">
-                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id, app.ad ,app.aday_adi)}>
+                                        <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700" onClick={() => handleIncele(app.id, app.ad, app.aday_adi)}>
                                             İncele &gt;
                                         </button>
                                     </Tippy>

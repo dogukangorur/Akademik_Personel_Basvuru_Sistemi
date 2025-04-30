@@ -61,44 +61,9 @@ const JuriBasvuruDegerlendirme = () => {
         fetchBelgeler();
     }, [secilenBasvuruId]);
 
-    const handleDosyaYukle = async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && secilenBasvuruId && userInfo) {
-            const selectedFile = e.target.files[0];
-            setDosya(selectedFile);
-
-            const formData = new FormData();
-            formData.append('dosya', selectedFile);
-            formData.append('juriId', userInfo.id);
-
-            try {
-                await axios.post(`http://localhost:8080/api/juri/basvuru/${secilenBasvuruId}/upload-degerlendirme`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                MySwal.fire({
-                    title: 'Dosya başarıyla yüklendi!',
-                    icon: 'success',
-                    toast: true,
-                    position: 'bottom-start',
-                    timer: 1500,
-                    showConfirmButton: false,
-                    showCloseButton: true,
-                    customClass: { popup: 'color-success' },
-                });
-            } catch (error) {
-                console.error('Dosya yüklenirken hata oluştu:', error);
-                MySwal.fire({
-                    title: 'Dosya yüklenirken hata oluştu!',
-                    icon: 'error',
-                    toast: true,
-                    position: 'bottom-start',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    showCloseButton: true,
-                    customClass: { popup: 'color-error' },
-                });
-            }
+    const handleDosyaSec = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setDosya(e.target.files[0]);
         }
     };
 
@@ -120,10 +85,16 @@ const JuriBasvuruDegerlendirme = () => {
         }
 
         try {
-            await axios.post(`http://localhost:8080/api/juri/basvuru/${secilenBasvuruId}/kaydet-nihai-sonuc`, {
-                juriId: userInfo.kullaniciID,
-                nihaiSonuc,
-                yorum,
+            const formData = new FormData();
+            formData.append('juriId', userInfo.kullaniciID);
+            formData.append('nihaiSonuc', nihaiSonuc);
+            formData.append('yorum', yorum);
+            if (dosya) {
+                formData.append('dosya', dosya);
+            }
+
+            await axios.post(`http://localhost:8080/api/juri/basvuru/${secilenBasvuruId}/degerlendirme-tam`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             MySwal.fire({
@@ -141,7 +112,7 @@ const JuriBasvuruDegerlendirme = () => {
                 window.location.href = '/juri/basvuru';
             }, 1500);
         } catch (error) {
-            console.error('Sonuç kaydedilirken hata oluştu:', error);
+            console.error('Değerlendirme kaydedilirken hata oluştu:', error);
             MySwal.fire({
                 title: 'Değerlendirme kaydedilirken hata oluştu!',
                 icon: 'error',
@@ -159,50 +130,56 @@ const JuriBasvuruDegerlendirme = () => {
         <div className="md:col-start-2 md:col-end-4 p-4 border rounded-lg bg-white shadow-lg w-full">
             <h2 className="text-3xl font-handwriting text-center">Başvuru değerlendirme</h2>
 
-            {/* 1. Alan: Belgeler */}
-            <div>
-                <h3 className="text-lg mb-4">
-                    İncelenen Aday: <span className="font-bold">{secilenAdayAd} {secilenAdayAdi}</span>
-                </h3>
-                <div className="border rounded p-4 mb-5">
-                    <h4 className="mb-3">Belgeler ve Tablolar</h4>
-                    <table className="w-full text-left border-collapse">
-                        <thead>
-                            <tr>
-                                <th className="border-b pb-2">Belge Türü</th>
-                                <th className="border-b pb-2">Belge Adı</th>
-                                <th className="border-b pb-2 text-center">Görüntüle</th>
-                                <th className="border-b pb-2 text-center">İndir</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {belgeler.map((belge, index) => (
-                                <tr key={index}>
-                                    <td className="py-2">{belge.kategori}</td>
-                                    <td>{belge.dosyaAdi}</td>
-                                    <td className="px-4 py-2 text-center">
+            <h3 className="text-lg mb-4">
+                İncelenen Aday:{' '}
+                <span className="font-bold">
+                    {secilenAdayAd} {secilenAdayAdi}
+                </span>
+            </h3>
+
+            {/* Belgeler Tablosu */}
+            <div className="border rounded p-4 mb-5">
+                <h4 className="mb-3">Belgeler ve Tablolar</h4>
+                <table className="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th className="border-b pb-2">Belge Türü</th>
+                            <th className="border-b pb-2">Belge Adı</th>
+                            <th className="border-b pb-2 text-center">Görüntüle</th>
+                            <th className="border-b pb-2 text-center">İndir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {belgeler.map((belge, index) => (
+                            <tr key={index}>
+                                <td className="py-2">{belge.kategori}</td>
+                                <td>{belge.dosyaAdi}</td>
+                                <td className="px-4 py-2 text-center">
                                     <Tippy content="Belgeyi görüntüle">
-    <button
-        type="button"
-        onClick={() =>
-            window.open(`http://localhost:8080/api/juri/view/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`, '_blank')
-        }
-        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
-    >
-        Görüntüle
-    </button>
-</Tippy>
-                                    </td>
-                                    <td className="px-4 py-2 text-center">
-                                        <Tippy content="Belgeyi indir">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                window.open(
+                                                    `http://localhost:8080/api/juri/view/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`,
+                                                    '_blank'
+                                                )
+                                            }
+                                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700"
+                                        >
+                                            Görüntüle
+                                        </button>
+                                    </Tippy>
+                                </td>
+                                <td className="px-4 py-2 text-center">
+                                    <Tippy content="Belgeyi indir">
                                         <button
                                             type="button"
                                             onClick={async () => {
                                                 try {
-                                                    const response = await fetch(`http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`);
-                                                    if (!response.ok) {
-                                                        throw new Error('Dosya indirilemedi');
-                                                    }
+                                                    const response = await fetch(
+                                                        `http://localhost:8080/api/juri/download/${belge.kategori === 'Puan Tablosu' ? 'puan' : 'profil'}/${encodeURIComponent(belge.dosyaAdi)}`
+                                                    );
+                                                    if (!response.ok) throw new Error('Dosya indirilemedi');
                                                     const blob = await response.blob();
                                                     const url = window.URL.createObjectURL(blob);
                                                     const a = document.createElement('a');
@@ -219,24 +196,23 @@ const JuriBasvuruDegerlendirme = () => {
                                         >
                                             İndir
                                         </button>
-                                        </Tippy>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                    </Tippy>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
-            {/* 2. Alan: Jüri Değerlendirme Yükleme */}
+            {/* Belge Yükleme Alanı */}
             <div className="border rounded p-4 mb-5">
-                <h4 className="mb-3">Değerlendirme Belgesi Yükle</h4>
+                <h4 className="mb-3">Değerlendirme Belgesi Seç</h4>
                 <hr className="mb-4" />
-                <input type="file" onChange={handleDosyaYukle} className="px-4 py-2 border border-gray-500 rounded w-full" />
+                <input type="file" onChange={handleDosyaSec} className="px-4 py-2 border border-gray-500 rounded w-full" />
                 {dosya && <p className="mt-2 text-sm">Seçilen dosya: {dosya.name}</p>}
             </div>
 
-            {/* 3. Alan: Nihai Sonuç ve Yorum */}
+            {/* Sonuç ve Yorum Formu */}
             <form onSubmit={handleFormSubmit} className="border rounded p-4 space-y-4 mb-5">
                 <div>
                     <label htmlFor="sonuc" className="block mb-1">

@@ -22,6 +22,7 @@ router.get("/ilan-basvurulari/:ilanId", controller.getIlanBasvurulariVeDegerlend
 router.post("/nihai-karar-ver", controller.verNihaiKarar);
 
 router.get('/download/juri/:fileName', controller.downloadJuriDosyasi);
+router.get('/goster/juri/:fileName', controller.gosterJuriDosyasi);
 
 //YoneticiFaaliyetTablosu.tsx
 // Başlıklar

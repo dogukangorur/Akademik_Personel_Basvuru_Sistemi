@@ -90,70 +90,87 @@ const getBasvurularByIlan = async (req, res) => {
     }
 };
 
-const uploadDegerlendirmeDosyasi = async (req, res) => {
-    const basvuruId = req.params.basvuruId;
-    const juriId = req.body.juriId;
+const getBasvurularVeDurum = (req, res) => {
+    const { ilanId, juriId } = req.params;
 
-    if (!req.file) {
-        return res.status(400).json({ error: 'Dosya bulunamadı.' });
-    }
+    const sql = `
+        SELECT 
+            b.id AS basvuru_id,
+            k.ad AS ad,
+            k.soyad AS aday_adi,
+            DATE_FORMAT(b.basvuru_tarihi, '%d/%m/%Y') AS tarih,
+            (
+                SELECT COUNT(*) 
+                FROM BasvuruJuri bj 
+                WHERE bj.basvuru_id = b.id AND bj.juri_id = ?
+            ) AS degerlendirildi_mi
+        FROM Basvuru b
+        INNER JOIN Kullanici k ON b.aday_id = k.id
+        WHERE b.ilan_id = ?
+        ORDER BY b.basvuru_tarihi DESC
+    `;
 
-    const dosyaAdi = req.file.filename;
+    const values = [juriId, ilanId];
 
-    try {
-        const sql = `
-            UPDATE BasvuruJuri 
-            SET degerlendime_raporu_doc = ?
-            WHERE basvuru_id = ? AND juri_id = ?
-        `;
-        const values = [dosyaAdi, basvuruId, juriId];
+    connection.query(sql, values, (err, results) => {
+        if (err) {
+            console.error('Başvurular alınırken hata:', err);
+            return res.status(500).json({ error: 'Sunucu hatası' });
+        }
 
-     
-        connection.query(sql, values, (error, data) => {
-            if (error) {
-                console.error('Error executing query:', error);
-                return res.status(500).json({ success: false, message: error.message });
-            }
+        const response = results.map((row) => ({
+            id: row.basvuru_id,
+            ad: row.ad,
+            aday_adi: row.aday_adi,
+            tarih: row.tarih,
+            basvuru_durum: row.degerlendirildi_mi > 0 ? 'Değerlendirildi' : 'Beklemede'
+        }));
 
-            if (data.affectedRows === 0) {
-                return res.status(404).json({ success: false, message: "İlan bulunamadı." });
-            }
-
-            
-            return res.status(200).json({ message: 'Dosya başarıyla yüklendi.' });
-        });
-
-    } catch (error) {
-        console.error('Değerlendirme dosyası kaydedilirken hata:', error);
-        return res.status(500).json({ error: 'Dosya kaydedilemedi.' });
-    }
+        return res.status(200).json(response);
+    });
 };
 
-
-const kaydetNihaiSonuc = async (req, res) => {
+const degerlendirmeTamIslemi = async (req, res) => {
     const basvuruId = req.params.basvuruId;
     const { juriId, nihaiSonuc, yorum } = req.body;
 
     try {
+        let dosyaAdi = null;
+
+        if (req.file) {
+            const storageFolder = path.join(__dirname, '../../STORAGE/juri');
+            if (!fs.existsSync(storageFolder)) {
+                fs.mkdirSync(storageFolder, { recursive: true });
+            }
+
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const newFilename = uniqueSuffix + '-' + req.file.originalname;
+            const filePath = path.join(storageFolder, newFilename);
+
+            fs.writeFileSync(filePath, req.file.buffer);
+            dosyaAdi = newFilename;
+        }
+
         const sql = `
-        INSERT INTO BasvuruJuri (juri_id,degerlendime_raporu_doc,basvuru_degerlendirme_durum,basvuru_id,yorum_metni)
-        VALUES(?,?,?,?,?)
+            INSERT INTO BasvuruJuri 
+            (juri_id, basvuru_id, degerlendime_raporu_doc, basvuru_degerlendirme_durum, yorum_metni)
+            VALUES (?, ?, ?, ?, ?)
         `;
-        const values =[juriId,rapor,nihaiSonuc,,basvuruId,yorum];
-        connection.query(sql, values, (error, data) => {
+
+        const values = [juriId, basvuruId, dosyaAdi, nihaiSonuc, yorum];
+
+        connection.query(sql, values, (error, result) => {
             if (error) {
-                console.error('Error executing query:', error);
+                console.error('Veritabanı hatası:', error);
                 return res.status(500).json({ success: false, message: error.message });
             }
-    
-            if (data.length === 0) {
-                return res.status(404).json({ success: false, message: "İlan bulunamadı." });
-            }
-           return res.status(200).json(data);
+
+            return res.status(200).json({ success: true, message: "Değerlendirme başarıyla eklendi." });
         });
+
     } catch (error) {
-        console.error('Nihai sonuç kaydedilirken hata:', error);
-        res.status(500).json({ error: 'Sonuç kaydedilemedi.' });
+        console.error('Hata oluştu:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
 
@@ -303,8 +320,8 @@ const goruntuleBelge = (req, res) => {
 module.exports = {
     getAssignedIlansForJuri,
     getBasvurularByIlan,
-    uploadDegerlendirmeDosyasi,
-    kaydetNihaiSonuc,
+    getBasvurularVeDurum,
+    degerlendirmeTamIslemi,
     getAdayBelgeleri,
     downloadBelge,
     goruntuleBelge
