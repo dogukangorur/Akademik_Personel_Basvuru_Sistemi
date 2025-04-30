@@ -29,6 +29,16 @@ yuklemesi.
 - PDF formatında belge oluşturma. 
 - Nufus Müdürlüğü  ve e-Devlet APİ entegrasyonu.
 
+
+<div style="width:100%;display:flex;justify-content:around-between;">
+<img src="IMG/1.png"  width="48%"/>
+<img src="IMG/2.png" width="48%"/>
+
+</div>
+
+
+
+
 🌐ENG
 
 # 🎓 Academic Personnel Application System (APAS)
