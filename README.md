@@ -29,20 +29,22 @@ yuklemesi.
 - PDF formatında belge oluşturma. 
 - Nufus Müdürlüğü  ve e-Devlet APİ entegrasyonu.
 
+<br>
 
 <div style="width:100%;display:flex;justify-content:around-between;">
-<img src="IMG/1.png"  width="33%" height=200/>
-<img src="IMG/2.png" width="33%" height=200/>
-<img src="IMG/3.png" width="33%" height=200/>
+<img src="IMG/1.png"  width="48%" height=250/>
+<img src="IMG/2.png" width="48%" height=250/>
 </div>
 <br>
 <div style="width:100%;display:flex;justify-content:around-between;">
-<img src="IMG/4.png"  width="33%" height=200/>
-<img src="IMG/5.png" width="33%" height=200/>
-<img src="IMG/6.png" width="33%" height=200/>
+<img src="IMG/3.png"  width="48%" height=250/>
+<img src="IMG/4.png" width="48%" height=250/>
 </div>
-
-
+<br>
+<div style="width:100%;display:flex;justify-content:around-between;">
+<img src="IMG/5.png"  width="48%" height=250/>
+<img src="IMG/6.png" width="48%" height=250/>
+</div>
 <br>
 
 🌐ENG
